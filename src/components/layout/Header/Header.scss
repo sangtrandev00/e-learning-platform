@@ -1,0 +1,57 @@
+@import "../../../assets/sass/base";
+@import "../../../assets/sass/mixins";
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba($brand-primary-color, 0.3);
+    &__wrapper {
+        width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: $header-height;
+        padding: 1rem 0rem;
+        font-size: 1.7rem;
+        font-family: $text-font;
+        color: $brand-primary-color;
+    }
+
+    
+    &__logo {
+       
+    }
+    
+
+    &__nav {
+       display: flex;
+       align-items: center;
+    }
+
+    &__nav-list {
+        @include list-reset;
+        display: flex;
+    }
+
+    &__nav-item {
+       
+        color: inherit;
+        margin: 0rem 1.2rem;
+    }
+
+    &__nav-link {
+       
+        color: inherit;
+        text-decoration: none;
+
+        &-icon {
+           font-size: 2rem;
+        }
+    }
+}
+

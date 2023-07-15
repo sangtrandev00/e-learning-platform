@@ -1,0 +1,196 @@
+@import "../../../assets/sass/base";
+
+.banner {
+    position: relative;
+    top: $header-height;
+    width: 100vw;
+    font-size: 1.6rem;
+    padding-top: 30%;
+    background-image: url("https://cdn.mycourse.app/images/site-templates/23af059146223524863c3cae5597db02.jpeg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    color: $light-text-color;
+    
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $brand-primary-color;
+        opacity: 0.8;
+    }
+
+    &__wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1200px;
+        margin: 0 auto;
+        &-left {
+            width: 50%;
+        }
+
+        &-right {
+            width: 50%;
+        }
+    }
+
+    &__cta-section {
+
+    }
+
+    &__title {
+        @include h-style("h1");
+    }
+
+    &__content {
+        line-height: 1.4;
+        font-weight: 400;
+        margin-bottom: 3rem;
+    }
+
+    &__cta-btns {
+
+    }
+}
+
+.our-benefits{
+    margin-top: $header-height;
+    font-size: 1.6rem;
+    text-align: center;
+    
+    &__title{
+        @include heading-style;
+        margin-bottom: 2.5rem;        
+    }
+
+    &__sub-tittle{
+        margin-bottom: 8rem;
+    }
+
+    &__list{
+        display: flex;
+        margin-left: -3rem;
+    }
+
+    &__item{
+        margin-left: 3rem;
+
+        &-icon {
+            font-size: 2.4rem;
+        }
+    }
+
+    &__item-img{
+        margin-bottom: 2.5rem;
+    }
+
+    &__item-title{
+        @include heading-style;
+        margin-bottom: 2.5rem;
+
+    }
+
+    &__item-content{
+        
+        line-height: 1.55;
+        opacity: 0.8;
+        font-weight: 400;
+        
+    }
+}
+
+.statistics {
+    background-color: $brand-secondary-color;
+
+    &__list {
+
+    }
+
+    &__item {
+        padding: 3.5rem 2.5rem;
+        height: 15.2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &-icon {
+            font-size: $main-text--xxl;
+        }
+    }
+
+    &__item-number {
+        @include h-style("h2");
+        margin: 2rem 0;
+    }
+
+    &__item-content {
+        font-size: 1.5rem;
+    }
+}
+
+.quotes {
+    font-size: 1.6rem;
+    background-color: $brand-primary-color;
+    &__wrapper {
+       
+    }
+
+    &__author {
+        display: flex;
+        color: $light-text-color;
+        
+        &-img-cover {
+            background-image: url("https://cdn.mycourse.app/v2.28.4/images/laptop-white-draw.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            width: 50%;
+            padding: 3.5% 10.5% 3.2%;
+        }
+
+        &-img {
+            background-image: url("https://cdn.mycourse.app/images/site-templates/57ad0b239703f4b3e09108dc8e7ddfc5.jpeg");
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+
+        &-content {
+            width: 50%;
+            &-title {
+                @include h-style("h2")
+            }
+
+            &-text {
+                font-weight: 400;
+                line-height: 1.4em;
+                margin-top: 2rem;
+            }
+        }
+    }
+
+
+}
+
+.our-courses {
+    &__title {
+        @include h-style("h2");
+        margin-bottom: 4rem;
+    }
+
+    &__btn-place {
+        text-align: center;
+        margin-top: 8rem;
+
+        button {
+            font-weight: 400;
+        }
+    }
+
+
+}

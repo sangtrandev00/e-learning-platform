@@ -1,0 +1,145 @@
+
+@import "../../../assets/sass/base";
+
+.view-cart {
+    margin-top: $header-height;
+    // background-color: $light-bg-color;
+
+    
+    &__wrap {
+
+    }
+
+    &__title {
+        @include h-style("h2");
+    }
+
+    &__content {
+        margin-top: 2rem;
+    }
+
+    &__list {
+
+        &-title {
+           font-size: 1.7rem;
+        }
+
+        &-wrap {
+
+        }
+
+        &-item {
+
+            &-divider {
+                margin: 1rem 0;
+            }
+
+            &-thumb {
+
+            }
+
+            &-img {
+                width: 12rem;
+                height: 6.8rem;
+            }
+
+            &-info {
+                font-size: 1.6rem;
+                font-weight: 400;
+                line-height: 1.4;
+
+                &-line {
+                    margin-bottom: 0.4rem;
+                }
+                &-name {
+                    color: $dark-text-color;
+                    font-weight: bold;
+                }
+
+                &-author {
+
+                }
+
+                &-rating {
+
+                }
+
+                .info-rating {
+                   display: flex;
+                    &__point {
+
+                    }
+
+                    &__icons {
+                        margin-left: 1rem;
+                        &-item {
+                            color: $brand-secondary-color;
+                        }   
+                    }
+
+                    &__ratings {
+                        margin-left: 1rem;
+                        color: rgba($color: #000000, $alpha: 0.8);
+                    }
+
+                }
+
+                &-statistic {
+
+                    &-item {
+                        margin-right: 1rem;
+                        color: rgba($color: #000000, $alpha: 0.8)
+                    }
+                }
+
+                &__btns {
+
+                }
+            }
+
+          
+
+            &-price {
+
+                &-text {
+
+                }
+
+                &-icon {
+
+                }
+            }
+        }
+    }
+
+    &__summary {
+        &-title {
+            font-size: 2rem;
+        }
+
+        &-price {
+            @include h-style("h2");
+            margin: 1rem 0;
+        }
+
+        &-btn {
+            text-align: center;
+        }
+
+        &-promo {
+
+            &-title {
+                font-size: 1.7rem;
+
+            }
+
+            &-input-group {
+                margin-top: 2rem;
+            }
+
+            &-btn {
+
+            }
+        }
+    }
+}

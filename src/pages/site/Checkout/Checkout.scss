@@ -1,0 +1,163 @@
+@import "../../../assets/sass/base";
+
+.checkout {
+    margin-top: $header-height;
+    font-size: 1.6rem;
+    &__col {
+        &--left {
+            padding-right: 4rem;
+        }
+
+        &--right {
+            background-color: $light-bg-color;
+            padding: 8rem 4rem;        
+        }
+    }
+
+    &__wrap {
+
+    }
+
+    &__title {
+        @include h-style("h2");
+    }
+
+    &__billing-title {
+        @include h-style("h3");
+        margin-top: 2rem;
+    }
+
+    &__countries {
+
+        &-header {
+            margin-top: 2rem;
+            display: flex;
+            width: 50px;
+            justify-content: space-between;
+            align-items: center;
+
+            &-item {
+            
+            }
+        }
+
+        &-title {
+        }
+
+        &-required {
+            margin-left: 16rem;
+            color: rgba($color: #000000, $alpha: 0.4)
+        }
+
+        &-select {
+            margin-top: 2rem;
+        }
+
+        &-condition-term {
+            margin-top: 2px;
+            font-size: 1.2rem;
+            color: rgba($color: #000000, $alpha: 0.6);
+            margin: 1rem 0;
+        }
+    }
+
+    &__payment {
+        &-methods {
+
+        }
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &-title {
+
+        }
+
+        &-secured {
+            color: rgba($color: #000000, $alpha: 0.6);
+            font-weight: 400;
+        }
+
+        &-body {
+            margin-top: 2rem;
+        }
+    }
+    
+    &__summary {
+        &-title {
+            @include h-style("h3");
+        }
+
+        &-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &-col {
+
+        }
+
+        &-price {
+            margin-top: 2rem;
+            &-label {
+
+            }
+
+            &-text {
+
+            }
+        }
+
+        &-total {
+            font-weight: bold;
+            &-label {
+
+            }
+
+            &-text {
+
+            }
+        }
+
+        &-notify {
+            margin-top: 4rem;
+        }
+
+        &-btn {
+            margin-top: 2rem;
+            width: 100%;
+        }
+    }
+
+    &__orders-detail {
+
+        &-title {
+            @include h-style("h3");
+            margin-top: 4rem;
+        }
+        &-item {
+            margin-top: 2rem;
+        }
+
+        .detail-item {
+            display: flex;
+            &__img {
+                width: 4rem;
+                height: 4rem;
+                object-fit: cover;
+            }
+
+            &__name {
+                font-weight: bold;
+                margin-left: 1rem;
+            }
+
+            &__price {
+                margin-left: auto;
+            }
+        }
+    }
+    
+}

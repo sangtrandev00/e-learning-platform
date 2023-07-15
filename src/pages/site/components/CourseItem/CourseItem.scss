@@ -1,0 +1,52 @@
+@import "../../../../assets/sass/base";
+
+.course-item {
+    position: relative;
+    box-shadow: 0 0 1px rgba($brand-primary-color, 0.4);
+    margin-bottom: 1.6rem;
+    cursor: pointer;
+
+    &__title {
+        @include h-style("h3");
+    }
+
+    &__img {
+        padding-bottom: 56.25%;
+        filter: brightness(0.8);
+        &:hover {
+            filter: none;
+        }
+    }
+
+    &__content {
+        padding: 1rem;
+        background-color: #fff;
+    }
+
+    &__title {
+        
+    }
+
+    &__process {
+
+    }
+
+    &__desc {
+        font-size: $main-text--md;
+        line-height: 1.4;
+        margin: 2rem 0rem;
+    }
+
+    &__enrolls {
+
+      &-btn {
+        width: 100%;
+      }
+    }
+
+    &__prices {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+}

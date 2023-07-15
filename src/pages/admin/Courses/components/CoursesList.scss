@@ -1,0 +1,14 @@
+.table__col-name {
+    display: flex;
+    align-items: center;
+
+    &-img {
+        width: 4rem;
+        height: 3rem;
+    }
+
+    &-text {
+        display: inline-block;
+        margin-left: 1rem;
+    }
+}

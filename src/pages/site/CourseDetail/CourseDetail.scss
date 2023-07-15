@@ -1,0 +1,255 @@
+@import "../../../assets/sass/base";
+
+.course-detail {
+    margin-top: $header-height;
+
+    &__wrap {
+        
+    }
+
+    &__breadcrumb {
+        color: $light-text-color;
+
+        a, span, li {
+            color: $light-text-color;
+        }
+      
+    }
+
+    &__intro {
+        padding: 2rem 0rem;
+        background-color: $dark-bg-color;
+        color: $light-text-color;
+
+        &-author {
+            margin-top: 2rem;
+
+            &-name {
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    &__title {
+        color: $light-text-color;
+        @include h-style("h3");
+        margin-top: 2rem;
+    }
+
+    &__sub-title {
+        font-size: 1.6rem;
+        margin-top: 2rem;
+    }
+
+    &__info {
+        display: flex;
+        margin-top: 2rem;
+        &-item {
+            margin-right: 1rem;
+
+            &-icon {
+                margin-right: 1rem;
+                color: $brand-secondary-color;
+            }
+        }
+
+        &-status {
+
+        }
+
+        &-rating {
+
+        }
+
+        &-author {
+
+            &-name {
+
+            }
+        }
+
+        &-students {
+
+        }
+        
+    }
+
+    .rating-icon {
+        color: $brand-secondary-color;
+        
+    }
+
+    &__author {
+        margin: 2rem 0;
+
+        &-name {
+            margin-left: 1rem;
+        }
+    }
+
+
+    // Includes section!!!
+    &__includes {
+        
+        &-wrap {
+            border: 2px solid rgba($brand-primary-color, 0.3);
+            padding: 2rem;
+        }
+
+        &-header {
+            @include h-style("h3");
+        }
+    }
+
+    // Content section
+
+    &__content {
+        &-title {
+            @include h-style("h3")
+        }
+
+        &-wrap {
+            margin-top: 2rem;
+        }
+
+        &-summary {
+
+            &-row {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            &-col {
+             
+            }
+            .col-right {
+                margin-left: auto;
+            }
+
+        }
+
+        &-collapse {
+            margin-top: 2rem;
+
+            &-btn {
+                margin-top: 2rem;
+                border: 1px solid rgba($brand-primary-color, 0.5);
+                width: 100%;
+            }
+        }
+    }
+
+    &__author {
+        background: $brand-tertiary-color;
+        margin-top: 4rem;
+        &-wrap {
+
+        }
+
+        &-info {
+
+        }
+
+        &-intro {
+            font-size: 2rem;
+            color: $dark-text-color;
+        }
+
+        &-name {
+            @include h-style("h2");
+        margin: 1rem 0rem 2rem 0rem;            
+        }
+
+        &-desc {
+            font-size: 1.6rem;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        &-avatar {
+            text-align: center;
+            
+        }
+
+        &-img {
+            box-shadow: 0 20px 20px 10px  rgba($brand-primary-color, 0.5);
+        }
+    }
+
+
+
+    &__overview {
+        position: absolute;
+        width: 30rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.08);
+        &-content {
+            margin-top: 18rem; // Fixed position
+            padding: 2rem 1rem;
+            background-color: #fff;
+        }
+
+        &-price {
+            @include h-style("h3");
+            color: $dark-text-color;
+        }
+
+        &-btns {
+            margin-top: 1rem;
+            
+
+        }
+
+        &-add-to-cart {
+        }
+
+        &-wishlist-btn {
+            
+        }
+
+        &-enroll-btn {
+            margin-top: 1rem;
+        }
+
+        &-guarantee {
+
+        }
+
+        &-includes {
+
+            &-title {
+                color: $dark-text-color
+            }
+        }
+
+    }
+
+    &__thumbnail {
+        position: absolute;
+        &-img {
+            width: 30rem;
+            display: inline-block;
+        }
+
+        &-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0 , 0.4);
+            text-align: center;
+            cursor: pointer;
+            &-icon {
+                font-size: 4.6rem;
+                margin-top: 5rem;
+            }
+
+            &-text {
+                margin-top: 4rem;
+                font-size: 1.6rem;
+            }
+        }
+    }
+
+
+}

@@ -1,0 +1,84 @@
+@import "../../../assets/sass/base";
+@import "../../../assets/sass/mixins";
+
+
+@mixin text-style {
+    font-size: 1.6rem;
+    text-decoration: none;
+    color: $dark-text-color;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+.courses {
+    margin-top: $header-height;
+    background: $light-bg-color;
+
+    &__wrap {
+
+    }
+
+    &__heading {
+        margin-bottom: $section-size--sm;
+        @include h-style("h2");
+        text-align: center;
+    }
+
+    &__content {
+        display: flex;
+    }
+
+    &__filter-bar {
+        width: 30%;
+        &-item {
+
+            margin-bottom: 2rem;
+
+            &-title {
+                font-size: $main-text--md;
+                font-weight: 600;
+                margin-bottom: 1rem;
+            }
+        }
+
+
+        .status-filter {
+
+            &__list {
+                @include list-reset;
+            }
+    
+            &__item {
+    
+    
+                &-link {
+                 @include text-style;
+                }
+            }
+    
+        }
+    
+        .authors-filter {
+    
+            &__list {
+                @include list-reset;
+            }
+    
+            &__item {
+    
+                &-link {
+                    @include text-style;
+                }
+            }
+    
+        }
+    }
+
+
+    &__list {
+        width: 70%;
+        
+    }
+    
+
+}

@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+// Color
+$brand-primary-color: #194583;
+$brand-secondary-color: #FFB029;
+$brand-tertiary-color: #8FB8DE;
+$dark-bg-color: #112236;
+$light-bg-color: #f2f2f2;
+$light-text-color: #000;
+$light-text-color: #fff;
+$link-text-color: #2196F3;
+$dark-text-color: #112236;
+
+// Layout
+$section-size--sm: 4rem;
+$section-size--md: 8rem;
+$section-size--lg: 12rem;
+$section-size--xl: 16rem;
+
+// Typoraphy
+
+$sub-font: 'Montserrat', sans-serif;
+$text-font: 'Noto Sans JP', sans-serif;
+$heading-font: 'Poppins', sans-serif;
+
+$h1--lg: 5.4rem;
+$h1--md: 4.8rem;
+$h1-sm: 3.8rem;
+
+$h2--lg: 4.8rem;
+$h2--md: 3.8rem;
+$h2-sm: 2.3rem;
+
+$h3--lg: 3.8rem;
+$h3--md: 2.3rem;
+$h3-sm: 1.8rem;
+
+$h4--lg: 2.3rem;
+$h4--md: 1.8rem;
+$h4--sm: 1.4rem;
+
+// Main text
+$main-text--xxl: 3.2rem;
+$main-text--xl: 2.6rem;
+$main-text--lg: 2.2rem;
+$main-text--md: 1.7rem;
+$main-text--sm: 1.5rem;
+
+// Fixed size/width/height
+
+$header-height: 8rem;
+
+@mixin main-text {
+    
+}
+
+@mixin heading-style {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.2em; // Em là gì ?
+    font-weight: bold;
+}
+
+@mixin h1-style {
+    @include heading-style;
+    font-size: $h1--md;
+}
+
+@mixin h2-style {
+    @include heading-style;
+    font-size: $h2--md;
+    line-height: 1.2em;
+}
+
+@mixin h3-style {
+    @include heading-style;
+    font-size: $h3--md;
+    line-height: 1.4em;
+}
+
+@mixin h4-style {
+    @include heading-style;
+    line-height: 1.4em;
+}
+
+@mixin h-style($headingName) {
+
+    @if $headingName == "h1" {
+        @include h1-style;
+    }
+
+    @if $headingName == "h2" {
+        @include h2-style;
+    }
+
+    @if $headingName == "h3" {
+        @include h3-style;
+    }
+
+    @if $headingName == "h4" {
+        @include h4-style;
+    }
+
+}
+
+// Button & Input
+
+
+* {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 62.5%;
+    line-height: 1.6rem;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+.container {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.spacing-h {
+    &-sm {
+        padding: $section-size--sm 0;   
+    }
+
+    &-md {
+        padding: $section-size--md 0;
+    }
+
+    &-lg {
+        padding: $section-size--lg 0;
+    }
+
+    &-xl {
+        padding: $section-size--xl 0;
+    }
+
+}
+
+.w-full {
+    width: 100%;
+}
+
+.w-half {
+    width: 50%;
+}

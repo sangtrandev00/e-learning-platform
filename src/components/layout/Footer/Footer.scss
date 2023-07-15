@@ -1,0 +1,65 @@
+@import "../../../assets/sass/mixins";
+@import "../../../assets/sass/base";
+
+.footer {
+    background-color: $dark-bg-color;
+    color: $light-text-color;
+
+    &__row {
+
+    }
+
+    &__col {
+        padding: 0rem 2.5rem;
+    }
+
+    &__logo {
+
+    }
+
+    &__text {
+        font-weight: 500;
+        font-size: 1.6rem;
+        line-height: 1.4;
+        margin: 2rem;
+    }
+
+    &__title {
+        font-size: 1.8rem;
+    }
+
+    .featured-list {
+        @include list-reset;
+        margin-top: 2rem;
+
+        &__item {
+
+            &-link {
+                color: #fff;
+                font-size: 1.6rem;
+                line-height: 1.4;
+                font-weight: 400;
+            }
+        }
+        
+    }
+
+    .social-list {
+        display: flex;
+        margin-top: 4rem;
+    }
+
+    .social-btn {
+        border: 2px solid $brand-secondary-color;
+        outline: none;
+        padding: 0.5rem;
+        background: transparent;
+        margin-left: 0.4rem;
+        cursor: pointer;
+    }
+
+    .social-icon {
+       color: $brand-secondary-color;
+    }
+
+}

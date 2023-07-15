@@ -1,0 +1,28 @@
+@import '../../../assets/sass/base';
+
+.auth {
+
+    &__title {
+        text-align: center;
+        @include h-style("h3");
+        margin-top: 2rem;
+    }
+
+    &__socials {
+        text-align: center;
+        margin: 2rem 0rem;
+        &-btn {
+            border-radius: 50%;
+            height: 4rem;
+        }
+
+        &-icon {
+            font-size: 1.4rem;
+        }
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+    }
+}
