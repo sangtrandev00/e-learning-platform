@@ -1,0 +1,97 @@
+@import "../../../assets/sass/base";
+.start-learning {
+
+    margin-top: $header-height;
+    background: $light-bg-color;
+    &__wrap {
+
+    }
+
+    &__header {
+
+        &-welcome {
+            display: flex;
+            &-icon {
+
+            }
+
+            &-img {
+                width: 12rem;
+                height: 12rem;
+                border-radius: 50%;
+            }
+
+            &-info {
+                padding-left: 2rem;
+            }
+
+            &-text {
+                margin-bottom: 1rem;
+            }
+
+            &-name {
+                margin-bottom: 1rem;
+            }
+
+            &-view-profile {
+
+            }
+        }
+
+        &-summary {
+            display: flex;
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 10px 50px rgba(0,0,0,.1);
+            padding: 3.5rem;
+            &-row {
+                width: 100%;
+            }
+
+            &-item {
+                padding: 2rem 2.5rem;
+                text-align: center;
+                
+                &--courses {
+                    background-color: $dark-bg-color;
+                    color: $light-text-color;
+                }
+
+                &--messages {
+
+                }
+
+                &--hours {
+                    background-color: $brand-secondary-color;
+                }
+
+                &-icon {    
+                    span {
+                        font-size: 3rem;
+                        margin-bottom: 1.5rem;
+                    }
+                }
+
+                &-number {
+                    font-size: 2.2rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                &-text {
+                    font-size: 1.4rem;
+                    font-weight: 400;
+                }
+            }
+        }
+
+    }
+
+    &__courses {
+        background-color: #fff;
+
+        &-heading {
+            @include h-style("h2");
+            margin-bottom: 4rem;
+        }
+    }
+}

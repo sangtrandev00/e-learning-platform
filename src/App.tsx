@@ -12,6 +12,10 @@ import SiteCourses from './pages/site/Courses';
 import CourseDetail from './pages/site/CourseDetail';
 import ViewCart from './pages/site/ViewCart';
 import Checkout from './pages/site/Checkout';
+import StartLearning from './pages/site/StartLearning';
+import Profile from './pages/site/Profile';
+import PathPlayer from './pages/site/PathPlayer';
+import Users from './pages/admin/Users';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +38,18 @@ const router = createBrowserRouter([
             element: <CourseDetail />
           }
         ]
+      },
+      {
+        path: 'start',
+        element: <StartLearning />
+      },
+      {
+        path: 'profile',
+        element: <Profile />
+      },
+      {
+        path: 'path-player',
+        element: <PathPlayer />
       },
       {
         path: 'view-cart',
@@ -79,7 +95,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'users',
-        element: <div>User Management</div>
+        element: <Users />
       },
       {
         path: 'setting',

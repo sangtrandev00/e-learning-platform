@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import CourseItem from '../components/CourseItem';
 import { Link } from 'react-router-dom';
+import CourseList from '../components/CourseList';
 const HomePage = () => {
   return (
     <div>
@@ -129,15 +130,7 @@ const HomePage = () => {
 
       <div className='our-courses container spacing-h-md'>
         <h2 className='our-courses__title'>Our Courses</h2>
-        <Row gutter={16} className='our-courses__wrapper'>
-          <CourseItem />
-          <CourseItem />
-          <CourseItem />
-        </Row>
-
-        <div className='our-courses__btn-place'>
-          <Button className='btn btn-secondary btn-sm'>Load more</Button>
-        </div>
+        <CourseList className='our-courses__wrapper' />
       </div>
     </div>
   );

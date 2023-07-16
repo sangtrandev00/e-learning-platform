@@ -7,6 +7,7 @@ import './Courses.scss';
 import CourseItem from './components/CourseItem';
 import { useState } from 'react';
 import CoursesList from './components/CoursesList';
+
 const Courses = () => {
   const [viewTable, setViewTable] = useState<string>('grid');
 

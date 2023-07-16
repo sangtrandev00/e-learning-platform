@@ -3,6 +3,7 @@ import './Courses.scss';
 import { Input, Row } from 'antd';
 import CourseItem from '../components/CourseItem';
 import { useNavigate } from 'react-router-dom';
+import CourseList from '../components/CourseList';
 
 const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
@@ -72,14 +73,7 @@ const Courses = () => {
           </div>
 
           <div className='courses__list'>
-            <Row className='courses__list-row' gutter={16}>
-              <CourseItem onClick={moveToDetail} />
-              <CourseItem onClick={moveToDetail} />
-              <CourseItem onClick={moveToDetail} />
-              <CourseItem onClick={moveToDetail} />
-              <CourseItem onClick={moveToDetail} />
-              <CourseItem onClick={moveToDetail} />
-            </Row>
+            <CourseList className='courses__list-row' />
           </div>
         </div>
       </div>
