@@ -15,6 +15,9 @@ import {
 import type { MenuProps } from 'antd';
 import { Button, Drawer, Layout, Menu, Space, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { openCreateCourse } from '../../pages/admin/Courses/course.slice';
+import CreateCourse from '../../pages/admin/Courses/components/CreateCourse';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -48,8 +51,9 @@ const items: MenuItem[] = [
 
 const RootAdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const dispatch = useDispatch();
 
   const closeDrawer = () => {
     setOpenDrawer(false);
@@ -65,6 +69,12 @@ const RootAdminLayout: React.FC = () => {
     console.log('click', e);
     navigate(e.key);
     setOpenDrawer(true);
+  };
+
+  const openCreateCourseHandler = () => {
+    console.log('click');
+
+    dispatch(openCreateCourse(true));
   };
 
   return (
@@ -87,7 +97,7 @@ const RootAdminLayout: React.FC = () => {
                   height: 64
                 }}
               />
-              <Button>
+              <Button onClick={openCreateCourseHandler}>
                 <PlusCircleOutlined />
                 Create Course
               </Button>
@@ -112,26 +122,24 @@ const RootAdminLayout: React.FC = () => {
       <Drawer
         className='drawer'
         title='Basic Drawer'
-        placement='left'
+        placement='right'
         onClose={closeDrawer}
         open={openDrawer}
         mask={false}
-        width={160}
+        width={200}
       >
-        <Space size='middle' align='start'>
-          <Space.Compact size='middle' direction='vertical'>
-            <Button>
-              <LeftOutlined />
-              Back
-            </Button>
+        <Button className=''>
+          <LeftOutlined />
+          Back
+        </Button>
 
-            <Button>
-              <PlusCircleOutlined />
-              Create Course
-            </Button>
-          </Space.Compact>
-        </Space>
+        <Button className='' onClick={openCreateCourseHandler}>
+          <PlusCircleOutlined />
+          Create Course
+        </Button>
       </Drawer>
+
+      <CreateCourse />
     </Fragment>
   );
 };

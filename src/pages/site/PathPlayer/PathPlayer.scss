@@ -1,0 +1,66 @@
+@import "../../../assets/sass/base";
+.path-player {
+
+    &__wrap {
+
+
+    }
+
+    &__menu {
+        color: $light-bg-color;
+
+        &-header {
+            background-color: $brand-primary-color;
+            padding-left: 2rem;
+
+            &-title {
+                @include h-style("h3");
+            }
+
+            &-nav {
+                display: flex;
+                padding: 1rem 0rem;
+                &-back {
+                    display: block;
+                    color: $light-text-color;
+                    display: flex;
+                    align-items: center;
+                    &-icon {
+
+                    }
+                }
+
+                &-collapse {
+                    display: block;
+                    margin-left: auto;
+                }
+            }
+        }
+
+        &-content {
+            margin-left: -2rem;
+            padding: 4rem 0rem 0rem 3rem;
+            background-color: #fff;
+
+        }
+    }
+
+    &__player {
+
+        &-nav {
+            display: flex;
+            padding: 1rem 0rem;
+            background-color: $light-bg-color;
+            &-item {
+                width: 50%;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+
+        &-screen {
+            // height: 1000px;
+        }
+    }
+    
+}

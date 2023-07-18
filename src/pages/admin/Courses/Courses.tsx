@@ -1,5 +1,4 @@
 import { Button, Col, Row, Select, Space } from 'antd';
-import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import React, { Fragment } from 'react';
 import { AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons';
@@ -7,6 +6,7 @@ import './Courses.scss';
 import CourseItem from './components/CourseItem';
 import { useState } from 'react';
 import CoursesList from './components/CoursesList';
+import CreateCourse from './components/CreateCourse';
 
 const Courses = () => {
   const [viewTable, setViewTable] = useState<string>('grid');

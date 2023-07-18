@@ -1,0 +1,64 @@
+.create-course {
+    &__modal {
+    }
+
+    &__left-bar {
+
+
+        .left-bar {
+
+            &__title {
+
+            }
+
+            &__icon {
+
+
+            }
+
+            &__samples {
+                
+                &-title {
+
+                }
+
+                &-content {
+
+                }
+            }
+
+        }
+    }
+
+    &__row {
+        height: 100%;
+    }
+
+    &__col {
+        height: 100%;
+        &--left {
+
+        }
+
+        &--right {
+            border-left: 1px solid #ccc;
+        }
+    }
+
+    &__data {
+        height: 100%;
+    }
+
+    &__form {
+        height: 100%;
+
+        &-wrap {
+            height: 100%;
+        }
+    }
+
+
+    .create-right-side {
+    }
+
+}

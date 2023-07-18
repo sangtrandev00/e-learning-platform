@@ -1,10 +1,12 @@
-import React, { Fragment } from 'react';
-import { Button, Table } from 'antd';
+import React, { Fragment, useEffect } from 'react';
+import { Button, Skeleton, Table } from 'antd';
 import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useState } from 'react';
 import './CoursesList.scss';
 import { Link, useNavigate } from 'react-router-dom';
+import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
+
 enum Access {
   PAID = 'PAID',
   FREE = 'FREE',
@@ -63,8 +65,8 @@ const columns: ColumnsType<DataCourseType> = [
     sorter: (a, b) => Number(a.author) - Number(b.author)
   },
   {
-    title: 'Author',
-    dataIndex: 'author',
+    title: 'Categories',
+    dataIndex: 'categories',
     filters: [
       {
         text: 'London',
@@ -113,7 +115,65 @@ const onChange: TableProps<DataCourseType>['onChange'] = (pagination, filters, s
 };
 
 const CoursesList: React.FC = () => {
-  const navigate = useNavigate();
+  const { data: dataList, isFetching } = useGetCoursesQuery();
+
+  if (dataList) {
+    console.log(dataList, isFetching);
+  }
+
+  const [courseData, setCourseData] = useState<DataCourseType[]>();
+
+  useEffect(() => {
+    if (dataList) {
+      const sourceCourseData = dataList.courses.map((courseItem) => {
+        const {
+          _id,
+          name,
+          description,
+          price,
+          finalPrice,
+          access,
+          level,
+          thumbnail,
+          categoryId,
+          userId,
+          createdAt,
+          updatedAt
+        } = courseItem;
+
+        const courseTemplateItem: DataCourseType = {
+          key: `${_id}`,
+          name: (
+            <div className='table__col-name'>
+              <img title={name} className='table__col-name-img' src={thumbnail} />
+              <span className='table__col-name-text'>{name}</span>
+            </div>
+          ),
+          author: userId,
+          categories: categoryId,
+          access: Access.FREE,
+          finalPrice: finalPrice,
+          price: price,
+          learners: 10,
+          createdAt: '18 jun 2023',
+          updatedAt: '18 jun 2023',
+          actions: (
+            <Fragment>
+              <Button>
+                <Link to={`/author/courses?courseid=${_id}`}>Edit</Link>
+              </Button>
+              <Button>Some actions</Button>
+            </Fragment>
+          )
+        };
+        return courseTemplateItem;
+      });
+
+      setCourseData(sourceCourseData);
+    } else {
+      setCourseData([]);
+    }
+  }, [dataList]);
 
   const data: DataCourseType[] = [
     {
@@ -186,11 +246,16 @@ const CoursesList: React.FC = () => {
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
-      pageSize: 2
+      pageSize: 12
     }
   });
 
-  return <Table columns={columns} dataSource={data} onChange={onChange} pagination={tableParams.pagination} />;
+  return (
+    <Fragment>
+      {isFetching && <Skeleton />}
+      <Table columns={columns} dataSource={courseData} onChange={onChange} pagination={tableParams.pagination} />
+    </Fragment>
+  );
 };
 
 export default CoursesList;

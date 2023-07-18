@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICourse } from '../../../types/course.type';
+import { IOrder } from '../../../types/order.type';
 import { CustomError } from '../../../utils/helpers';
 
 /**
@@ -17,21 +17,21 @@ import { CustomError } from '../../../utils/helpers';
  *
  * Cách 2: Đây là cách thường dùng với RTK query
  * 1. Sau khi thêm 1 bài post thì server sẽ trả về data của bài post đó
- * 2. Chúng ta sẽ tiến hành fetch lại API get Courses để cập nhật state redux
+ * 2. Chúng ta sẽ tiến hành fetch lại API get Orders để cập nhật state redux
  * 3. Lúc này UI chúng ta sẽ được sync
  *
  * =====> Cách này giúp data dưới local sẽ luôn mới nhất, luôn đồng bộ với server
  * =====> Khuyết điểm là chúng ta sẽ tốn thêm một lần gọi API. Thực ra thì điều này có thể chấp nhận được
  */
 
-interface getCoursesResponse {
-  courses: ICourse[];
+interface getOrdersResponse {
+  orders: IOrder[];
   message: string;
 }
 
-export const courseApi = createApi({
-  reducerPath: 'courseApi', // Tên field trong Redux state
-  tagTypes: ['Courses'], // Những kiểu tag cho phép dùng trong blogApi
+export const orderApi = createApi({
+  reducerPath: 'orderApi', // Tên field trong Redux state
+  tagTypes: ['Orders'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:9000/admin',
@@ -43,21 +43,21 @@ export const courseApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getCourses: build.query<getCoursesResponse, void>({
-      query: () => '/courses', // method không có argument
+    getOrders: build.query<getOrdersResponse, void>({
+      query: () => '/orders', // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Courses method chạy lại
+       * thì sẽ làm cho Orders method chạy lại
        * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
        */
       providesTags(result) {
         /**
-         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Cái callback này sẽ chạy mỗi khi Orders chạy
          * Mong muốn là sẽ return về một mảng kiểu
          * ```ts
          * interface Tags: {
-         *    type: "Courses";
+         *    type: "User";
          *    id: string;
          *  }[]
          *```
@@ -67,8 +67,8 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
-              { type: 'Courses' as const, id: 'LIST' }
+              ...result.map(({ _id }) => ({ type: 'Orders' as const, _id })),
+              { type: 'Orders' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
 
@@ -76,23 +76,23 @@ export const courseApi = createApi({
           }
         }
 
-        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
         // return final
-        return [{ type: 'Courses', id: 'LIST' }];
+        return [{ type: 'Orders', id: 'LIST' }];
       }
     }),
     /**
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    addCourse: build.mutation<ICourse, Omit<ICourse, 'id'>>({
+    addOrder: build.mutation<IOrder, Omit<IOrder, 'id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')
           // let a: any = null
           // a.b = 1
           return {
-            url: 'course',
+            url: 'order',
             method: 'POST',
             body
           };
@@ -103,13 +103,13 @@ export const courseApi = createApi({
       /**
        * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
        * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Courses sẽ chạy lại
+       * Trong trường hợp này Orders sẽ chạy lại
        */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Orders', id: 'LIST' }])
     }),
-    getCourse: build.query<ICourse, string>({
+    getOrder: build.query<IOrder, string>({
       query: (id) => ({
-        url: `courses/${id}`,
+        url: `orders/${id}`,
         headers: {
           hello: 'Im duoc'
         },
@@ -119,34 +119,34 @@ export const courseApi = createApi({
         }
       })
     }),
-    updateCourse: build.mutation<ICourse, { id: string; body: ICourse }>({
+    updateOrder: build.mutation<IOrder, { id: string; body: IOrder }>({
       query(data) {
         return {
-          url: `courses/${data.id}`,
+          url: `orders/${data.id}`,
           method: 'PUT',
           body: data.body
         };
       },
-      // Trong trường hợp này thì Courses sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Courses', id: data.id }])
+      // Trong trường hợp này thì Orders sẽ chạy lại
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Orders', id: data.id }])
     }),
-    deleteCourse: build.mutation<Record<string, never>, string>({
+    deleteOrder: build.mutation<Record<string, never>, string>({
       query(id) {
         return {
-          url: `courses/${id}`,
+          url: `orders/${id}`,
           method: 'DELETE'
         };
       },
-      // Trong trường hợp này thì Courses sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Courses', id }]
+      // Trong trường hợp này thì Orders sẽ chạy lại
+      invalidatesTags: (result, error, id) => [{ type: 'Orders', id }]
     })
   })
 });
 
 export const {
-  useGetCoursesQuery,
-  useAddCourseMutation,
-  useGetCourseQuery,
-  useUpdateCourseMutation,
-  useDeleteCourseMutation
-} = courseApi;
+  useGetOrdersQuery,
+  useAddOrderMutation,
+  useGetOrderQuery,
+  useUpdateOrderMutation,
+  useDeleteOrderMutation
+} = orderApi;

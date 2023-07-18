@@ -1,0 +1,36 @@
+@import "../../../../../../assets/sass/base";
+
+.lesson-item {
+    display: flex;
+    padding: 1rem;
+    background-color: $light-bg-color;
+    border-left: 4px solid $brand-primary-color;
+    cursor: pointer;
+    &__icon {
+
+    }
+
+    &__lengths {
+        margin-left: 0.8rem;
+    }
+
+    &__status {
+        background-color: $brand-tertiary-color;
+        color: #fff;
+        font-weight: 400;
+        padding: 0rem 0.2rem;
+    }
+
+    &__lenghs-minutes {
+
+    }
+
+    &__name {
+        margin-left: 0.8rem;
+    }
+
+    &__is-finished {
+        margin-left: auto;
+    }
+
+}

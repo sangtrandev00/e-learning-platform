@@ -7,7 +7,7 @@ import RootAdminLayout from './components/AdminLayout/RootLayout';
 import HomePage from './pages/site/Home';
 import Dashboard from './pages/admin/Dashboard';
 import ErrorPage from './pages/Error/404Error';
-import CoursesList from './pages/admin/Courses/Courses.';
+import CoursesList from './pages/admin/Courses/Courses';
 import SiteCourses from './pages/site/Courses';
 import CourseDetail from './pages/site/CourseDetail';
 import ViewCart from './pages/site/ViewCart';
@@ -46,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <Profile />
-      },
-      {
-        path: 'path-player',
-        element: <PathPlayer />
       },
       {
         path: 'view-cart',
@@ -103,6 +99,10 @@ const router = createBrowserRouter([
       }
     ],
     errorElement: <div>Admin Error</div>
+  },
+  {
+    path: 'path-player',
+    element: <PathPlayer />
   }
 ]);
 

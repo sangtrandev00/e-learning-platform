@@ -26,17 +26,17 @@ export interface ICourse {
   level: CourseLevel;
   thumbnail: string;
   courseSlug: string;
-  cateId: string; // id of Lập trình/Khoa học máy tính
+  categoryId: string; // id of Lập trình/Khoa học máy tính
   userId: string; // FK
-  sectionList: ISection[];
+  sectionList?: ISection[];
   usersEntrolled?: {
     // Learners
     userId: string;
     lessonDone: number; // Thời gian tới bao nhiêu là để biết học sinh done khóa đó, phần này có nên sinh ra một bảng nữa hay không!
     dateStart: string;
   }[];
-  createAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // When is use is enrolled ? (bought the course, click enroll if course is free)

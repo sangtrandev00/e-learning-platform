@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICourse } from '../../../types/course.type';
+import { IUser } from '../../../types/user.type';
 import { CustomError } from '../../../utils/helpers';
 
 /**
@@ -17,21 +17,21 @@ import { CustomError } from '../../../utils/helpers';
  *
  * Cách 2: Đây là cách thường dùng với RTK query
  * 1. Sau khi thêm 1 bài post thì server sẽ trả về data của bài post đó
- * 2. Chúng ta sẽ tiến hành fetch lại API get Courses để cập nhật state redux
+ * 2. Chúng ta sẽ tiến hành fetch lại API get Users để cập nhật state redux
  * 3. Lúc này UI chúng ta sẽ được sync
  *
  * =====> Cách này giúp data dưới local sẽ luôn mới nhất, luôn đồng bộ với server
  * =====> Khuyết điểm là chúng ta sẽ tốn thêm một lần gọi API. Thực ra thì điều này có thể chấp nhận được
  */
 
-interface getCoursesResponse {
-  courses: ICourse[];
+interface getUsersResponse {
+  users: IUser[];
   message: string;
 }
 
-export const courseApi = createApi({
-  reducerPath: 'courseApi', // Tên field trong Redux state
-  tagTypes: ['Courses'], // Những kiểu tag cho phép dùng trong blogApi
+export const userApi = createApi({
+  reducerPath: 'userApi', // Tên field trong Redux state
+  tagTypes: ['Users'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:9000/admin',
@@ -43,21 +43,21 @@ export const courseApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getCourses: build.query<getCoursesResponse, void>({
-      query: () => '/courses', // method không có argument
+    getUsers: build.query<getUsersResponse, void>({
+      query: () => '/users', // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Courses method chạy lại
+       * thì sẽ làm cho Users method chạy lại
        * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
        */
       providesTags(result) {
         /**
-         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Cái callback này sẽ chạy mỗi khi Users chạy
          * Mong muốn là sẽ return về một mảng kiểu
          * ```ts
          * interface Tags: {
-         *    type: "Courses";
+         *    type: "User";
          *    id: string;
          *  }[]
          *```
@@ -67,8 +67,8 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
-              { type: 'Courses' as const, id: 'LIST' }
+              ...result.map(({ _id }) => ({ type: 'Users' as const, _id })),
+              { type: 'Users' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
 
@@ -76,23 +76,23 @@ export const courseApi = createApi({
           }
         }
 
-        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // const final = [{ type: 'Users' as const, id: 'LIST' }]
         // return final
-        return [{ type: 'Courses', id: 'LIST' }];
+        return [{ type: 'Users', id: 'LIST' }];
       }
     }),
     /**
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    addCourse: build.mutation<ICourse, Omit<ICourse, 'id'>>({
+    addUser: build.mutation<IUser, Omit<IUser, 'id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')
           // let a: any = null
           // a.b = 1
           return {
-            url: 'course',
+            url: 'user',
             method: 'POST',
             body
           };
@@ -103,13 +103,13 @@ export const courseApi = createApi({
       /**
        * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
        * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Courses sẽ chạy lại
+       * Trong trường hợp này Users sẽ chạy lại
        */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
     }),
-    getCourse: build.query<ICourse, string>({
+    getUser: build.query<IUser, string>({
       query: (id) => ({
-        url: `courses/${id}`,
+        url: `users/${id}`,
         headers: {
           hello: 'Im duoc'
         },
@@ -119,34 +119,29 @@ export const courseApi = createApi({
         }
       })
     }),
-    updateCourse: build.mutation<ICourse, { id: string; body: ICourse }>({
+    updateUser: build.mutation<IUser, { id: string; body: IUser }>({
       query(data) {
         return {
-          url: `courses/${data.id}`,
+          url: `users/${data.id}`,
           method: 'PUT',
           body: data.body
         };
       },
-      // Trong trường hợp này thì Courses sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Courses', id: data.id }])
+      // Trong trường hợp này thì Users sẽ chạy lại
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: data.id }])
     }),
-    deleteCourse: build.mutation<Record<string, never>, string>({
+    deleteUser: build.mutation<Record<string, never>, string>({
       query(id) {
         return {
-          url: `courses/${id}`,
+          url: `users/${id}`,
           method: 'DELETE'
         };
       },
-      // Trong trường hợp này thì Courses sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Courses', id }]
+      // Trong trường hợp này thì Users sẽ chạy lại
+      invalidatesTags: (result, error, id) => [{ type: 'Users', id }]
     })
   })
 });
 
-export const {
-  useGetCoursesQuery,
-  useAddCourseMutation,
-  useGetCourseQuery,
-  useUpdateCourseMutation,
-  useDeleteCourseMutation
-} = courseApi;
+export const { useGetUsersQuery, useAddUserMutation, useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } =
+  userApi;
