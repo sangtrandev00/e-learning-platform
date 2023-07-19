@@ -90,8 +90,13 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'users',
-        element: <Users />
+        path: 'users-manager',
+        children: [
+          {
+            index: true,
+            element: <Users />
+          }
+        ]
       },
       {
         path: 'setting',

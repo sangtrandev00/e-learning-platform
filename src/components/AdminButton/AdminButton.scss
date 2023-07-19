@@ -1,0 +1,47 @@
+@import "../../assets/sass/admin-base";
+
+.btn {
+    color: $light-text-color;
+    background-color: $primary-color;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    
+    &-primary {
+        padding: 0.8rem 2rem;
+    }
+
+
+    &-lg {
+        font-size: 2rem;  
+        padding: 2rem 6rem;
+        border-radius: 6.2rem;
+    }
+
+    &-md {
+        font-size: 1.6rem;
+        padding: 1.5rem 4rem;
+        border-radius: 3.6rem;
+    }
+
+    &-sm {
+        font-size: 1.4rem;
+        padding: 1.1rem 3.2rem;
+        border-radius: 3rem;
+    }
+
+    // &-outline-primary{
+    //     border: 2px solid $brand-primary-color;
+    //     background-color: transparent;
+    //     color: $brand-primary-color;
+    // }
+
+    // &-secondary {
+    //     background-color: $brand-secondary-color;
+    //     color: $dark-text-color;
+    //     border: none;
+    //     font-weight: 600;
+    // }
+
+}
+

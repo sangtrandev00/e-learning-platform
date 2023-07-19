@@ -1,0 +1,233 @@
+@import "../../../assets/sass/admin-base";
+.dashboard {
+
+    &__summary {
+        height: 34rem;
+        background-color: #fff;
+        margin-top: 1rem;
+        &-row {
+            height: 100%;
+        }
+
+        &-col {
+            height: 100%;
+        }
+    }
+
+    &__chart {
+        height: 100%;
+        &-header {
+            display: flex;
+            padding: 1.2rem;
+            &-logo {
+
+                &-icon {
+                    font-size: 2.4rem;
+                    line-height: 1.4;
+                }
+
+                &-text {
+                    margin-left: 1rem;
+                }
+            }
+
+            &-nav {
+                margin-left: auto;
+
+                &-item {
+                    margin-right: 0.4rem;
+
+                    &--select {
+                        background-color: $gray-bg-color;
+                    }
+                }
+            }
+        }
+
+        &-body {
+            height: 100%;
+            padding-left: 1rem;
+            padding-bottom: 10rem;
+        }
+    }
+
+    &__statistic {
+        height: 100%;
+
+        &-row {
+            height: 100%;
+        }
+
+        &-item {
+            @include flex(column);
+            margin-top: 1rem;
+        }
+    }
+
+    &__latest {
+        margin-top: 1rem;
+
+        &-item {
+            border-radius: 1rem;
+            background-color: #fff;
+            padding: 1rem;
+            &-header {
+                display: flex;
+                align-items: center;
+                &-icon {
+                    font-size: 2rem;
+                }
+
+                &-title {
+                    font-weight: 500;
+                    margin-left: 1rem;
+                }
+
+                &-view-all {
+                    margin-left: 1rem;
+                    display: inline-block;
+                    background-color: $primary-color;
+                    color: #fff;
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 4rem;
+                }
+            }
+
+            &-body {
+                margin-top: 2rem;
+            }
+
+        }
+        &-users {
+
+            .latest-users {
+                &__header {
+                    &-icon {
+                    }
+
+                    &-title {
+           
+                    }
+
+                    &-view-all {
+                
+                    }
+                }
+
+                &__body {
+                }
+
+                &__item {
+                    display: flex;
+                    align-items: center;
+                    &-avatar {
+                        width: 4rem;
+                        height: 4rem;
+                    }
+
+                    &-info {
+                        padding-left: 1rem;
+                        font-weight: 400;
+
+                    }
+
+                    &-name {
+
+                    }
+
+                    &-title {
+
+                    }
+                }
+
+            }
+        }
+
+        &-posts {
+
+           .latest-posts {
+            &__item {
+                
+                display: flex;
+
+                &-icon {
+                    font-size: 2rem;
+                }
+
+                &-info {
+                    margin-left: 1rem;
+                }
+
+                &-content {
+                    margin-top: 1rem;
+                }
+
+                &-action {
+                    font-weight: 400;
+                }
+
+                &-text {
+
+                }
+
+                &-time {
+                    margin-left: auto;
+                    font-weight: 400;
+                    
+                }
+            }
+
+
+           }
+        }
+
+        // Online users
+
+        &-online-users {
+
+
+            .online-users {
+
+                &__header {
+
+                    &-icon {
+
+                    }
+
+                    &-title {
+
+                    }
+
+
+                }
+
+                &__body {
+
+                 
+                }
+                &__item {
+
+                    &-avatar {
+                        width: 2rem;
+                        height: 2rem;
+                    }
+
+                    &-info {
+
+                    }
+                    
+                    &-name {
+
+                    }
+
+                    &-time {
+
+                    }
+                }
+
+            }
+        }
+
+
+    }
+}

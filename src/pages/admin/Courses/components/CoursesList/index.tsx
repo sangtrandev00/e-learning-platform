@@ -251,10 +251,10 @@ const CoursesList: React.FC = () => {
   });
 
   return (
-    <Fragment>
+    <div className="course-list">
       {isFetching && <Skeleton />}
       <Table columns={columns} dataSource={courseData} onChange={onChange} pagination={tableParams.pagination} />
-    </Fragment>
+    </div>
   );
 };
 

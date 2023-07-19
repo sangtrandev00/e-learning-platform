@@ -1,0 +1,16 @@
+@import "../../../assets/sass/base";
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+
+    &__notify {
+        margin-right: 2rem;
+    }
+
+    &__page-title {
+        @include h-style("h3");
+        font-weight: 500;
+        margin-left: 1rem;
+    }
+}

@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+$primary-color: #4ACCC1;
+$secondary-color: #FA0A84;
+$bg-color: #F5F5F5;
+$gray-bg-color: #EBEBEB;
+$light-text-color: #FFFFFF;
+$font-family: "Helvetica Neue,-apple-system,BlinkMacSystemFont,Segoe UI,Arial";
+
+@mixin flex($direction: row, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}

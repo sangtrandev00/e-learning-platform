@@ -1,14 +1,18 @@
-.table__col-name {
-    display: flex;
-    align-items: center;
+.course-list {
+    margin-top: 1rem;
+    .table__col-name {
+        display: flex;
+        align-items: center;
+        
+        &-img {
+            width: 4rem;
+            height: 3rem;
+        }
     
-    &-img {
-        width: 4rem;
-        height: 3rem;
-    }
-
-    &-text {
-        display: inline-block;
-        margin-left: 1rem;
+        &-text {
+            display: inline-block;
+            margin-left: 1rem;
+        }
     }
 }
+

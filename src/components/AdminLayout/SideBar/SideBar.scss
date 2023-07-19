@@ -1,0 +1,15 @@
+@import "../../../assets/sass/admin-base";
+
+.sidebar {
+
+    .ant-menu-item:first-child {
+   
+    }
+
+    &__menu > .ant-menu-item:first-child  {
+        background-color: $gray-bg-color;
+        padding: 3rem 1rem;
+    }
+
+    
+}

@@ -1,13 +1,13 @@
-import { Button, Col, Row, Select, Space } from 'antd';
+import { Button, Col, Row, Select, Space, Input } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import React, { Fragment } from 'react';
 import { AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import './Courses.scss';
 import CourseItem from './components/CourseItem';
 import { useState } from 'react';
 import CoursesList from './components/CoursesList';
-import CreateCourse from './components/CreateCourse';
+import './Courses.scss';
 
+const { Search } = Input;
 const Courses = () => {
   const [viewTable, setViewTable] = useState<string>('grid');
 
@@ -37,7 +37,7 @@ const Courses = () => {
     <Fragment>
       <Header className='sub-header'>
         <Space className='sub-header__wrap'>
-          {/* <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} /> */}
+          <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
           <Select
             showSearch
             placeholder='Select a person'
