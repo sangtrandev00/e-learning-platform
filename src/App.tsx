@@ -10,12 +10,15 @@ import ErrorPage from './pages/Error/404Error';
 import CoursesList from './pages/admin/Courses/Courses';
 import SiteCourses from './pages/site/Courses';
 import CourseDetail from './pages/site/CourseDetail';
+import AdminCourseDetail from './pages/admin/Courses/components/CourseDetail';
 import ViewCart from './pages/site/ViewCart';
 import Checkout from './pages/site/Checkout';
 import StartLearning from './pages/site/StartLearning';
 import Profile from './pages/site/Profile';
 import PathPlayer from './pages/site/PathPlayer';
 import Users from './pages/admin/Users';
+import Categories from './pages/admin/Categories';
+import Settings from './pages/admin/Settings';
 
 const router = createBrowserRouter([
   {
@@ -75,7 +78,7 @@ const router = createBrowserRouter([
         element: <Dashboard />
       },
       {
-        path: 'courses-manager',
+        path: 'courses',
 
         children: [
           {
@@ -85,12 +88,12 @@ const router = createBrowserRouter([
           {
             id: 'course-detail',
             path: ':courseid',
-            element: <div>Course detail</div>
+            element: <AdminCourseDetail />
           }
         ]
       },
       {
-        path: 'users-manager',
+        path: 'users',
         children: [
           {
             index: true,
@@ -99,8 +102,17 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'setting',
-        element: <div>Setting </div>
+        path: 'categories',
+        children: [
+          {
+            index: true,
+            element: <Categories />
+          }
+        ]
+      },
+      {
+        path: 'settings',
+        element: <Settings />
       }
     ],
     errorElement: <div>Admin Error</div>

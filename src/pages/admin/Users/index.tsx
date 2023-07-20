@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, Input, Select, Button } from 'antd';
 import './Users.scss';
 import UsersList from './components/UsersList';
-
+import AddUser from './components/AddUser';
+import { PlusOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 const Users = () => {
+  const [open, setOpen] = useState(false);
+
   const onSearchHandler = (value: string) => {
     console.log(value);
   };
@@ -23,6 +26,9 @@ const Users = () => {
       <div className='users__wrap'>
         <div className='users__filter'>
           <Space className='sub-header__wrap'>
+            <Button onClick={() => setOpen(true)} type='primary' icon={<PlusOutlined />}>
+              New account
+            </Button>
             <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
             <Select
               showSearch
@@ -96,6 +102,7 @@ const Users = () => {
           <UsersList />
         </div>
       </div>
+      <AddUser isOpen={open} onClose={() => setOpen(false)} />
     </div>
   );
 };

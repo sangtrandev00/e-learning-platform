@@ -3,12 +3,11 @@ import { Button, Skeleton, Space, Table } from 'antd';
 import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useState } from 'react';
-import './UsersList.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import './CategoriesList.scss';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import UserDetail from './components/UserDetail';
-interface DataUserType {
+
+interface DataCategoryType {
   key: React.Key;
   name: any;
   avatar?: string;
@@ -27,9 +26,9 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const columns: ColumnsType<DataUserType> = [
+const columns: ColumnsType<DataCategoryType> = [
   {
-    title: 'User',
+    title: 'Category',
     dataIndex: 'name',
     filters: [
       {
@@ -56,7 +55,7 @@ const columns: ColumnsType<DataUserType> = [
     // sorter: (a, b) => Number(a.author) - Number(b.author)
   },
   {
-    title: 'Registerd',
+    title: 'Created at',
     dataIndex: 'createdAt',
     filters: [
       {
@@ -85,32 +84,32 @@ const columns: ColumnsType<DataUserType> = [
   }
 ];
 
-const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sorter, extra) => {
+const onChange: TableProps<DataCategoryType>['onChange'] = (pagination, filters, sorter, extra) => {
   console.log('params', pagination, filters, sorter, extra);
 };
 
-const UsersList: React.FC = () => {
+const CategoriesList: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  const showUserDetail = () => {
-    console.log('click');
-    setOpen(true);
-  };
+  //   const showUserDetail = () => {
+  //     console.log('click');
+  //     setOpen(true);
+  //   };
 
-  const usersSource = [
+  const categoriesSource = [
     {
       key: '1',
       name: (
-        <a href='#' onClick={showUserDetail}>
-          <div className='user-info'>
+        <a href='#'>
+          <div className='category-info'>
             <img
               src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
+              className='category-info__avatar'
             />
 
-            <div className='user-info__content'>
-              <div className='user-info__name'>sangtrandev</div>
-              <div className='user-info__email'>sangtnps20227@fpt.edu.vn</div>
+            <div className='category-info__content'>
+              <div className='category-info__name'>Backend</div>
+              {/* <div className='category-info__email'>sangtnps20227@fpt.edu.vn</div> */}
             </div>
           </div>
         </a>
@@ -134,15 +133,15 @@ const UsersList: React.FC = () => {
       key: '2',
       name: (
         <a href='#'>
-          <div className='user-info'>
+          <div className='category-info'>
             <img
               src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
+              className='category-info__avatar'
             />
 
-            <div className='user-info__content'>
-              <div className='user-info__name'>trannhatsang</div>
-              <div className='user-info__email'>nhatsang@gmail.com</div>
+            <div className='category-info__content'>
+              <div className='category-info__name'>Frontend</div>
+              {/* <div className='category-info__email'>nhatsang@gmail.com</div> */}
             </div>
           </div>
         </a>
@@ -170,7 +169,7 @@ const UsersList: React.FC = () => {
   //     console.log(dataList, isFetching);
   //   }
 
-  //   const [courseData, setCourseData] = useState<DataUserType[]>();
+  //   const [courseData, setCourseData] = useState<DataCategoryType[]>();
 
   //   useEffect(() => {
   //     if (dataList) {
@@ -190,7 +189,7 @@ const UsersList: React.FC = () => {
   //           updatedAt
   //         } = courseItem;
 
-  //         const courseTemplateItem: DataUserType = {
+  //         const courseTemplateItem: DataCategoryType = {
   //           key: `${_id}`,
   //           name: (
   //             <div className='table__col-name'>
@@ -224,7 +223,7 @@ const UsersList: React.FC = () => {
   //     }
   //   }, [dataList]);
 
-  //   const data: DataUserType[] = [
+  //   const data: DataCategoryType[] = [
   //     {
   //       key: '1',
   //       name: (
@@ -302,10 +301,9 @@ const UsersList: React.FC = () => {
   return (
     <div className='users-list'>
       {/* {isFetching && <Skeleton />} */}
-      <Table columns={columns} dataSource={usersSource} onChange={onChange} pagination={tableParams.pagination} />
-      <UserDetail isOpen={open} onClose={() => setOpen(false)} />
+      <Table columns={columns} dataSource={categoriesSource} onChange={onChange} pagination={tableParams.pagination} />
     </div>
   );
 };
 
-export default UsersList;
+export default CategoriesList;

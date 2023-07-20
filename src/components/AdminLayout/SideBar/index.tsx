@@ -8,7 +8,9 @@ import {
   TeamOutlined,
   UserOutlined,
   BorderOuterOutlined,
-  UnorderedListOutlined
+  UnorderedListOutlined,
+  SettingOutlined,
+  UserAddOutlined
 } from '@ant-design/icons';
 
 import './SideBar.scss';
@@ -27,18 +29,15 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 const items: MenuItem[] = [
   getItem('sangtrandev', 'myprofile', <BorderOuterOutlined />),
   getItem('Dashboard', 'dashboard', <PieChartOutlined />),
-  getItem('Categories', 'categories', <UnorderedListOutlined />, [getItem('categories manager', 'categories-manager')]),
-  getItem('Courses', 'courses', <DesktopOutlined />, [
-    getItem('Course Manager', 'courses-manager'),
-    getItem('Course 2', 'fsdjfklsdf')
-  ]),
+  getItem('Categories', 'categories', <UnorderedListOutlined />, [getItem('Categories', 'categories')]),
+  getItem('Courses', 'courses', <DesktopOutlined />, [getItem('Course Manager', 'courses')]),
   getItem('Users', 'users', <UserOutlined />, [
-    getItem('All Users', 'users-manager'),
+    getItem('All Users', 'users'),
     getItem('Admins', 'admins'),
     getItem('Intructors', 'intructors')
   ]),
-  getItem('Setting', 'setting', <TeamOutlined />, [getItem('Team 1', '6fsdfsd'), getItem('Team 2', '8fsdf')]),
-  getItem('My account', 'accouont', <FileOutlined />),
+  getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
+  getItem('My account', 'account', <UserAddOutlined />),
   getItem('Need Help ?', 'help', <FileOutlined />)
 ];
 

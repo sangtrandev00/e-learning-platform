@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect } from 'react';
-import { Button, Skeleton, Table } from 'antd';
+import { Button, Skeleton, Space, Table } from 'antd';
 import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useState } from 'react';
-import './CoursesList.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
+import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
+import './CoursesList.scss';
 
 enum Access {
   PAID = 'PAID',
@@ -159,10 +160,16 @@ const CoursesList: React.FC = () => {
           updatedAt: '18 jun 2023',
           actions: (
             <Fragment>
-              <Button>
-                <Link to={`/author/courses?courseid=${_id}`}>Edit</Link>
-              </Button>
-              <Button>Some actions</Button>
+              <Space>
+                <Button>
+                  <Link to={`/author/courses/${_id}`}>
+                    <EditOutlined />
+                  </Link>
+                </Button>
+                <Button>
+                  <EllipsisOutlined />
+                </Button>
+              </Space>
             </Fragment>
           )
         };
@@ -251,7 +258,7 @@ const CoursesList: React.FC = () => {
   });
 
   return (
-    <div className="course-list">
+    <div className='course-list'>
       {isFetching && <Skeleton />}
       <Table columns={columns} dataSource={courseData} onChange={onChange} pagination={tableParams.pagination} />
     </div>

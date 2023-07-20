@@ -1,8 +1,5 @@
-.users-list {
-    margin-top: 1rem;
-}
+.category-info {
 
-.user-info {
     display: flex;
     align-items: center;
     &__avatar {
@@ -11,11 +8,8 @@
         border-radius: 50%;
     }
 
-    &__content {
+    &__name {
         margin-left: 1rem;
     }
-
-    &__name {
-        font-size: 1.8rem;
-    }
+    
 }

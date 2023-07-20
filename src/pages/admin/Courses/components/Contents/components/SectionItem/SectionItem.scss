@@ -1,0 +1,28 @@
+.section-item {
+    padding: 0rem 2rem 0rem 4rem;
+
+    &__content {
+        display: flex;
+    }
+
+    &__number {
+
+
+        &-head {
+            font-size: 4.8rem;
+        }
+        
+    }
+
+    &__info {
+        margin-left: 2rem;
+    }
+
+    &__name {
+        font-size: 3.6rem;
+    }
+
+    &__btns {
+
+    }
+}
