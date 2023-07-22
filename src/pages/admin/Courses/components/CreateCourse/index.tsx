@@ -20,8 +20,15 @@ const initStateCourse: ICourse = {
   level: CourseLevel.BEGINNER,
   thumbnail: '',
   courseSlug: '',
-  categoryId: '',
-  userId: ''
+  categoryId: {
+    _id: '',
+    name: ''
+  },
+  userId: {
+    _id: '',
+    name: '',
+    avatar: ''
+  }
 };
 
 const orderCreateForm = [

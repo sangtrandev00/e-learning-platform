@@ -3,9 +3,11 @@
 
 export interface ICategory {
   _id: string;
-  cateName: string;
-  cateDesc: string;
+  name: string;
+  description: string;
   cateImage: string;
   cateSlug: string;
-  parentId: string; // 0, 1, 2
+  parentId?: string; // 0, 1, 2
+  createdAt?: string;
+  courses?: number;
 }

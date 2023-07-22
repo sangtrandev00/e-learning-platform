@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICourse } from '../../../types/course.type';
 import { CustomError } from '../../../utils/helpers';
+import { ISection } from '../../../types/lesson.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -29,6 +30,11 @@ interface getCoursesResponse {
   message: string;
 }
 
+interface getSectionsResponse {
+  sections: ISection[];
+  message: string;
+}
+
 export const courseApi = createApi({
   reducerPath: 'courseApi', // Tên field trong Redux state
   tagTypes: ['Courses'], // Những kiểu tag cho phép dùng trong blogApi
@@ -45,6 +51,93 @@ export const courseApi = createApi({
     // Generic type theo thứ tự là kiểu response trả về và argument
     getCourses: build.query<getCoursesResponse, void>({
       query: () => '/courses', // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Courses method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "Courses";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        console.log('result provider tags: ', result);
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              { type: 'Courses' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Courses', id: 'LIST' }];
+      }
+    }),
+    getSections: build.query<getSectionsResponse, void>({
+      query: () => '/sections', // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Courses method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "Courses";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              { type: 'Courses' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Courses', id: 'LIST' }];
+      }
+    }),
+    getSectionsByCourseId: build.query<getSectionsResponse, string>({
+      query: (courseId) => ({
+        url: `sections/${courseId}/course`
+        // headers: {
+        //   hello: 'Im duoc'
+        // },
+        // params: {
+        //   first_name: 'du',
+        //   'last-name': 'duoc'
+        // }
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
@@ -138,13 +231,19 @@ export const courseApi = createApi({
         };
       },
       // Trong trường hợp này thì Courses sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Courses', id }]
+      invalidatesTags: (result, error, id) => {
+        console.log(result, error, id);
+
+        return [{ type: 'Courses', id }];
+      }
     })
   })
 });
 
 export const {
   useGetCoursesQuery,
+  useGetSectionsQuery,
+  useGetSectionsByCourseIdQuery,
   useAddCourseMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,

@@ -1,8 +1,7 @@
 export interface ISection {
   _id: string;
-  chapterName: string;
+  name: string;
   courseId: string;
-  lessonList: ILesson[];
 }
 
 export interface ILesson {

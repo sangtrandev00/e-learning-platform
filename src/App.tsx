@@ -19,6 +19,7 @@ import PathPlayer from './pages/site/PathPlayer';
 import Users from './pages/admin/Users';
 import Categories from './pages/admin/Categories';
 import Settings from './pages/admin/Settings';
+import Orders from './pages/admin/Orders';
 
 const router = createBrowserRouter([
   {
@@ -87,7 +88,7 @@ const router = createBrowserRouter([
           },
           {
             id: 'course-detail',
-            path: ':courseid',
+            path: ':courseId',
             element: <AdminCourseDetail />
           }
         ]
@@ -98,6 +99,15 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Users />
+          }
+        ]
+      },
+      {
+        path: 'orders',
+        children: [
+          {
+            index: true,
+            element: <Orders />
           }
         ]
       },

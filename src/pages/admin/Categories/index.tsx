@@ -1,11 +1,16 @@
-import { Button, Input, Select, Space } from 'antd';
+import { Button, Input, Select, Skeleton, Space } from 'antd';
 import CreateCategory from './components/CreateCategory';
 import CategoriesList from './components/CategoriesList';
 import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import { useAddCategoryMutation, useGetCategoriesQuery } from './category.service';
+import { ICategory } from '../../../types/category.type';
 const { Search } = Input;
 
 const Categories = () => {
+  const [addCategory, addCategoryResult] = useAddCategoryMutation();
+  const { data, isFetching } = useGetCategoriesQuery();
+  console.log(data);
   const [open, setOpen] = useState(false);
 
   const onSearchHandler = (value: string) => {
@@ -19,6 +24,22 @@ const Categories = () => {
   const onSelectSearch = (value: string) => {
     console.log('search:', value);
   };
+
+  const submitHandler = (formData: Omit<ICategory, '_id'>) => {
+    console.log('submit', formData);
+
+    addCategory(formData)
+      .unwrap()
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log(addCategoryResult);
+  };
+
   return (
     <div className='categories'>
       <div className='users__wrap'>
@@ -97,11 +118,11 @@ const Categories = () => {
         </div>
         <div className='users__show-result'></div>
         <div className='users__content'>
-          <CategoriesList />
+          {isFetching ? <Skeleton /> : <CategoriesList data={data?.categories || []} />}
         </div>
       </div>
       {/* isOpen={open} onClose={() => setOpen(false)} */}
-      <CreateCategory isOpen={open} onClose={() => setOpen(false)} />
+      <CreateCategory onSubmit={submitHandler} isOpen={open} onClose={() => setOpen(false)} />
     </div>
   );
 };

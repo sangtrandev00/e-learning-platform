@@ -1,3 +1,84 @@
-.course-content__item {
-    margin-top: 2rem;
+.course-content {
+
+    &__item {
+        margin-top: 2rem;
+        &-thumb {
+            height: 14rem;
+            object-fit: cover;
+        }
+        
+        &-card {
+
+
+            &:hover {
+                box-shadow: 0 0 4rem 0.5rem rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+            }
+        }
+
+        &-settings {
+
+        }
+
+        &-categories {
+            font-size: 0.8em;
+            display: inline-block;
+            padding: 0.4rem;
+            margin-top: 2rem;
+        }
+
+        &-cate {
+            margin-bottom: 1rem;
+        }
+
+        &-divider {
+            margin: 1rem 0rem;
+        }
+
+        &-meta {
+           height: 12rem;
+        }
+
+        .item-price {
+
+
+            &__title {
+                font-weight: 400;
+            }
+
+            &__list {
+
+
+            }
+
+            &__old-price {
+                font-size: 1.2rem;
+                text-decoration: line-through;
+            }
+
+            &__new-price {
+                margin-left: 1rem;
+                font-size: 1.6rem
+            }
+
+        }
+
+        .item-learners {
+
+            &__title {
+                font-weight: 400;
+                text-align: right;
+
+            }
+
+            &__qty {
+                font-size: 1.6rem;
+                text-align: right;
+            }
+        }
+        
+    }
+
+    
+  
 }

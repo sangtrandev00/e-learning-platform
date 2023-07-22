@@ -85,7 +85,7 @@ export const categoryApi = createApi({
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    addCategory: build.mutation<ICategory, Omit<ICategory, 'id'>>({
+    addCategory: build.mutation<ICategory, Omit<ICategory, '_id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')

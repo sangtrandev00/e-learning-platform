@@ -4,6 +4,7 @@ import './Users.scss';
 import UsersList from './components/UsersList';
 import AddUser from './components/AddUser';
 import { PlusOutlined } from '@ant-design/icons';
+
 const { Search } = Input;
 
 const Users = () => {

@@ -26,8 +26,15 @@ export interface ICourse {
   level: CourseLevel;
   thumbnail: string;
   courseSlug: string;
-  categoryId: string; // id of Lập trình/Khoa học máy tính
-  userId: string; // FK
+  categoryId: {
+    _id: string;
+    name: string;
+  }; // id of Lập trình/Khoa học máy tính
+  userId: {
+    _id: string;
+    name: string;
+    avatar: string;
+  }; // FK
   sectionList?: ISection[];
   usersEntrolled?: {
     // Learners
