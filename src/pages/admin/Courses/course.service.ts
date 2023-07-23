@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICourse } from '../../../types/course.type';
 import { CustomError } from '../../../utils/helpers';
-import { ISection } from '../../../types/lesson.type';
+import { ILesson, ISection } from '../../../types/lesson.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -32,6 +32,11 @@ interface getCoursesResponse {
 
 interface getSectionsResponse {
   sections: ISection[];
+  message: string;
+}
+
+interface getLessonsResponse {
+  lessons: ILesson[];
   message: string;
 }
 
@@ -174,6 +179,53 @@ export const courseApi = createApi({
         return [{ type: 'Courses', id: 'LIST' }];
       }
     }),
+    getLessonsBySectionId: build.query<getLessonsResponse, string>({
+      query: (sectionId) => ({
+        url: `lessons/${sectionId}/section`
+        // headers: {
+        //   hello: 'Im duoc'
+        // },
+        // params: {
+        //   first_name: 'du',
+        //   'last-name': 'duoc'
+        // }
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Courses method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "Courses";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              { type: 'Courses' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Courses', id: 'LIST' }];
+      }
+    }),
     /**
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
@@ -186,6 +238,50 @@ export const courseApi = createApi({
           // a.b = 1
           return {
             url: 'course',
+            method: 'POST',
+            body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Courses sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
+    }),
+    addSection: build.mutation<ISection, Omit<ISection, '_id'>>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: 'section',
+            method: 'POST',
+            body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Courses sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
+    }),
+    addLesson: build.mutation<ILesson, Omit<ILesson, '_id'>>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: 'lesson',
             method: 'POST',
             body
           };
@@ -244,7 +340,10 @@ export const {
   useGetCoursesQuery,
   useGetSectionsQuery,
   useGetSectionsByCourseIdQuery,
+  useGetLessonsBySectionIdQuery,
   useAddCourseMutation,
+  useAddSectionMutation,
+  useAddLessonMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,
   useDeleteCourseMutation

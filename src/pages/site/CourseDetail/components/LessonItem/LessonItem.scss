@@ -1,0 +1,36 @@
+.course-detail {
+
+
+    &__lesson-item {
+        
+
+        &-label {
+            display: flex;
+            align-items: center;
+            &-icon {
+
+            }
+
+            &-text {
+                margin-left: 1rem;
+            }
+
+            &-float-right {
+                margin-left: auto;
+            }
+
+            &-preview {
+                
+            }
+
+            &-duration {
+                margin-left: 2rem;
+            }
+        }
+
+        &-desc {
+            margin-top: 1rem;
+            color: rgba($color: #000000, $alpha: 0.6)
+        }
+    }
+}

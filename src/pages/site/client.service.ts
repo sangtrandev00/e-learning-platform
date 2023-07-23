@@ -4,6 +4,8 @@ import { CustomError } from '../../utils/helpers';
 import { ICategory } from '../../types/category.type';
 import { ICourse } from '../../types/course.type';
 import { IUser } from '../../types/user.type';
+import { IParams } from '../../types/params.type';
+import { ILesson, ISection } from '../../types/lesson.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -32,7 +34,7 @@ interface getCategoriesResponse {
   message: string;
 }
 
-interface getCoursesResponse {
+export interface getCoursesResponse {
   courses: ICourse[];
   message: string;
   pagination: {
@@ -40,6 +42,20 @@ interface getCoursesResponse {
     _totalRows: number;
     _page: number;
   };
+}
+
+export interface getSectionsResponse {
+  sections: ISection[];
+  message: string;
+}
+
+export interface getLessonsResponse {
+  lessons: ILesson[];
+  message: string;
+}
+export interface getCourseResponse {
+  course: ICourse;
+  message: string;
 }
 
 export const clientApi = createApi({
@@ -94,8 +110,13 @@ export const clientApi = createApi({
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
-    getCourses: build.query<getCoursesResponse, void>({
-      query: () => '/courses', // method không có argument
+    getCourses: build.query<getCoursesResponse, IParams>({
+      query: () => ({
+        url: '/courses',
+        params: {
+          _limit: 3
+        }
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
@@ -162,40 +183,51 @@ export const clientApi = createApi({
       query: (id) => ({
         url: `categories/${id}`,
         headers: {
-          hello: 'Im duoc'
-        },
-        params: {
-          first_name: 'du',
-          'last-name': 'duoc'
+          hello: 'Im Sang'
         }
       })
     }),
-    getCourse: build.query<ICourse, string>({
+    getCourse: build.query<getCourseResponse, string>({
       query: (id) => ({
-        url: `courses/${id}`,
-        headers: {
-          hello: 'Im duoc'
-        },
-        params: {
-          first_name: 'du',
-          'last-name': 'duoc'
-        }
+        url: `courses/${id}`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
+      })
+    }),
+    getSectionsByCourseId: build.query<getSectionsResponse, string>({
+      query: (courseId) => ({
+        url: `sections/${courseId}/course`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
+      })
+    }),
+    getLessonsBySectionId: build.query<getLessonsResponse, string>({
+      query: (sectionId) => ({
+        url: `lessons/${sectionId}/section`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
       })
     }),
     getUser: build.query<IUser, string>({
       query: (id) => ({
-        url: `users/${id}`,
-        headers: {
-          hello: 'Im duoc'
-        },
-        params: {
-          first_name: 'du',
-          'last-name': 'duoc'
-        }
+        url: `users/${id}`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
       })
     })
   })
 });
 
-export const { useGetCategoriesQuery, useGetCoursesQuery, useGetUserQuery, useGetCourseQuery, useCreateOrderMutation } =
-  clientApi;
+export const {
+  useGetCategoriesQuery,
+  useGetCoursesQuery,
+  useGetSectionsByCourseIdQuery,
+  useGetLessonsBySectionIdQuery,
+  useGetUserQuery,
+  useGetCourseQuery,
+  useCreateOrderMutation
+} = clientApi;

@@ -5,6 +5,7 @@ interface CourseState {
   courseId: string;
   isOpenCreateCourse: boolean;
   formData: ICourse;
+  sectionId: string;
 }
 
 const initialState: CourseState = {
@@ -20,9 +21,17 @@ const initialState: CourseState = {
     level: CourseLevel.BEGINNER,
     thumbnail: '',
     courseSlug: '',
-    categoryId: '646781266859a50acfca8e93',
-    userId: '6468a145401d3810494f4797'
-  }
+    categoryId: {
+      _id: '646781266859a50acfca8e93',
+      name: 'Web'
+    },
+    userId: {
+      _id: '6468a145401d3810494f4797',
+      name: 'Nguyen Van A',
+      avatar: ''
+    }
+  },
+  sectionId: ''
 };
 
 const courseSlice = createSlice({
@@ -35,6 +44,9 @@ const courseSlice = createSlice({
     startEditCourse: (state, action: PayloadAction<string>) => {
       state.courseId = action.payload;
     },
+    startAddSection: (state, action: PayloadAction<string>) => {
+      state.sectionId = action.payload;
+    },
     cancelEditCourse: (state) => {
       state.courseId = '';
     },
@@ -45,5 +57,6 @@ const courseSlice = createSlice({
 });
 
 const courseReducer = courseSlice.reducer;
-export const { cancelEditCourse, startEditCourse, openCreateCourse, handleFormData } = courseSlice.actions;
+export const { cancelEditCourse, startEditCourse, openCreateCourse, handleFormData, startAddSection } =
+  courseSlice.actions;
 export default courseReducer;

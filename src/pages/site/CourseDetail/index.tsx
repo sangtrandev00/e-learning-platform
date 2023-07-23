@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CourseDetail.scss';
 import { Breadcrumb, Button, Col, Collapse, CollapseProps, List, Row, Space, Typography } from 'antd';
 import {
@@ -9,8 +9,12 @@ import {
   RightCircleFilled,
   HeartOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
+import { useGetCourseQuery, useGetSectionsByCourseIdQuery } from '../client.service';
+import { Skeleton } from 'antd';
+import { AccessStatus, CourseLevel, ICourse } from '../../../types/course.type';
+import SectionList from './components/SectionList';
 // type Props = {}
 const courseData = [
   'Deploy a feature-complete app to production.',
@@ -29,33 +33,46 @@ const overviewData = [
   'Certificate of completion.'
 ];
 
-const text = `
-  Join community to learn the best of nestjs!
-  
-`;
-
-const items: CollapseProps['items'] = [
-  {
-    key: '1',
-    label: 'Get Started Here',
-    children: <p>{text}</p>
+const initCourseDetail = {
+  _id: '',
+  name: '',
+  description: '',
+  price: 0,
+  finalPrice: 0,
+  access: AccessStatus.FREE,
+  level: CourseLevel.BEGINNER,
+  thumbnail: '',
+  courseSlug: '',
+  categoryId: {
+    _id: '646781266859a50acfca8e93',
+    name: 'Web'
   },
-  {
-    key: '2',
-    label: 'Basic of nest',
-    children: <p>{text}</p>
-  },
-  {
-    key: '3',
-    label: 'Get Started with nest command line',
-    children: <p>{text}</p>
+  userId: {
+    _id: '6468a145401d3810494f4797',
+    name: 'Nguyen Van A',
+    avatar: ''
   }
-];
+};
 
 const CourseDetail = () => {
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
+  const params = useParams();
+  const { courseId } = params;
+
+  const { data, isFetching } = useGetCourseQuery(courseId || '');
+
+  let courseDetail = initCourseDetail;
+
+  if (data) {
+    courseDetail = data.course;
+  }
+
+  const { _id, name, description, price, finalPrice, thumbnail, level, courseSlug, categoryId, userId } = courseDetail;
+
+  const { data: sectionData, isFetching: isSectionFetching } = useGetSectionsByCourseIdQuery(courseId || '');
+
+  const numOfSections = sectionData?.sections.length || 0;
+
+  console.log(sectionData);
 
   return (
     <div className='course-detail'>
@@ -82,11 +99,8 @@ const CourseDetail = () => {
                   ]}
                 />
 
-                <h2 className='course-detail__title'>NestJS: The Complete Developer's Guide</h2>
-                <p className='course-detail__sub-title'>
-                  Build full featured backend APIs incredibly quickly with Nest, TypeORM, and Typescript. Includes
-                  testing and deployment!
-                </p>
+                <h2 className='course-detail__title'>{name}</h2>
+                <p className='course-detail__sub-title'>{description}</p>
                 <div className='course-detail__info'>
                   <div className='course-detail__info-item course-detail__info-status'>Bestseller</div>
                   <div className='course-detail__info-item course-detail__info-rating'>
@@ -111,7 +125,7 @@ const CourseDetail = () => {
                 <div className='course-detail__intro-author'>
                   <span className=''>Author</span>
                   <Link to='/' className='course-detail__intro-author-name'>
-                    John Doe
+                    {userId.name}
                   </Link>
                 </div>
               </Col>
@@ -119,7 +133,7 @@ const CourseDetail = () => {
                 <div className='course-detail__overview'>
                   <div className='course-detail__thumbnail'>
                     <img
-                      src='https://img-c.udemycdn.com/course/240x135/3510096_5891.jpg'
+                      src={thumbnail || 'https://img-c.udemycdn.com/course/240x135/3510096_5891.jpg'}
                       alt=''
                       className='course-detail__thumbnail-img'
                     />
@@ -131,7 +145,7 @@ const CourseDetail = () => {
                     </div>
                   </div>
                   <div className='course-detail__overview-content'>
-                    <div className='course-detail__overview-price'>₫1,699,000</div>
+                    <div className='course-detail__overview-price'>{finalPrice === 0 ? 'FREE' : `$${finalPrice}`}</div>
                     <div className='course-detail__overview-btns'>
                       <Space>
                         <ButtonCmp className='course-detail__overview-add-to-cart btn btn-md btn-secondary'>
@@ -202,7 +216,7 @@ const CourseDetail = () => {
               <div className='course-detail__content-wrap'>
                 <div className='course-detail__content-summary'>
                   <Row className='course-detail__content-summary-row'>
-                    <Col md='12'>20 sections • 243 lectures • 19h 44m total length</Col>
+                    <Col md='12'>{numOfSections} sections • 243 lectures • 19h 44m total length</Col>
                     <Col className='course-detail__content-summary-col col-right' md='12'>
                       <Link to='/'>Expand all sections</Link>
                     </Col>
@@ -210,12 +224,7 @@ const CourseDetail = () => {
                 </div>
               </div>
               {/* Collapse section */}
-              <div className='course-detail__content-collapse'>
-                <Collapse items={items} defaultActiveKey={['1']} onChange={onChange} />
-                <Button className='course-detail__content-collapse-btn'>
-                  10 more section <DownOutlined />
-                </Button>
-              </div>
+              {courseId && <SectionList courseId={courseId} />}
             </Col>
           </Row>
         </div>
@@ -227,7 +236,7 @@ const CourseDetail = () => {
             <Row>
               <Col md={12} className='course-detail__author-info'>
                 <p className='course-detail__author-intro'>Meet the intructor</p>
-                <h2 className='course-detail__author-name'>Patrick Jones</h2>
+                <h2 className='course-detail__author-name'>{userId.name}</h2>
                 <p className='course-detail__author-desc'>
                   Patrick Jones is a content marketing professional since 2002. He has a Masters Degree in Digital
                   Marketing and a Bachelors in Education and has been teaching marketing strategies for over 15 years in
@@ -238,8 +247,8 @@ const CourseDetail = () => {
               <Col md={12} className='course-detail__author-avatar'>
                 <img
                   className='course-detail__author-img'
-                  src='https://cdn.mycourse.app/images/site-templates/fd6a2ef6babd1ba096b2e4b256df961e.jpeg'
-                  alt=''
+                  src={userId.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
+                  alt={userId.name}
                 />
               </Col>
             </Row>

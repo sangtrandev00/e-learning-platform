@@ -10,11 +10,12 @@
         color: $light-bg-color;
 
         &-header {
+            padding: 0rem 2rem;
             background-color: $brand-primary-color;
-            padding-left: 2rem;
-
             &-title {
                 @include h-style("h3");
+                font-weight: 500;
+                margin: 2rem 0rem;
             }
 
             &-nav {
@@ -26,20 +27,50 @@
                     display: flex;
                     align-items: center;
                     &-icon {
-
+                        margin-right: 1rem;
                     }
                 }
 
                 &-collapse {
                     display: block;
                     margin-left: auto;
+
+                    &-btn {
+                    }
+                    margin-right: 1rem;
                 }
+            }
+
+          
+        }
+
+        &-progress {
+            .ant-progress-text {
+                color: #fff;
+                font-weight: normal;
+            }
+        }
+
+        &-tabs {
+          
+            background-color: $brand-primary-color;
+
+            .ant-tabs {
+               
+            }
+
+            .ant-tabs-nav {
+                padding: 0rem 2rem;
+            }
+
+            .ant-tabs-tab-btn {
+                color: #fff;
             }
         }
 
         &-content {
             margin-left: -2rem;
-            padding: 4rem 0rem 0rem 3rem;
+            padding: 3rem 0rem 0rem 4rem;
             background-color: #fff;
 
         }

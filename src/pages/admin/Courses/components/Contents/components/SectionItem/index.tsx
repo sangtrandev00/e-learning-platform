@@ -2,6 +2,9 @@ import React from 'react';
 import './SectionItem.scss';
 import { Button, Divider, Space } from 'antd';
 import { ISection } from '../../../../../../../types/lesson.type';
+import AddActivities from './AddActivities';
+import LessonItem from '../LessonItem';
+import { useGetLessonsBySectionIdQuery } from '../../../../course.service';
 
 type SectionItemProps = {
   section: ISection;
@@ -9,6 +12,9 @@ type SectionItemProps = {
 };
 
 const SectionItem = (props: SectionItemProps) => {
+  const { data, isFetching } = useGetLessonsBySectionIdQuery(props.section._id);
+  console.log(data);
+
   return (
     <div className='section-item'>
       <div className='section-item__content'>
@@ -17,9 +23,15 @@ const SectionItem = (props: SectionItemProps) => {
         </div>
         <div className='section-item__info'>
           <h3 className='section-item__name'>{props.section.name}</h3>
+          <div className='section-item__content'>
+            {/* List lesson items here!!! */}
+            {data?.lessons.map((lessonItem) => {
+              return <LessonItem key={lessonItem._id} lesson={lessonItem} />;
+            })}
+          </div>
           <div className='section-item__btns'>
             <Space>
-              <Button>Add Activity</Button>
+              <AddActivities sectionId={props.section._id} />
               or
               <Button>Import activity</Button>
             </Space>

@@ -1,6 +1,6 @@
 import './Home.scss';
 import Button from '../../../components/Button';
-import { Col, Row, Space } from 'antd';
+import { Col, Row, Skeleton, Space } from 'antd';
 import {
   EditOutlined,
   UserOutlined,
@@ -12,9 +12,22 @@ import {
 import CourseItem from '../components/CourseItem';
 import { Link } from 'react-router-dom';
 import CourseList from '../components/CourseList';
+import { useGetCourseQuery, useGetCoursesQuery } from '../client.service';
+import { IParams } from '../../../types/params.type';
+
 const HomePage = () => {
+  const params: IParams = {
+    _limit: 3,
+    _page: 1
+  };
+
+  const { data, isFetching } = useGetCoursesQuery(params);
+
+  console.log(data);
+
   return (
     <div>
+      {/* Banner */}
       <div className='banner'>
         <div className='banner__wrapper'>
           <div className='banner__wrapper-left'>
@@ -37,6 +50,8 @@ const HomePage = () => {
           <div className='banner__wrapper-right'></div>
         </div>
       </div>
+
+      {/* Our Benefits */}
       <div className='our-benefits spacing-h-md '>
         <div className='container'>
           <h2 className='our-benefits__title'>Benefits of our training programs</h2>
@@ -78,6 +93,7 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* Statistics */}
       <div className='statistics spacing-h-md '>
         <Row className='statistics__list container'>
           <Col className='statistics__item' md={8}>
@@ -130,7 +146,7 @@ const HomePage = () => {
 
       <div className='our-courses container spacing-h-md'>
         <h2 className='our-courses__title'>Our Courses</h2>
-        <CourseList className='our-courses__wrapper' />
+        {isFetching ? <Skeleton /> : <CourseList data={data} className='our-courses__wrapper' />}
       </div>
     </div>
   );

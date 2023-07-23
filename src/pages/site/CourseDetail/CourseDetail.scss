@@ -27,6 +27,8 @@
             &-name {
                 margin-left: 1rem;
             }
+
+         
         }
     }
 
@@ -39,6 +41,7 @@
     &__sub-title {
         font-size: 1.6rem;
         margin-top: 2rem;
+        line-height: 1.4;
     }
 
     &__info {
@@ -66,6 +69,8 @@
             &-name {
 
             }
+
+           
         }
 
         &-students {
@@ -84,6 +89,12 @@
 
         &-name {
             margin-left: 1rem;
+        }
+
+        &-img {
+            width: 40rem;
+            height: 27rem;
+            object-fit: contain;
         }
     }
 
@@ -184,7 +195,7 @@
         box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.08);
         &-content {
             margin-top: 18rem; // Fixed position
-            padding: 2rem 1rem;
+            padding: 2rem;
             background-color: #fff;
         }
 

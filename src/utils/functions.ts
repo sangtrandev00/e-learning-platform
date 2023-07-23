@@ -8,3 +8,8 @@
 // const inputDateString = '2023-05-20T09:24:22.806Z';
 // const formattedDate = formatDate(inputDateString);
 // console.log(formattedDate); // Output: (20 May 2023)
+export function formatTime(seconds: number) {
+  const date = new Date(0);
+  date.setSeconds(seconds);
+  return date.toISOString().substr(14, 5);
+}

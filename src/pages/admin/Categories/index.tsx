@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { useAddCategoryMutation, useGetCategoriesQuery } from './category.service';
 import { ICategory } from '../../../types/category.type';
+
 const { Search } = Input;
 
 const Categories = () => {

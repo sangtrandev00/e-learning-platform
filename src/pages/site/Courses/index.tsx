@@ -4,10 +4,18 @@ import { Input, Row } from 'antd';
 import CourseItem from '../components/CourseItem';
 import { useNavigate } from 'react-router-dom';
 import CourseList from '../components/CourseList';
+import { useGetCoursesQuery } from '../client.service';
 
 const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
 const Courses = () => {
+  const params = {
+    _limit: 3,
+    _page: 1
+  };
+
+  const { data, isFetching } = useGetCoursesQuery(params);
+
   const navigate = useNavigate();
 
   const moveToDetail = (id: string) => {
@@ -73,7 +81,7 @@ const Courses = () => {
           </div>
 
           <div className='courses__list'>
-            <CourseList className='courses__list-row' />
+            <CourseList data={data} className='courses__list-row' />
           </div>
         </div>
       </div>

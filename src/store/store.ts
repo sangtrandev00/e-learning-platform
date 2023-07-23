@@ -7,6 +7,8 @@ import { orderApi } from '../pages/admin/Orders/order.service';
 import courseReducer from '../pages/admin/Courses/course.slice';
 import orderReducer from '../pages/admin/Orders/order.slice';
 import categoryReducer from '../pages/admin/Categories/category.slice';
+import { clientApi } from '../pages/site/client.service';
+import clientReducer from '../pages/site/client.slice';
 
 const rootReducer = combineReducers({
   course: courseReducer,
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   order: orderReducer,
   [orderApi.reducerPath]: orderApi.reducer,
   category: categoryReducer,
-  [categoryApi.reducerPath]: categoryApi.reducer
+  [categoryApi.reducerPath]: categoryApi.reducer,
+  client: clientReducer,
+  [clientApi.reducerPath]: clientApi.reducer
 });
 
 export const store = configureStore({
@@ -25,6 +29,7 @@ export const store = configureStore({
       courseApi.middleware,
       orderApi.middleware,
       categoryApi.middleware,
+      clientApi.middleware,
       rtkQueryErrorLogger
     )
 });

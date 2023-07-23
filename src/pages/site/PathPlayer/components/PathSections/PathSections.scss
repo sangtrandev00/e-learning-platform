@@ -1,0 +1,18 @@
+@import "../../../../../assets/sass/base";
+
+.path-sections {
+
+    .section__title {
+        color: $brand-primary-color;
+        font-weight: 600;
+        height:  5.2rem; /* Chiều cao để hiển thị dòng text */
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;  /* Số dòng hiển thị lên */
+    }
+
+    &__wrap {
+
+    }
+}

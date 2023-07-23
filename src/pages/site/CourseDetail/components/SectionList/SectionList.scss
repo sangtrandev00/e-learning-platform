@@ -1,0 +1,11 @@
+.section {
+    &__title {
+        display: flex;
+        align-items: center;
+    }
+
+    &__summary {
+        margin-left: auto;
+        font-weight: 400;
+    }
+}

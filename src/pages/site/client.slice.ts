@@ -12,17 +12,23 @@ interface ICart {
 interface ClientState {
   userId: string;
   isAuth: boolean;
+  playingVideo: string;
+  totalLectures: number;
+  totalVideosLength: number;
   cart?: ICart;
   //   formData: IClient;
 }
 
 const initialState: ClientState = {
   userId: '',
-  isAuth: false
+  isAuth: false,
+  playingVideo: 'https://www.youtube.com/watch?v=GQ-toR8F7rc&ab_channel=F8Official',
+  totalLectures: 0,
+  totalVideosLength: 0
 };
 
-const orderSlice = createSlice({
-  name: 'order',
+const clientSlice = createSlice({
+  name: 'client',
   initialState,
   reducers: {
     clearUser: (state) => {
@@ -39,6 +45,15 @@ const orderSlice = createSlice({
     },
     createOrder: (state, action: PayloadAction<ICart>) => {
       state.cart = action.payload;
+    },
+    startPlayingVideo: (state, action: PayloadAction<string>) => {
+      state.playingVideo = action.payload;
+    },
+    calcTotalLectures: (state, action: PayloadAction<number>) => {
+      state.totalLectures += action.payload;
+    },
+    calcTotalVideosLength: (state, action: PayloadAction<number>) => {
+      state.totalVideosLength += action.payload;
     }
     // handleFormData: (state, action: PayloadAction<IOrder>) => {
     //   state.formData = action.payload;
@@ -46,6 +61,14 @@ const orderSlice = createSlice({
   }
 });
 
-const orderReducer = orderSlice.reducer;
-export const { addToCart, clearCart, removeCart, createOrder } = orderSlice.actions;
-export default orderReducer;
+const clientReducer = clientSlice.reducer;
+export const {
+  addToCart,
+  clearCart,
+  removeCart,
+  createOrder,
+  startPlayingVideo,
+  calcTotalLectures,
+  calcTotalVideosLength
+} = clientSlice.actions;
+export default clientReducer;

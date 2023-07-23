@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd';
 import type { RadioChangeEvent } from 'antd';
-import { ISection } from '../../../../../../../types/lesson.type';
+import { ILesson } from '../../../../../../../types/lesson.type';
 const { Option } = Select;
 
-type AddSectionProps = {
-  onSubmit: (formData: Omit<ISection, '_id'>) => void;
+type AddLessonProps = {
+  onSubmit: (formData: Omit<ILesson, '_id'>) => void;
 };
 
 // const initialSection: Omit<ISection, '_id'> = {
@@ -15,7 +15,7 @@ type AddSectionProps = {
 //   description: ''
 // };
 
-const AddSection: React.FC<AddSectionProps> = (props) => {
+const AddLesson: React.FC<AddLessonProps> = (props) => {
   const [open, setOpen] = useState(false);
 
   // const [formData, setFormData] = useState<Omit<ISection, '_id'>>(initialSection);
@@ -38,10 +38,10 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
   return (
     <>
       <Button type='primary' onClick={showDrawer} icon={<PlusOutlined />}>
-        Add Section
+        Add New Lesson
       </Button>
       <Drawer
-        title='Section Edit'
+        title='Lesson Edit'
         width={812}
         onClose={onClose}
         open={open}
@@ -61,6 +61,15 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                 <Col span={24}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
                     <Input placeholder='Please enter the section name here' />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name='content'
+                    label='Link Youtube'
+                    rules={[{ required: true, message: 'Please enter link youtube' }]}
+                  >
+                    <Input placeholder='Please enter link youtube' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -136,4 +145,4 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
   );
 };
 
-export default AddSection;
+export default AddLesson;

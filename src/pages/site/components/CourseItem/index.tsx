@@ -1,49 +1,61 @@
-import { Col, Progress, Row } from 'antd';
+import { Badge, Col, Progress, Row } from 'antd';
 import Button from '../../../../components/Button';
 import './CourseItem.scss';
+import { ICourse } from '../../../../types/course.type';
 type CourseItemProps = {
-  id?: string;
-  avatar?: string;
-  name?: string;
-  process?: number;
-  price?: number;
-  discount?: number;
-  onClick: (id: string) => void;
+  courseItem: ICourse;
+  onClick: (_id: string) => void;
 };
 
 // Generate style of course-item__img
 
 const CourseItem = (props: CourseItemProps) => {
   return (
-    <Col onClick={() => props?.onClick(props.id as string)} md={8}>
-      <div className='course-item'>
-        <div
-          className='course-item__img'
-          style={{
-            backgroundImage: `url(${props.avatar || ''})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover'
-          }}
-        ></div>
-        <div className='course-item__content'>
-          <h3 className='course-item__title'>{props.name}</h3>
-          <Progress className='course-item__process' percent={props.process || 30} />
-          <div className='course-item__desc'>content machine learning A - Z</div>
-          <div className='course-item__enrolls'>
-            <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
-              <Col md={12}>
-                <Button className='course-item__enrolls-btn btn btn-secondary btn-sm'>Enroll</Button>
-              </Col>
-              <Col md={12}>
-                <div className='course-item__prices'>
-                  <span className='course-item__prices-old'>$20</span>
-                  <span className='course-item__prices-new'>$3</span>
-                </div>
-              </Col>
-            </Row>
+    <Col onClick={() => props?.onClick(props.courseItem._id)} md={8}>
+      <Badge.Ribbon text='Special Offer'>
+        <div className='course-item'>
+          <div
+            className='course-item__img'
+            style={{
+              backgroundImage: `url(${props.courseItem.thumbnail || ''})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover'
+            }}
+          ></div>
+          <div className='course-item__content'>
+            <h3 className='course-item__title course-item__title--courses-page'>{props.courseItem.name}</h3>
+            <Progress className='course-item__process' percent={30} />
+            <div className='course-item__desc'>{props.courseItem.description}</div>
+            <div className='course-item__author'>
+              <img
+                src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/custom/500x0_98c893731f584cae4930e0d71df6c24d.jpeg'
+                alt=''
+                className='course-item__author-img'
+              />
+              <div className='course-item__author-name'>{props.courseItem.userId.name}</div>
+            </div>
+            <div className='course-item__enrolls'>
+              <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
+                <Col md={12}>
+                  <Button className='course-item__enrolls-btn btn btn-secondary btn-sm'>Enroll</Button>
+                </Col>
+                <Col md={12}>
+                  <div className='course-item__prices'>
+                    {props.courseItem.finalPrice === 0 ? (
+                      <div className='course-item__prices-free'>FREE</div>
+                    ) : (
+                      <>
+                        <span className='course-item__prices-old'>${props.courseItem.price}</span>
+                        <span className='course-item__prices-new'>${props.courseItem.finalPrice}</span>
+                      </>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </div>
         </div>
-      </div>
+      </Badge.Ribbon>
     </Col>
   );
 };
@@ -51,12 +63,24 @@ const CourseItem = (props: CourseItemProps) => {
 // generate default props for this component
 
 CourseItem.defaultProps = {
-  id: '32',
-  avatar:
-    'https://api.us-e2.learnworlds.com/imagefile/https://lwfiles.mycourse.app/648eaf1c0c0c35ee7db7e0a2-public/108ae32aaacf8712b9900919ee977d70.jpeg?client_id=648eaf1c0c0c35ee7db7e0a2&width=400&height=0',
-  name: 'Master SEO',
-  process: 100,
-  price: '',
-  discount: ''
+  courseItem: {
+    _id: '',
+    name: '',
+    thumbnail: '',
+    description: '',
+    price: 0,
+    finalPrice: 0,
+    userId: {
+      _id: '',
+      name: '',
+      avatar: ''
+    },
+    createdAt: '',
+    updatedAt: '',
+    categoryId: {
+      _id: '',
+      name: ''
+    }
+  }
 };
 export default CourseItem;
