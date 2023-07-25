@@ -13,7 +13,24 @@ const PlayerScreen = () => {
   };
 
   const playerEl = useRef<ReactPlayer>(null);
+  const onProgress = (progress: { loaded: number; loadedSeconds: number; played: number; playedSeconds: number }) => {
+    console.log(progress);
 
+    console.log('pecent', progress.played / progress.loaded);
+    console.log(playerEl.current?.getCurrentTime());
+    console.log(playerEl.current?.getSecondsLoaded());
+    console.log(playerEl.current?.getDuration());
+
+    if (playerEl.current) {
+      console.log('percent: ', playerEl.current.getCurrentTime() / playerEl.current.getDuration());
+      const percentHavePlayed = playerEl.current.getCurrentTime() / playerEl.current.getDuration();
+      if (percentHavePlayed >= 0.95) {
+        console.log('watched done the video');
+      } else {
+        console.log('have not watched done the video');
+      }
+    }
+  };
   console.log(playerEl.current?.getDuration());
 
   return (
@@ -25,6 +42,7 @@ const PlayerScreen = () => {
       height='90vh'
       controls={true}
       onDuration={onDuration}
+      onProgress={onProgress}
     />
   );
 };

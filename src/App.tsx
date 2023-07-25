@@ -20,6 +20,7 @@ import Users from './pages/admin/Users';
 import Categories from './pages/admin/Categories';
 import Settings from './pages/admin/Settings';
 import Orders from './pages/admin/Orders';
+import OrderCompleted from './pages/site/OrderCompleted';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: 'checkout',
         element: <Checkout />
+      },
+      {
+        path: 'order-completed',
+        element: <OrderCompleted />
       },
       {
         path: 'contact',
@@ -134,6 +139,10 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  if (!localStorage.getItem('cart')) {
+    localStorage.setItem('cart', JSON.stringify({ items: [] }));
+  }
+
   return <RouterProvider router={router} />;
 }
 

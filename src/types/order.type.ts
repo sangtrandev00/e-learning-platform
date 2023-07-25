@@ -1,28 +1,29 @@
 export interface IOrder {
   _id: string;
-  orderItems: IOrderItem[];
-  transaction: ITransaction;
+  items: IOrderItem[];
   user: {
-    userId: string;
+    _id: string;
+    email: string;
     name: string;
     phone: string;
-    email: string;
   };
-  status: string;
+  transaction: ITransaction;
+  totalPrice: number;
+  vatFee: number;
+  note?: string;
 }
 
 interface ITransaction {
-  transactionId: string;
-  status: string;
-  paidAt: string;
-  isPaid: boolean;
-  paymentMethod: string; // STRIPE, PAYPAL, VNPAY, MOMO
+  transactionId?: string;
+  status?: string;
+  paidAt?: string;
+  isPaid?: boolean;
+  method: string; // STRIPE, PAYPAL, VNPAY, MOMO
 }
 
 interface IOrderItem {
-  _id: string;
   courseId: string;
-  courseName: string;
-  coursePrice: number;
-  thumbnail: string;
+  name?: string;
+  finalPrice?: number;
+  thumbnail?: string;
 }

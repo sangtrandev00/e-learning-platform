@@ -8,6 +8,7 @@ import { getCoursesResponse } from '../../client.service';
 type CourseListProps = {
   className: string;
   data?: getCoursesResponse;
+  courseState: string;
 };
 // props: Props
 
@@ -17,14 +18,23 @@ const CourseList = (props: CourseListProps) => {
   const moveToDetail = (id: string) => {
     console.log('moveToDetail', id);
 
-    navigate(`/courses/${id}`);
+    if (props.courseState === 'ordered') {
+      navigate(`/path-player?courseId=${id}`);
+    } else {
+      navigate(`/courses/${id}`);
+    }
   };
 
   return (
     <Fragment>
       <Row gutter={16} className={props.className}>
         {props.data?.courses.map((courseItem) => (
-          <CourseItem courseItem={courseItem} onClick={moveToDetail} />
+          <CourseItem
+            courseState={props.courseState}
+            key={courseItem._id}
+            courseItem={courseItem}
+            onClick={moveToDetail}
+          />
         ))}
         {/* <CourseItem onClick={moveToDetail} />
         <CourseItem onClick={moveToDetail} />

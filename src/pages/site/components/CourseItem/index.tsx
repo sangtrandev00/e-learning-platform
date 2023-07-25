@@ -2,14 +2,23 @@ import { Badge, Col, Progress, Row } from 'antd';
 import Button from '../../../../components/Button';
 import './CourseItem.scss';
 import { ICourse } from '../../../../types/course.type';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 type CourseItemProps = {
   courseItem: ICourse;
-  onClick: (_id: string) => void;
+  courseState?: string;
+  onClick: (_id: string) => void | ((e: React.MouseEvent<HTMLButtonElement>) => void);
 };
 
 // Generate style of course-item__img
 
 const CourseItem = (props: CourseItemProps) => {
+  const navigate = useNavigate();
+
+  const clickHandler = () => {
+    // e.preventDefault();
+    navigate(`/fsdfds`);
+  };
   return (
     <Col onClick={() => props?.onClick(props.courseItem._id)} md={8}>
       <Badge.Ribbon text='Special Offer'>
@@ -37,7 +46,9 @@ const CourseItem = (props: CourseItemProps) => {
             <div className='course-item__enrolls'>
               <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
                 <Col md={12}>
-                  <Button className='course-item__enrolls-btn btn btn-secondary btn-sm'>Enroll</Button>
+                  <Button onClick={clickHandler} className='course-item__enrolls-btn btn btn-secondary btn-sm'>
+                    {props.courseState === 'ordered' ? 'Continue' : 'Enroll'}
+                  </Button>
                 </Col>
                 <Col md={12}>
                   <div className='course-item__prices'>

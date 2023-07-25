@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ViewCart.scss';
 import { Button, Col, Divider, Input, Row, Space } from 'antd';
-import { StarFilled, TagOutlined } from '@ant-design/icons';
 import ButtonCmp from '../../../components/Button';
 import CartItem from './components/CartItem';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { removeCart } from '../client.slice';
 const ViewCart = () => {
+  const cart = useSelector((state: RootState) => state.client.cart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
+  let sumFinalPrice = 0;
+  const calcTotalCartPrice = (finalPrice: number) => {
+    sumFinalPrice += finalPrice;
+    setTotalPrice(sumFinalPrice);
+  };
+
+  const removeCartHandler = (courseId: string) => {
+    console.log('remove from cart: course id: ', courseId);
+    dispatch(removeCart(courseId));
+  };
+
   return (
     <div className='view-cart'>
       <div className='view-cart__wrap container spacing-h-sm'>
@@ -14,18 +30,25 @@ const ViewCart = () => {
           <Row>
             <Col md={18}>
               <div className='view-cart__list'>
-                <h4 className='view-cart__list-title'>2 Courses in Cart</h4>
+                <h4 className='view-cart__list-title'>{cart.items.length || 0} Courses in Cart</h4>
                 <div className='view-cart__list-wrap'>
-                  <CartItem />
-                  <CartItem />
-                  <CartItem />
+                  {cart.items.map((cartItem) => {
+                    return (
+                      <CartItem
+                        onTotal={calcTotalCartPrice}
+                        key={cartItem.courseId}
+                        courseId={cartItem.courseId}
+                        onRemove={removeCartHandler}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </Col>
             <Col md={6}>
               <div className='view-cart__summary'>
                 <h4 className='view-cart__summary-title'>Total: </h4>
-                <h3 className='view-cart__summary-price'>₫1,328,000</h3>
+                <h3 className='view-cart__summary-price'>${totalPrice}</h3>
                 <Link to='/checkout'>
                   <div className='view-cart__summary-btn btn btn-md'>Checkout</div>
                 </Link>

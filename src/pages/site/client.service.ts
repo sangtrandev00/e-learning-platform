@@ -58,6 +58,11 @@ export interface getCourseResponse {
   message: string;
 }
 
+export interface createOrderResponse {
+  order: IOrder;
+  message: string;
+}
+
 export const clientApi = createApi({
   reducerPath: 'clientApi', // Tên field trong Redux state
   tagTypes: ['Clients'], // Những kiểu tag cho phép dùng trong blogApi
@@ -111,10 +116,54 @@ export const clientApi = createApi({
       }
     }),
     getCourses: build.query<getCoursesResponse, IParams>({
-      query: () => ({
+      query: (params) => ({
         url: '/courses',
         params: {
-          _limit: 3
+          _limit: params._limit
+        }
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Orders method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Orders chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              { type: 'Clients' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
+    }),
+    getCoursesOrderedByUser: build.query<getCoursesResponse, IParams>({
+      query: (params) => ({
+        url: `/courses/${params._userId}/ordered`,
+        params: {
+          _limit: params._limit,
+          _page: params._page
         }
       }), // method không có argument
       /**
@@ -157,7 +206,7 @@ export const clientApi = createApi({
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    createOrder: build.mutation<IOrder, Omit<IOrder, 'id'>>({
+    createOrder: build.mutation<createOrderResponse, Omit<IOrder, '_id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')
@@ -167,6 +216,28 @@ export const clientApi = createApi({
             url: 'order',
             method: 'POST',
             body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Orders sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
+    }),
+    updateLessonDoneByUser: build.mutation<createOrderResponse, { userId: string; lessonId: string }>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: `lesson-done/${body.lessonId}`,
+            method: 'POST',
+            body: body.userId
           };
         } catch (error: any) {
           throw new CustomError((error as CustomError).message);
@@ -225,6 +296,7 @@ export const clientApi = createApi({
 export const {
   useGetCategoriesQuery,
   useGetCoursesQuery,
+  useGetCoursesOrderedByUserQuery,
   useGetSectionsByCourseIdQuery,
   useGetLessonsBySectionIdQuery,
   useGetUserQuery,

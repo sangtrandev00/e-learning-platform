@@ -10,7 +10,7 @@ const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
 const Courses = () => {
   const params = {
-    _limit: 3,
+    _limit: 12,
     _page: 1
   };
 

@@ -5,7 +5,7 @@ import { ReadOutlined } from '@ant-design/icons';
 import CourseItem from '../components/CourseItem';
 import CourseList from '../components/CourseList';
 import './StartLearning.scss';
-import { useGetCoursesQuery } from '../client.service';
+import { useGetCoursesOrderedByUserQuery, useGetCoursesQuery } from '../client.service';
 // type Props = {};
 
 const StartLearning = () => {
@@ -14,11 +14,12 @@ const StartLearning = () => {
   };
 
   const params = {
-    _limit: 3,
+    _userId: '6468a145401d3810494f4797',
+    _limit: 12,
     _page: 1
   };
 
-  const { data, isFetching } = useGetCoursesQuery(params);
+  const { data, isFetching } = useGetCoursesOrderedByUserQuery(params);
 
   return (
     <div className='start-learning'>
@@ -83,7 +84,11 @@ const StartLearning = () => {
           <div className='start-learning__courses-wrap container'>
             <h2 className='start-learning__courses-heading'>Courses</h2>
             <div className='start-learning__courses-list'>
-              {isFetching ? <Skeleton /> : <CourseList data={data} className='start-learning__courses-row' />}
+              {isFetching ? (
+                <Skeleton />
+              ) : (
+                <CourseList courseState='ordered' data={data} className='start-learning__courses-row' />
+              )}
             </div>
           </div>
         </div>

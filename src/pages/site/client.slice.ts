@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IOrder } from '../../types/order.type';
 // import { IOrder } from '../../../types/order.type';
 // import { IUser } from '../../types/user.type';
 interface ICart {
-  cart: {
-    items: {
-      courseId: string;
-    }[];
-  };
+  items: {
+    courseId: string;
+  }[];
 }
 
 interface ClientState {
@@ -15,16 +14,21 @@ interface ClientState {
   playingVideo: string;
   totalLectures: number;
   totalVideosLength: number;
-  cart?: ICart;
+  cart: ICart;
+  totalCartPrice: number;
   //   formData: IClient;
 }
+
+const localCart = JSON.parse(localStorage.getItem('cart') || '{items:[]}') as ICart;
 
 const initialState: ClientState = {
   userId: '',
   isAuth: false,
   playingVideo: 'https://www.youtube.com/watch?v=GQ-toR8F7rc&ab_channel=F8Official',
   totalLectures: 0,
-  totalVideosLength: 0
+  totalVideosLength: 0,
+  cart: localCart,
+  totalCartPrice: 0
 };
 
 const clientSlice = createSlice({
@@ -34,18 +38,27 @@ const clientSlice = createSlice({
     clearUser: (state) => {
       state.userId = '';
     },
-    addToCart: (state, action: PayloadAction<ICart>) => {
-      state.cart = action.payload;
+    addToCart: (state, action: PayloadAction<string>) => {
+      const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
+
+      if (courseExistingIdx === -1) {
+        state.cart.items.push({ courseId: action.payload });
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      }
     },
-    clearCart: (state, action: PayloadAction<ICart>) => {
-      state.cart = action.payload;
+    clearCart: (state) => {
+      state.cart.items = [];
     },
-    removeCart: (state, action: PayloadAction<ICart>) => {
-      state.cart = action.payload;
+    removeCart: (state, action: PayloadAction<string>) => {
+      const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
+      if (courseExistingIdx >= 0) {
+        state.cart.items.splice(courseExistingIdx, 1);
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      }
     },
-    createOrder: (state, action: PayloadAction<ICart>) => {
-      state.cart = action.payload;
-    },
+    // createOrder: (state, action: PayloadAction<Omit<IOrder, "_id">) => {
+    //   state.state = action.payload;
+    // },
     startPlayingVideo: (state, action: PayloadAction<string>) => {
       state.playingVideo = action.payload;
     },
@@ -62,13 +75,6 @@ const clientSlice = createSlice({
 });
 
 const clientReducer = clientSlice.reducer;
-export const {
-  addToCart,
-  clearCart,
-  removeCart,
-  createOrder,
-  startPlayingVideo,
-  calcTotalLectures,
-  calcTotalVideosLength
-} = clientSlice.actions;
+export const { addToCart, clearCart, removeCart, startPlayingVideo, calcTotalLectures, calcTotalVideosLength } =
+  clientSlice.actions;
 export default clientReducer;

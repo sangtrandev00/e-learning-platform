@@ -6,10 +6,14 @@ import { Badge, Modal, Space } from 'antd';
 import { useState } from 'react';
 import Login from '../../../pages/site/Auth/Login';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 const Header = () => {
   // State here
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const cart = useSelector((state: RootState) => state.client.cart);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -67,7 +71,7 @@ const Header = () => {
             </li>
             <div className='header__nav-item'>
               <Link className='header__nav-link' to='/view-cart'>
-                <Badge count={5}>
+                <Badge count={cart.items.length}>
                   <ShoppingCartOutlined className='header__nav-link-icon' />
                 </Badge>
               </Link>

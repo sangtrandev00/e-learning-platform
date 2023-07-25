@@ -1,12 +1,15 @@
-import React from 'react';
-import './Checkout.scss';
+import React, { useState } from 'react';
 import { Col, Collapse, CollapseProps, Divider, Row, Select, theme } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
 import type { CSSProperties } from 'react';
 import { CaretRightOutlined } from '@ant-design/icons';
 import DetailItem from './components/DetailItem';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { useCreateOrderMutation } from '../client.service';
+import './Checkout.scss';
+import { clearCart } from '../client.slice';
 const text = `
 Name on card
 TRAN NHAT SANG
@@ -41,12 +44,60 @@ const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelSt
 
 const Checkout = () => {
   const { token } = theme.useToken();
+  const [createOrder, createOrderResult] = useCreateOrderMutation();
 
   const panelStyle = {
     marginBottom: 0,
     background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
     border: '1px solid rgba(0, 0, 0, 0.1)'
+  };
+
+  const cart = useSelector((state: RootState) => state.client.cart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  let sumFinalPrice = 0;
+
+  const calcTotalCartPrice = (finalPrice: number) => {
+    console.log('calcTotalCartPrice');
+    sumFinalPrice += finalPrice;
+    setTotalPrice(sumFinalPrice);
+  };
+
+  const checkoutHandler = () => {
+    console.log('checkout handler');
+
+    const newOrder = {
+      items: cart.items,
+      user: {
+        _id: '64a26c3bc87fa04e3d1c8995',
+        email: 'morgan@gmail.com',
+        name: 'Sharon morgan',
+        phone: '0909125313'
+      },
+      transaction: {
+        method: 'VNPay'
+      },
+      totalPrice: totalPrice,
+      note: 'No caption',
+      vatFee: totalPrice * 0.1
+    };
+
+    createOrder(newOrder)
+      .unwrap()
+      .then((result) => {
+        console.log('result', result);
+        if (result.order._id) {
+          dispatch(clearCart());
+          navigate(`/order-completed?orderId=${result.order._id}`);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log(createOrderResult);
   };
 
   return (
@@ -96,10 +147,15 @@ const Checkout = () => {
               </div>
               <div className='checkout__orders-detail'>
                 <h3 className='checkout__orders-detail-title'>Order details</h3>
+                {cart.items.map((cartItem) => {
+                  return (
+                    <DetailItem onTotal={calcTotalCartPrice} key={cartItem.courseId} courseId={cartItem.courseId} />
+                  );
+                })}
+                {/* <DetailItem />
                 <DetailItem />
                 <DetailItem />
-                <DetailItem />
-                <DetailItem />
+                <DetailItem /> */}
               </div>
             </div>
           </Col>
@@ -110,18 +166,20 @@ const Checkout = () => {
                   <h3 className='checkout__summary-title'>Summary</h3>
                   <div className='checkout__summary-row checkout__summary-price'>
                     <span className='checkout__summary-col checkout__summary-price-label'>Original Price:</span>
-                    <span className='checkout__summary-col checkout__summary-price-text'>₫11,723,000</span>
+                    <span className='checkout__summary-col checkout__summary-price-text'>${totalPrice}</span>
                   </div>
                   <Divider className='checkout__summary-divider' />
                   <div className='checkout__summary-row checkout__summary-total'>
                     <span className='checkout__summary-col checkout__summary-total-label'>Total:</span>
-                    <span className='checkout__summary-col checkout__summary-total-text'>₫11,723,000</span>
+                    <span className='checkout__summary-col checkout__summary-total-text'>${totalPrice}</span>
                   </div>
 
                   <div className='checkout__summary-notify'>
                     By completing your purchase you agree to these <Link to='/'> Terms of Service.</Link>
                   </div>
-                  <ButtonCmp className='checkout__summary-btn btn btn-primary btn-md'>Complete Checkout</ButtonCmp>
+                  <ButtonCmp onClick={checkoutHandler} className='checkout__summary-btn btn btn-primary btn-md'>
+                    Complete Checkout
+                  </ButtonCmp>
                 </div>
               </Col>
             </Row>

@@ -5,12 +5,12 @@
     font-size: 1.6rem;
     &__col {
         &--left {
-            padding-right: 4rem;
+            padding-right: 4rem!important;
         }
 
         &--right {
             background-color: $light-bg-color;
-            padding: 8rem 4rem;        
+            padding: 8rem 4rem!important;        
         }
     }
 

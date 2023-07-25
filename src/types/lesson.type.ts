@@ -15,3 +15,9 @@ export interface ILesson {
   access: string;
   description: string;
 }
+
+export interface IsLessonDone {
+  userId: string;
+  lessonId: string;
+  isDone: boolean;
+}

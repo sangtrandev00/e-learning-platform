@@ -15,6 +15,8 @@ import { useGetCourseQuery, useGetSectionsByCourseIdQuery } from '../client.serv
 import { Skeleton } from 'antd';
 import { AccessStatus, CourseLevel, ICourse } from '../../../types/course.type';
 import SectionList from './components/SectionList';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../client.slice';
 // type Props = {}
 const courseData = [
   'Deploy a feature-complete app to production.',
@@ -73,6 +75,13 @@ const CourseDetail = () => {
   const numOfSections = sectionData?.sections.length || 0;
 
   console.log(sectionData);
+  const dispatch = useDispatch();
+
+  const addCartHandler = () => {
+    console.log('add to cart: course id: ', _id);
+
+    dispatch(addToCart(_id));
+  };
 
   return (
     <div className='course-detail'>
@@ -148,7 +157,10 @@ const CourseDetail = () => {
                     <div className='course-detail__overview-price'>{finalPrice === 0 ? 'FREE' : `$${finalPrice}`}</div>
                     <div className='course-detail__overview-btns'>
                       <Space>
-                        <ButtonCmp className='course-detail__overview-add-to-cart btn btn-md btn-secondary'>
+                        <ButtonCmp
+                          onClick={addCartHandler}
+                          className='course-detail__overview-add-to-cart btn btn-md btn-secondary'
+                        >
                           Add to Cart
                         </ButtonCmp>
                         <Button className='course-detail__overview-wishlist-btn'>

@@ -4,6 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useGetSectionsByCourseIdQuery } from '../../../client.service';
 import CourseDetailLessonList from '../LessonList';
 import './SectionList.scss';
+
 type SectionListProps = {
   courseId: string;
 };
