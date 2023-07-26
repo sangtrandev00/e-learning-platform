@@ -8,11 +8,12 @@ import Login from '../../../pages/site/Auth/Login';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import Signup from '../../../pages/site/Auth/Signup';
 const Header = () => {
   // State here
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [authState, setAuthState] = useState('login');
   const cart = useSelector((state: RootState) => state.client.cart);
 
   const handleOk = () => {
@@ -24,12 +25,19 @@ const Header = () => {
   };
 
   const signInHandler = () => {
+    setAuthState('login');
     setIsModalOpen(true);
   };
 
   const signUpHandler = () => {
-    console.log('sign up!!!');
+    setAuthState('signup');
     setIsModalOpen(true);
+  };
+
+  const changeAuthState = (authState: string) => {
+    console.log(authState);
+
+    setAuthState(authState);
   };
 
   return (
@@ -91,7 +99,8 @@ const Header = () => {
       </div>
 
       <Modal title='' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Login />
+        {authState === 'login' && <Login />}
+        {authState === 'signup' && <Signup onClick={changeAuthState} />}
       </Modal>
     </div>
   );

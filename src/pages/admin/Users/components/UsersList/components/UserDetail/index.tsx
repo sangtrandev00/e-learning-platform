@@ -13,6 +13,7 @@ const UserDetail: React.FC<UserDetailProps> = (props) => {
         title={`Drawer`}
         placement='right'
         size={'large'}
+        width={800}
         onClose={props.onClose}
         open={props.isOpen}
         extra={

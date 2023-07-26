@@ -6,6 +6,8 @@ export interface IOrder {
     email: string;
     name: string;
     phone: string;
+    avatar?: string;
+    createdAt?: string;
   };
   transaction: ITransaction;
   totalPrice: number;

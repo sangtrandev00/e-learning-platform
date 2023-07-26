@@ -11,7 +11,8 @@ import {
   UnorderedListOutlined,
   SettingOutlined,
   UserAddOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  BarChartOutlined
 } from '@ant-design/icons';
 
 import './SideBar.scss';
@@ -38,6 +39,7 @@ const items: MenuItem[] = [
     getItem('Admins', 'admins'),
     getItem('Intructors', 'intructors')
   ]),
+  getItem('Reports Center', 'reports', <BarChartOutlined />, [getItem('reports', 'reports')]),
   getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
   getItem('My account', 'account', <UserAddOutlined />),
   getItem('Need Help ?', 'help', <FileOutlined />)

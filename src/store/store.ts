@@ -9,6 +9,10 @@ import orderReducer from '../pages/admin/Orders/order.slice';
 import categoryReducer from '../pages/admin/Categories/category.slice';
 import { clientApi } from '../pages/site/client.service';
 import clientReducer from '../pages/site/client.slice';
+import { userApi } from '../pages/admin/Users/user.service';
+import userReducer from '../pages/admin/Users/user.slice';
+import { authApi } from '../pages/auth.service';
+import authReducer from '../pages/auth.slice';
 
 const rootReducer = combineReducers({
   course: courseReducer,
@@ -16,9 +20,13 @@ const rootReducer = combineReducers({
   order: orderReducer,
   [orderApi.reducerPath]: orderApi.reducer,
   category: categoryReducer,
+  [userApi.reducerPath]: userApi.reducer,
+  user: userReducer,
   [categoryApi.reducerPath]: categoryApi.reducer,
   client: clientReducer,
-  [clientApi.reducerPath]: clientApi.reducer
+  [clientApi.reducerPath]: clientApi.reducer,
+  auth: authReducer,
+  [authApi.reducerPath]: authApi.reducer
 });
 
 export const store = configureStore({
@@ -29,7 +37,9 @@ export const store = configureStore({
       courseApi.middleware,
       orderApi.middleware,
       categoryApi.middleware,
+      userApi.middleware,
       clientApi.middleware,
+      authApi.middleware,
       rtkQueryErrorLogger
     )
 });

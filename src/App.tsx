@@ -21,6 +21,7 @@ import Categories from './pages/admin/Categories';
 import Settings from './pages/admin/Settings';
 import Orders from './pages/admin/Orders';
 import OrderCompleted from './pages/site/OrderCompleted';
+import ReportsCenter from './pages/admin/Reports';
 
 const router = createBrowserRouter([
   {
@@ -122,6 +123,15 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Categories />
+          }
+        ]
+      },
+      {
+        path: 'reports',
+        children: [
+          {
+            index: true,
+            element: <ReportsCenter />
           }
         ]
       },

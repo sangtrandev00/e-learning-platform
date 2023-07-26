@@ -85,7 +85,7 @@ export const userApi = createApi({
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    addUser: build.mutation<IUser, Omit<IUser, 'id'>>({
+    addUser: build.mutation<IUser, Omit<IUser, '_id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')

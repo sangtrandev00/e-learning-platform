@@ -3,22 +3,21 @@ import { Avatar, Button, Skeleton, Space, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useState } from 'react';
-import './UsersList.scss';
+import './OrdersList.scss';
 import { Link, useNavigate } from 'react-router-dom';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
-import { EditOutlined, EllipsisOutlined, UserOutlined, AntDesignOutlined } from '@ant-design/icons';
-import UserDetail from './components/UserDetail';
-import { useGetUsersQuery } from '../../user.service';
+import { EditOutlined, EllipsisOutlined, UserOutlined, AntDesignOutlined, DownloadOutlined } from '@ant-design/icons';
+import { useGetOrdersQuery } from '../../order.service';
 interface DataUserType {
   key: React.Key;
   name: HTMLElement;
   avatar?: string;
   email?: string;
   courses: HTMLElement;
-  tags: HTMLElement;
-  createdAt: string; // Convert to date: Example: 18 jun 2023
-  lastLogin: string;
-  actions?: any;
+  register: string;
+  transaction: HTMLElement;
+  amount: string;
+  payment: string;
 }
 
 interface TableParams {
@@ -30,7 +29,7 @@ interface TableParams {
 
 const columns: ColumnsType<DataUserType> = [
   {
-    title: 'User',
+    title: 'Learners',
     dataIndex: 'name',
     filters: [
       {
@@ -52,37 +51,25 @@ const columns: ColumnsType<DataUserType> = [
     width: '30%'
   },
   {
-    title: 'Last login',
-    dataIndex: 'lastLogin'
+    title: 'Register',
+    dataIndex: 'register'
     // sorter: (a, b) => Number(a.author) - Number(b.author)
-  },
-  {
-    title: 'Registerd',
-    dataIndex: 'createdAt',
-    filters: [
-      {
-        text: 'London',
-        value: 'London'
-      },
-      {
-        text: 'New York',
-        value: 'New York'
-      }
-    ],
-    // onFilter: (value: string | number | boolean, record) => record.categories.startsWith(value.toString()),
-    filterSearch: true
   },
   {
     title: 'Courses',
     dataIndex: 'courses'
   },
   {
-    title: 'Tags',
-    dataIndex: 'tags'
+    title: 'Invoice / Transaction ID',
+    dataIndex: 'transaction'
   },
   {
-    title: 'Manage',
-    dataIndex: 'manage'
+    title: 'Amount',
+    dataIndex: 'amount'
+  },
+  {
+    title: 'Payment Gateway',
+    dataIndex: 'payment'
   }
 ];
 
@@ -90,22 +77,25 @@ const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sor
   console.log('params', pagination, filters, sorter, extra);
 };
 
-const UsersList: React.FC = () => {
+const OrdersList: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { data, isFetching } = useGetUsersQuery();
+
+  const { data, isFetching } = useGetOrdersQuery();
 
   const showUserDetail = () => {
     console.log('click');
     setOpen(true);
   };
 
-  const usersData = data?.users.map((user) => {
-    const userTemplateItem = {
-      key: user._id,
+  const ordersData = data?.orders.map((order) => {
+    const { transaction, user, _id, totalPrice, items } = order;
+
+    const orderTemplateItem = {
+      key: order._id,
       name: (
         <a href='#' onClick={showUserDetail}>
           <div className='user-info'>
-            <img alt={user.name} src={user.avatar} className='user-info__avatar' />
+            <img alt={user.name} src={user.avatar || ''} className='user-info__avatar' />
 
             <div className='user-info__content'>
               <div className='user-info__name'>{user.name}</div>
@@ -114,45 +104,41 @@ const UsersList: React.FC = () => {
           </div>
         </a>
       ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
+      register: '19 Jul 2023 21:43:35',
+
       courses: (
         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          {(user.courses || []).map((course) => (
+          {(items || []).map((course) => (
             <Avatar src={course.thumbnail} />
           ))}
           {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
           <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
-          <Tooltip title='Ant User' placement='top'>
-            {(user.courses || []).map((course) => (
+          <Tooltip title='Courses' placement='top'>
+            {(items || []).map((course) => (
               <Avatar src={course.thumbnail} />
             ))}
           </Tooltip>
           {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
         </Avatar.Group>
       ),
-      tags: (
+      transaction: (
         <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
+          <div>
+            <Link to='/'>
+              Invoice <DownloadOutlined />
+            </Link>
+          </div>
+          <div>sandbox_64bccb1fc177e</div>
         </>
       ),
-      manage: (
-        <Space>
-          <Button>
-            <EditOutlined />
-          </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Space>
-      )
+      amount: `$${totalPrice}`,
+      payment: transaction.method
     };
 
-    return userTemplateItem;
+    return orderTemplateItem;
   });
 
-  const usersSource = [
+  const ordersSource = [
     {
       key: '1',
       name: (
@@ -170,8 +156,7 @@ const UsersList: React.FC = () => {
           </div>
         </a>
       ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
+      register: '19 Jul 2023 21:43:35',
       courses: (
         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
           <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
@@ -182,22 +167,18 @@ const UsersList: React.FC = () => {
           <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
         </Avatar.Group>
       ),
-      tags: (
+      transaction: (
         <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
+          <div>
+            <Link to='/'>
+              Invoice <DownloadOutlined />
+            </Link>
+          </div>
+          <div>sandbox_64bccb1fc177e</div>
         </>
       ),
-      manage: (
-        <Space>
-          <Button>
-            <EditOutlined />
-          </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Space>
-      )
+      amount: `$16`,
+      payment: 'sandbox'
     },
     {
       key: '2',
@@ -205,6 +186,7 @@ const UsersList: React.FC = () => {
         <a href='#'>
           <div className='user-info'>
             <img
+              alt=''
               src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
               className='user-info__avatar'
             />
@@ -216,8 +198,7 @@ const UsersList: React.FC = () => {
           </div>
         </a>
       ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
+      register: '19 Jul 2023 21:43:35',
       courses: (
         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
           <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
@@ -228,22 +209,18 @@ const UsersList: React.FC = () => {
           <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
         </Avatar.Group>
       ),
-      tags: (
+      transaction: (
         <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
+          <div>
+            <Link to='/'>
+              Invoice <DownloadOutlined />
+            </Link>
+          </div>
+          <div>sandbox_64bccb1fc177e</div>
         </>
       ),
-      manage: (
-        <Space>
-          <Button>
-            <EditOutlined />
-          </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Space>
-      )
+      amount: `$16`,
+      payment: 'VNPAY'
     }
   ];
 
@@ -260,12 +237,11 @@ const UsersList: React.FC = () => {
       {!isFetching && (
         <div className='users-list'>
           {/* {isFetching && <Skeleton />} */}
-          <Table columns={columns} dataSource={usersData} onChange={onChange} pagination={tableParams.pagination} />
-          <UserDetail isOpen={open} onClose={() => setOpen(false)} />
+          <Table columns={columns} dataSource={ordersData} onChange={onChange} pagination={tableParams.pagination} />
         </div>
       )}
     </Fragment>
   );
 };
 
-export default UsersList;
+export default OrdersList;
