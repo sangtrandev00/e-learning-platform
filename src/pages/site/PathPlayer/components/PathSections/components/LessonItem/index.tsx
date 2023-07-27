@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { PlayCircleOutlined, CheckOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, CheckOutlined, CheckCircleFilled } from '@ant-design/icons';
 import ReactPlayer from 'react-player'; // Import the react-player component
 import './LessonItem.scss';
 import { ILesson } from '../../../../../../../types/lesson.type';
@@ -12,7 +12,7 @@ interface LessonItemProps {
 }
 
 function LessonItem(props: LessonItemProps) {
-  const { _id, name, sectionId, content, access, description, type } = props.lessonItem;
+  const { _id, name, sectionId, content, access, description, type, isDone } = props.lessonItem;
 
   const dispatch = useDispatch();
 
@@ -21,7 +21,12 @@ function LessonItem(props: LessonItemProps) {
   const playerRef = useRef<ReactPlayer | null>(null);
 
   const playVideoHandler = () => {
-    dispatch(startPlayingVideo(content));
+    dispatch(
+      startPlayingVideo({
+        lessonId: _id,
+        content
+      })
+    );
   };
 
   const handleDuration = (duration: number) => {
@@ -31,7 +36,7 @@ function LessonItem(props: LessonItemProps) {
   return (
     <div className='lesson-item' onClick={playVideoHandler}>
       <div className='lesson-item__icon'>
-        <PlayCircleOutlined />
+        <PlayCircleOutlined className='lesson-item__icon-icon' />
       </div>
       <div className='lesson-item__lengths'>
         <div className='lesson-item__status'>{access}</div>
@@ -39,7 +44,7 @@ function LessonItem(props: LessonItemProps) {
       </div>
       <div className='lesson-item__name'>{name}</div>
       <div className='lesson-item__is-finished'>
-        <CheckOutlined />
+        {isDone && <CheckCircleFilled className='lesson-item__is-finished-icon' />}
       </div>
       <ReactPlayer
         ref={playerRef}

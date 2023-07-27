@@ -8,6 +8,9 @@
     cursor: pointer;
     &__icon {
 
+        &-icon {
+            // color: red;
+        }
     }
 
     &__lengths {
@@ -31,6 +34,10 @@
 
     &__is-finished {
         margin-left: auto;
+
+        &-icon {
+            color: $brand-tertiary-color;
+        }
     }
 
 }

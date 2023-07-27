@@ -11,6 +11,7 @@ interface ICart {
 interface ClientState {
   userId: string;
   isAuth: boolean;
+  lessonId: string;
   playingVideo: string;
   totalLectures: number;
   totalVideosLength: number;
@@ -24,6 +25,7 @@ const localCart = JSON.parse(localStorage.getItem('cart') || '{items:[]}') as IC
 const initialState: ClientState = {
   userId: '',
   isAuth: false,
+  lessonId: '',
   playingVideo: 'https://www.youtube.com/watch?v=GQ-toR8F7rc&ab_channel=F8Official',
   totalLectures: 0,
   totalVideosLength: 0,
@@ -59,8 +61,9 @@ const clientSlice = createSlice({
     // createOrder: (state, action: PayloadAction<Omit<IOrder, "_id">) => {
     //   state.state = action.payload;
     // },
-    startPlayingVideo: (state, action: PayloadAction<string>) => {
-      state.playingVideo = action.payload;
+    startPlayingVideo: (state, action: PayloadAction<{ lessonId: string; content: string }>) => {
+      state.playingVideo = action.payload.content;
+      state.lessonId = action.payload.lessonId;
     },
     calcTotalLectures: (state, action: PayloadAction<number>) => {
       state.totalLectures += action.payload;

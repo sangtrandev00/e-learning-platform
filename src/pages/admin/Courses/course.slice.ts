@@ -6,6 +6,7 @@ interface CourseState {
   isOpenCreateCourse: boolean;
   formData: ICourse;
   sectionId: string;
+  isOpenAddSectionModal: boolean;
 }
 
 const initialState: CourseState = {
@@ -31,7 +32,8 @@ const initialState: CourseState = {
       avatar: ''
     }
   },
-  sectionId: ''
+  sectionId: '',
+  isOpenAddSectionModal: false
 };
 
 const courseSlice = createSlice({
@@ -52,6 +54,12 @@ const courseSlice = createSlice({
     },
     handleFormData: (state, action: PayloadAction<ICourse>) => {
       state.formData = action.payload;
+    },
+    openAddSectionModal: (state) => {
+      state.isOpenAddSectionModal = true;
+    },
+    closeAddSectionModal: (state) => {
+      state.isOpenAddSectionModal = false;
     }
   }
 });

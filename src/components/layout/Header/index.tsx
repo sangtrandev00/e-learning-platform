@@ -2,21 +2,39 @@ import Button from '../../Button';
 import './Header.scss';
 import type { MenuProps } from 'antd';
 import { Link } from 'react-router-dom';
-import { Badge, Dropdown, Modal, Space } from 'antd';
+import { Avatar, Badge, Dropdown, Modal, Space } from 'antd';
 import { useState } from 'react';
 import Login from '../../../pages/site/Auth/Login';
-import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, UserOutlined, BellOutlined, HeartOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import Signup from '../../../pages/site/Auth/Signup';
 import { closeAuthModal, openAuthModal, setAuthenticated, setUnauthenticated } from '../../../pages/auth.slice';
-
+import { useGetUserQuery } from '../../../pages/site/client.service';
 const Header = () => {
+  // State here
+
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const isOpenAuthModal = useSelector((state: RootState) => state.auth.isOpenAuthModal);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const [authState, setAuthState] = useState('login');
+  const cart = useSelector((state: RootState) => state.client.cart);
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const { data: userData, isFetching } = useGetUserQuery(userId);
+
+  console.log(userData);
+
   const userAuthItems: MenuProps['items'] = [
     {
-      label: '1st menu item',
+      label: (
+        <div>
+          <div>{userData?.name}</div>
+          <div>{userData?.email}</div>
+        </div>
+      ),
       key: '1',
-      icon: <UserOutlined />
+      icon: <Avatar src={userData?.avatar} />
     },
     {
       label: '2nd menu item',
@@ -37,13 +55,58 @@ const Header = () => {
       // disabled: true
     }
   ];
-  // State here
 
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  const isOpenAuthModal = useSelector((state: RootState) => state.auth.isOpenAuthModal);
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-  const [authState, setAuthState] = useState('login');
-  const cart = useSelector((state: RootState) => state.client.cart);
+  const notificationItems: MenuProps['items'] = [
+    {
+      label: 'Note 1',
+      key: '1',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Note 2',
+      key: '2',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Note 3',
+      key: '3',
+      icon: <UserOutlined />,
+      danger: true
+    },
+    {
+      label: 'Note 4',
+      key: 'Note 5',
+      icon: <UserOutlined />,
+      danger: true
+      // disabled: true
+    }
+  ];
+
+  const wishlistItems: MenuProps['items'] = [
+    {
+      label: 'wishlist 1',
+      key: '1',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Wishlist 2',
+      key: '2',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Wishlist 3',
+      key: '3',
+      icon: <UserOutlined />,
+      danger: true
+    },
+    {
+      label: 'Wishlist 4',
+      key: 'Note 5',
+      icon: <UserOutlined />,
+      danger: true
+      // disabled: true
+    }
+  ];
 
   const dispatch = useDispatch();
 
@@ -87,8 +150,16 @@ const Header = () => {
     }
   };
 
-  const menuProps = {
+  const menuUserProps = {
     items: userAuthItems,
+    onClick: handleMenuClick
+  };
+  const menuNotificationsProps = {
+    items: notificationItems,
+    onClick: handleMenuClick
+  };
+  const menuWishlistProps = {
+    items: wishlistItems,
     onClick: handleMenuClick
   };
 
@@ -141,14 +212,36 @@ const Header = () => {
             </li>
             {isAuth && (
               <li className='header__nav-item'>
-                <Dropdown.Button
-                  onClick={handleButtonClick}
-                  menu={menuProps}
-                  placement='bottom'
-                  icon={<UserOutlined />}
-                >
-                  Dropdown
-                </Dropdown.Button>
+                <Dropdown menu={menuWishlistProps} placement='bottomRight'>
+                  <Badge dot={true}>
+                    {/* <Avatar shape="square" size="large" /> */}
+                    <HeartOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} />
+                    {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
+                  </Badge>
+                </Dropdown>
+              </li>
+            )}
+
+            {isAuth && (
+              <li className='header__nav-item'>
+                <Dropdown menu={menuNotificationsProps} placement='bottomRight'>
+                  <Badge dot={true}>
+                    {/* <Avatar shape="square" size="large" /> */}
+                    <BellOutlined className='header__nav-item-notify-icon' style={{ cursor: 'pointer' }} />
+                    {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
+                  </Badge>
+                </Dropdown>
+              </li>
+            )}
+
+            {isAuth && (
+              <li className='header__nav-item'>
+                <Dropdown menu={menuUserProps} placement='bottomRight'>
+                  <Badge dot={true}>
+                    {/* <Avatar shape="square" size="large" /> */}
+                    <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} />
+                  </Badge>
+                </Dropdown>
               </li>
             )}
           </ul>

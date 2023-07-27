@@ -14,6 +14,8 @@ export interface ILesson {
   content: string; // link youtube, pdf, slide, coding title
   access: string;
   description: string;
+  videoLength: number;
+  isDone?: boolean;
 }
 
 export interface IsLessonDone {

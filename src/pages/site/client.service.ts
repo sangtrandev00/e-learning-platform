@@ -6,6 +6,9 @@ import { ICourse } from '../../types/course.type';
 import { IUser } from '../../types/user.type';
 import { IParams } from '../../types/params.type';
 import { ILesson, ISection } from '../../types/lesson.type';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import jwtDecode from 'jwt-decode';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -71,6 +74,17 @@ export const clientApi = createApi({
     baseUrl: 'http://localhost:9000',
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
+
+      const token = localStorage.getItem('token');
+
+      if (token) {
+        const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(token);
+
+        headers.set('UserId', decodedToken.userId);
+      }
+
+      // Add the userId header
+
       // Set some headers here !
       return headers;
     }
@@ -237,7 +251,9 @@ export const clientApi = createApi({
           return {
             url: `lesson-done/${body.lessonId}`,
             method: 'POST',
-            body: body.userId
+            body: {
+              userId: body.userId
+            }
           };
         } catch (error: any) {
           throw new CustomError((error as CustomError).message);
@@ -270,16 +286,16 @@ export const clientApi = createApi({
       query: (courseId) => ({
         url: `sections/${courseId}/course`
         // headers: {
-        //   hello: 'Im Sang'
+        //   userId: 'Im Sang'
         // }
       })
     }),
-    getLessonsBySectionId: build.query<getLessonsResponse, string>({
-      query: (sectionId) => ({
-        url: `lessons/${sectionId}/section`
-        // headers: {
-        //   hello: 'Im Sang'
-        // }
+    getLessonsBySectionId: build.query<getLessonsResponse, { sectionId: string; userId: string }>({
+      query: (payload) => ({
+        url: `lessons/${payload.sectionId}/section`,
+        headers: {
+          userId: payload.userId
+        }
       })
     }),
     getUser: build.query<IUser, string>({
@@ -301,5 +317,6 @@ export const {
   useGetLessonsBySectionIdQuery,
   useGetUserQuery,
   useGetCourseQuery,
-  useCreateOrderMutation
+  useCreateOrderMutation,
+  useUpdateLessonDoneByUserMutation
 } = clientApi;

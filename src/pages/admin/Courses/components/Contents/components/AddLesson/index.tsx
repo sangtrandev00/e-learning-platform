@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import { ILesson } from '../../../../../../../types/lesson.type';
+import ReactPlayer from 'react-player';
+import { formatTime } from '../../../../../../../utils/functions';
+import { useAddLessonMutation } from '../../../../course.service';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../../store/store';
 const { Option } = Select;
 
 type AddLessonProps = {
-  onSubmit: (formData: Omit<ILesson, '_id'>) => void;
+  // onSubmit: (formData: Omit<ILesson, '_id'>) => void;
+  // videoLength?: number;
+  // onCloseActivies: () => void;
 };
 
 // const initialSection: Omit<ISection, '_id'> = {
@@ -17,10 +24,17 @@ type AddLessonProps = {
 
 const AddLesson: React.FC<AddLessonProps> = (props) => {
   const [open, setOpen] = useState(false);
-
+  const playerRef = useRef<ReactPlayer | null>(null);
+  const [contentLink, setContentLink] = useState('');
   // const [formData, setFormData] = useState<Omit<ISection, '_id'>>(initialSection);
+  const [addLesson, addLessonResult] = useAddLessonMutation();
+
+  const sectionId = useSelector((state: RootState) => state.course.sectionId);
 
   const showDrawer = () => {
+    // props.onCloseActivies();
+
+    // Close section add activities --> Add later
     setOpen(true);
   };
 
@@ -33,6 +47,56 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
   const onChange = (e: RadioChangeEvent) => {
     console.log('radio checked', e.target.value);
     setValue((e.target as HTMLInputElement).value);
+  };
+
+  const onChangeVideoLink = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('calc video length', e.target.value);
+    setContentLink(e.target.value);
+    // console.log('video length: ', playerRef.current.getDuration());
+
+    // props.videoLength = ;
+  };
+
+  const onPasteVideoLink = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    console.log(e.clipboardData.getData('text'));
+    setContentLink(e.clipboardData.getData('text'));
+
+    // console.log('video length: ', playerRef.current?.getDuration());
+    // console.log('video length: ', formatTime(playerRef.current?.getDuration() || 0));
+  };
+
+  const onFinish = (formData: Omit<ILesson, '_id'>) => {
+    console.log(formData);
+    console.log(playerRef.current?.getDuration());
+    console.log(formatTime(playerRef.current?.getDuration() || 0));
+
+    const lessonData: Omit<ILesson, '_id'> = {
+      name: formData.name,
+      content: formData.content,
+      access: formData.access,
+      sectionId: sectionId,
+      type: 'video',
+      description: formData.description,
+      videoLength: playerRef.current?.getDuration() || 0
+    };
+
+    addLesson(lessonData)
+      .unwrap()
+      .then((result) => {
+        console.log(result);
+
+        notification.success({
+          message: 'Add lesson successfully',
+          duration: 2
+        });
+
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log(addLessonResult);
   };
 
   return (
@@ -56,7 +120,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
           <Col md={8}></Col>
           <Col md={16}>
             {/* Form maybe cange layter */}
-            <Form layout='vertical' hideRequiredMark onFinish={props.onSubmit}>
+            <Form layout='vertical' hideRequiredMark onFinish={onFinish}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
@@ -69,8 +133,31 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
                     label='Link Youtube'
                     rules={[{ required: true, message: 'Please enter link youtube' }]}
                   >
-                    <Input placeholder='Please enter link youtube' />
+                    <Input
+                      onPaste={onPasteVideoLink}
+                      onChange={onChangeVideoLink}
+                      // onChange={calcVideoLength}
+                      placeholder='Please enter link youtube'
+                    />
                   </Form.Item>
+                  <span>Video length: 30 minutes</span>
+                  <ReactPlayer
+                    ref={playerRef}
+                    url={contentLink}
+                    width={0}
+                    height={0}
+                    // onDuration={handleDuration}
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          controls: 0,
+                          modestbranding: 1,
+                          showinfo: 0,
+                          fs: 0
+                        }
+                      }
+                    }}
+                  />
                 </Col>
                 <Col span={24}>
                   <Form.Item name='access' label='Access' rules={[{ required: true, message: 'Please enter url' }]}>
