@@ -1,10 +1,37 @@
-import { Button, Space } from 'antd';
+import { Avatar, Button, Dropdown, Space } from 'antd';
 import React, { Fragment } from 'react';
-import { PlusCircleOutlined, BellOutlined, QuestionOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, BellOutlined, QuestionOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { openCreateCourse } from '../../../../../pages/admin/Courses/course.slice';
-
+import type { MenuProps } from 'antd';
 const DashboardHeader = () => {
+  const adminInfoItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <a target='_blank' rel='noopener noreferrer' href='https://www.antgroup.com'>
+          1st menu item
+        </a>
+      )
+    },
+    {
+      key: '2',
+      label: (
+        <a target='_blank' rel='noopener noreferrer' href='https://www.aliyun.com'>
+          2nd menu item
+        </a>
+      )
+    },
+    {
+      key: 'logout',
+      label: (
+        <a target='_blank' rel='noopener noreferrer' href='https://www.luohanacademy.com'>
+          Logout
+        </a>
+      )
+    }
+  ];
+
   const dispatch = useDispatch();
 
   const openCreateCourseHandler = () => {
@@ -48,6 +75,9 @@ const DashboardHeader = () => {
           <QuestionOutlined />
           <span>Help</span>
         </Button>
+        <Dropdown menu={{ items: adminInfoItems }} placement='bottom' arrow>
+          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} icon={<UserOutlined />} />
+        </Dropdown>
       </Space>
     </Fragment>
   );

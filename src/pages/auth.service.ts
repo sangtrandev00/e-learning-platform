@@ -29,6 +29,10 @@ interface loginResponse {
   userId: string;
   message: string;
 }
+interface signupResponse {
+  userId: string;
+  message: string;
+}
 
 export const authApi = createApi({
   reducerPath: 'authApi', // Tên field trong Redux state
@@ -70,7 +74,29 @@ export const authApi = createApi({
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Orders', id: 'LIST' }])
     }),
-    signup: build.mutation<IUser, Omit<IUser, '_id'>>({
+    adminLogin: build.mutation<loginResponse, { email: string; password: string }>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: 'admin-login',
+            method: 'POST',
+            body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Orders sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Orders', id: 'LIST' }])
+    }),
+    signup: build.mutation<signupResponse, Omit<IUser, '_id'>>({
       query(body) {
         return {
           url: `signup`,

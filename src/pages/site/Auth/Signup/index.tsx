@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Button, Checkbox, Divider, Form, Input, Space } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, Space, notification } from 'antd';
 import ButtonCmp from '../../../../components/Button';
 import { GoogleOutlined, FacebookOutlined, FacebookFilled, LinkedinFilled, GithubOutlined } from '@ant-design/icons';
 import '../Auth.scss';
@@ -11,6 +11,7 @@ interface SignupProps {
 }
 
 const Signup: React.FC<SignupProps> = (props) => {
+  const [form] = Form.useForm();
   const [signup, signupResult] = useSignupMutation();
 
   const onFinish = (formValues: Omit<IUser, '_id'>) => {
@@ -28,6 +29,14 @@ const Signup: React.FC<SignupProps> = (props) => {
       .then((result) => {
         console.log(result);
 
+        if ('data' in result) {
+          console.log(result.data);
+
+          const signupResponse: { message: string; userId: string } = result.data;
+
+          notification.success({ type: 'success', message: signupResponse.message });
+        }
+
         props.onClick('login');
       })
       .catch((error) => {
@@ -39,7 +48,7 @@ const Signup: React.FC<SignupProps> = (props) => {
     console.log('Failed:', errorInfo);
   };
 
-  const clickHandler = (e: React.MouseEvent) => {
+  const navigateLoginHandler = (e: React.MouseEvent) => {
     e.preventDefault();
 
     props.onClick('login');
@@ -70,6 +79,7 @@ const Signup: React.FC<SignupProps> = (props) => {
       <Divider>Or</Divider>
 
       <Form
+        form={form}
         name='basic'
         layout='vertical'
         labelCol={{ span: 8 }}
@@ -103,7 +113,7 @@ const Signup: React.FC<SignupProps> = (props) => {
         </Form.Item>
       </Form>
       <div className='auth__footer'>
-        <a onClick={clickHandler} className='auth__footer-link'>
+        <a onClick={navigateLoginHandler} className='auth__footer-link'>
           Login
         </a>
       </div>

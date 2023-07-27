@@ -3,7 +3,8 @@ import { ICourse } from './course.type';
 export enum UserRole {
   ADMIN = 'ADMIN',
   STUDENT = 'STUDENT',
-  TEACHER = 'TEACHER'
+  TEACHER = 'TEACHER',
+  USER = 'USER'
 }
 
 export interface IUser {

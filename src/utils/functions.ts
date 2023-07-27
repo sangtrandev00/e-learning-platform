@@ -13,3 +13,17 @@ export function formatTime(seconds: number) {
   date.setSeconds(seconds);
   return date.toISOString().substr(14, 5);
 }
+
+export function getHeaders() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+  } else {
+    return {
+      'Content-Type': 'application/json'
+    };
+  }
+}

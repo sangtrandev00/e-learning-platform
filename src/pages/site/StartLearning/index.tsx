@@ -6,6 +6,8 @@ import CourseItem from '../components/CourseItem';
 import CourseList from '../components/CourseList';
 import './StartLearning.scss';
 import { useGetCoursesOrderedByUserQuery, useGetCoursesQuery } from '../client.service';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 // type Props = {};
 
 const StartLearning = () => {
@@ -13,8 +15,10 @@ const StartLearning = () => {
     console.log('move');
   };
 
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
   const params = {
-    _userId: '6468a145401d3810494f4797',
+    _userId: userId,
     _limit: 12,
     _page: 1
   };

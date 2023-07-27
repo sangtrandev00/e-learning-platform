@@ -1,13 +1,22 @@
 import React, { Fragment } from 'react';
-import { Button, Checkbox, Divider, Form, Input, Space } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, Space, notification } from 'antd';
 import ButtonCmp from '../../../../components/Button';
 import { GoogleOutlined, FacebookOutlined, FacebookFilled, LinkedinFilled, GithubOutlined } from '@ant-design/icons';
 import '../Auth.scss';
 import { useLoginMutation } from '../../../auth.service';
+import jwtDecode from 'jwt-decode';
+import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
+import { useDispatch } from 'react-redux';
+import Notification from '../../../../components/Notification';
 
-const Login: React.FC = () => {
+interface LoginProps {
+  onClick: (authState: string) => void;
+}
+
+const Login: React.FC<LoginProps> = (props) => {
+  const [form] = Form.useForm();
   const [login, loginResult] = useLoginMutation();
-
+  const dispatch = useDispatch();
   const onFinish = (formValues: { email: string; password: string }) => {
     console.log('Success:', formValues);
 
@@ -19,14 +28,53 @@ const Login: React.FC = () => {
     login(userCredentials)
       .then((result) => {
         console.log(result);
+        if ('data' in result) {
+          console.log(result.data);
+
+          const loginResponse: { token: string; message: string; userId: string } = result.data;
+          const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(
+            loginResponse.token
+          );
+
+          localStorage.setItem('token', loginResponse.token);
+          const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds
+          console.log(decodedToken);
+
+          // Check if the token has not expired
+          if (Date.now() < expirationTime) {
+            // Token is valid, dispatch action to set authentication state
+            dispatch(setAuthenticated(loginResponse.token));
+            dispatch(closeAuthModal());
+            form.resetFields();
+            notification.success({ type: 'success', message: loginResponse.message, duration: 2 });
+          } else {
+            // Token has expired, handle accordingly (e.g., prompt user to log in again)
+            console.log('Token has expired. Please log in again.');
+          }
+        }
+
+        // Handling error failed login here
+        // if ('error' in result) {
+        //   if ('status' in result.error) {
+        //     console.log('show notification!');
+        //   }
+        // }
+        // if (result.error.status === 500) {
+        //   console.log('show notification!');
+        // }
       })
       .catch((error) => {
-        console.log(error);
+        console.log('error:', error);
       });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+  };
+
+  const navigateLoginHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    props.onClick('signup');
   };
 
   return (
@@ -54,6 +102,7 @@ const Login: React.FC = () => {
       <Divider>Or</Divider>
 
       <Form
+        form={form}
         name='basic'
         layout='vertical'
         labelCol={{ span: 8 }}
@@ -64,7 +113,7 @@ const Login: React.FC = () => {
         onFinishFailed={onFinishFailed}
         autoComplete='off'
       >
-        <Form.Item wrapperCol={{ span: 24 }} label='Email' name='email' rules={[{ type: 'email' }]}>
+        <Form.Item wrapperCol={{ span: 24 }} label='Email' name='email' rules={[{ type: 'email', required: true }]}>
           <Input className='' />
         </Form.Item>
 
@@ -82,7 +131,7 @@ const Login: React.FC = () => {
         </Form.Item>
       </Form>
       <div className='auth__footer'>
-        <a href='' className='auth__footer-link'>
+        <a onClick={navigateLoginHandler} href='#' className='auth__footer-link'>
           Create Account
         </a>
         <a href='' className='auth__footer-link'>
