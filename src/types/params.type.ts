@@ -4,5 +4,5 @@ export interface IParams {
   _order?: string;
   _page?: number;
   _q?: string;
-  _userId: string;
+  _userId?: string;
 }

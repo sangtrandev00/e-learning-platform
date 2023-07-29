@@ -4,6 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useGetSectionsByCourseIdQuery } from '../../../client.service';
 import CourseDetailLessonList from '../LessonList';
 import './SectionList.scss';
+import { formatTime } from '../../../../../utils/functions';
 
 type SectionListProps = {
   courseId: string;
@@ -17,14 +18,16 @@ const SectionList = (props: SectionListProps) => {
   };
 
   const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
-    const { _id, name, description, access } = sectionItem;
+    const { _id, name, description, access, numOfLessons, totalVideosLength } = sectionItem;
 
     const sectionTemplateItem = {
       key: `${index}`,
       label: (
         <div className='section__title'>
           <h3>{name}</h3>
-          <div className='section__summary'>13 lectures • 41min</div>
+          <div className='section__summary'>
+            {numOfLessons} lectures • {formatTime(totalVideosLength)}
+          </div>
         </div>
       ),
       children: <CourseDetailLessonList sectionId={_id} />

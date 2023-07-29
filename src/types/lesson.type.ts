@@ -4,6 +4,8 @@ export interface ISection {
   courseId: string;
   description: string;
   access: string;
+  numOfLessons?: number;
+  totalVideosLength?: number;
 }
 
 export interface ILesson {

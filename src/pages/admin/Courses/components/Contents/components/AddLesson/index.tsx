@@ -26,6 +26,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
   const [open, setOpen] = useState(false);
   const playerRef = useRef<ReactPlayer | null>(null);
   const [contentLink, setContentLink] = useState('');
+  const [form] = Form.useForm();
   // const [formData, setFormData] = useState<Omit<ISection, '_id'>>(initialSection);
   const [addLesson, addLessonResult] = useAddLessonMutation();
 
@@ -91,6 +92,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
         });
 
         setOpen(false);
+        form.resetFields();
       })
       .catch((error) => {
         console.log(error);
@@ -120,7 +122,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
           <Col md={8}></Col>
           <Col md={16}>
             {/* Form maybe cange layter */}
-            <Form layout='vertical' hideRequiredMark onFinish={onFinish}>
+            <Form form={form} layout='vertical' hideRequiredMark onFinish={onFinish}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>

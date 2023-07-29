@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { useUpdateLessonDoneByUserMutation } from '../../../client.service';
+import { setCurrentLessonDone } from '../../../client.slice';
 
 // type Props = {};
 
@@ -12,21 +13,16 @@ const PlayerScreen = () => {
   const currLessonId = useSelector((state: RootState) => state.client.lessonId);
   const [updateLessonDone, updateLessonDoneResult] = useUpdateLessonDoneByUserMutation();
   const [apiCalled, setApiCalled] = useState(false);
+  const dispatch = useDispatch();
   const onDuration = (number: number) => {
     console.log(number);
   };
 
   const playerEl = useRef<ReactPlayer>(null);
   const onProgress = (progress: { loaded: number; loadedSeconds: number; played: number; playedSeconds: number }) => {
-    console.log(progress);
-
     console.log('pecent', progress.played / progress.loaded);
-    console.log(playerEl.current?.getCurrentTime());
-    console.log(playerEl.current?.getSecondsLoaded());
-    console.log(playerEl.current?.getDuration());
 
     if (!apiCalled && playerEl.current) {
-      console.log('percent: ', playerEl.current.getCurrentTime() / playerEl.current.getDuration());
       const percentHavePlayed = playerEl.current.getCurrentTime() / playerEl.current.getDuration();
       if (percentHavePlayed >= 0.95) {
         console.log('watched done the video');
@@ -37,6 +33,9 @@ const PlayerScreen = () => {
         })
           .then((result) => {
             console.log('update lesson done result: ', result);
+
+            // Update at state and db here!!!
+            dispatch(setCurrentLessonDone());
           })
           .catch((error) => {
             console.log(error);
@@ -46,7 +45,6 @@ const PlayerScreen = () => {
       }
     }
   };
-  console.log(playerEl.current?.getDuration());
 
   return (
     <ReactPlayer

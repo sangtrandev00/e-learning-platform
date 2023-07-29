@@ -9,20 +9,37 @@ import Learners from './components/Learners';
 import Notes from './components/Notes';
 import ReactPlayer from 'react-player';
 import PlayerScreen from './components/PlayerScreen/PlayerScreen';
-import { useGetCourseQuery } from '../client.service';
+import { useGetCourseEnrolledByUserQuery, useGetCourseQuery } from '../client.service';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 // type Props = {};
 // props: Props
 
 const PathPlayer = () => {
-  const onChange = (key: string) => {
-    console.log(key);
-  };
-
   const [searchParams, setSearchParams] = useSearchParams();
-
   const courseId = searchParams.get('courseId');
 
-  const { data, isFetching } = useGetCourseQuery(courseId as string);
+  const { data, isFetching, refetch } = useGetCourseEnrolledByUserQuery(courseId as string);
+
+  const progressPercent = ((data?.course.progress || 0) * 100).toFixed(2);
+  const [currProgress, setCurrProgress] = useState(progressPercent);
+  const lessonId = useSelector((state: RootState) => state.client.lessonId);
+  const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
+
+  // Handle change progress when player finish the current lesson (watching!)
+  useEffect(() => {
+    console.log('update lesson here at local state, at path player set progress ', isLessonDone);
+
+    // Refetch data here
+    refetch()
+      .then((result) => {
+        console.log('refetch succuefully!', result);
+      })
+      .catch((error) => {
+        console.log('error: ', error);
+      });
+  }, [isLessonDone, refetch]);
 
   const tabItems: TabsProps['items'] = [
     {
@@ -47,6 +64,10 @@ const PathPlayer = () => {
     }
   ];
 
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
   return (
     <div className='path-player'>
       <div className='path-player__wrap'>
@@ -65,7 +86,7 @@ const PathPlayer = () => {
                 </div>
                 <h3 className='path-player__menu-header-title'>{data?.course.name}</h3>
                 <div className='path-player__menu-progress'>
-                  <Progress percent={50} status='active' />
+                  <Progress percent={progressPercent} status='active' />
                 </div>
               </div>
               {/* Menu Content  */}

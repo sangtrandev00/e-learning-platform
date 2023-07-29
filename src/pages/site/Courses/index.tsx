@@ -81,7 +81,7 @@ const Courses = () => {
           </div>
 
           <div className='courses__list'>
-            <CourseList data={data} className='courses__list-row' />
+            <CourseList courseState='notOrdered' courses={data?.courses} className='courses__list-row' />
           </div>
         </div>
       </div>

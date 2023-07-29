@@ -2,8 +2,8 @@ import Button from '../../Button';
 import './Header.scss';
 import type { MenuProps } from 'antd';
 import { Link } from 'react-router-dom';
-import { Avatar, Badge, Dropdown, Modal, Space } from 'antd';
-import { useState } from 'react';
+import { Avatar, Badge, Dropdown, Input, Modal, Space } from 'antd';
+import { useEffect, useState } from 'react';
 import Login from '../../../pages/site/Auth/Login';
 import { ShoppingCartOutlined, UserOutlined, BellOutlined, HeartOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,10 @@ import { RootState } from '../../../store/store';
 import Signup from '../../../pages/site/Auth/Signup';
 import { closeAuthModal, openAuthModal, setAuthenticated, setUnauthenticated } from '../../../pages/auth.slice';
 import { useGetUserQuery } from '../../../pages/site/client.service';
+import { IUser } from '../../../types/user.type';
+
+const { Search } = Input;
+
 const Header = () => {
   // State here
 
@@ -20,32 +24,77 @@ const Header = () => {
   const [authState, setAuthState] = useState('login');
   const cart = useSelector((state: RootState) => state.client.cart);
   const userId = useSelector((state: RootState) => state.auth.userId);
+  const [userData, setUserData] = useState<IUser>();
+  const { data, isFetching } = useGetUserQuery(userId);
 
-  const { data: userData, isFetching } = useGetUserQuery(userId);
+  console.log('userData: ', userData);
 
-  console.log(userData);
+  useEffect(() => {
+    if (data) {
+      setUserData(data.user);
+    }
+  }, [data]);
 
   const userAuthItems: MenuProps['items'] = [
     {
       label: (
-        <div>
+        <Link to='/profile'>
           <div>{userData?.name}</div>
           <div>{userData?.email}</div>
-        </div>
+        </Link>
       ),
-      key: '1',
+      key: 'profile',
       icon: <Avatar src={userData?.avatar} />
     },
     {
-      label: '2nd menu item',
-      key: '2',
+      label: 'My Learning',
+      key: 'mylearning',
       icon: <UserOutlined />
     },
     {
-      label: '3rd menu item',
-      key: '3',
-      icon: <UserOutlined />,
-      danger: true
+      label: 'Instructor Dashboard',
+      key: 'instructor',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Notifications',
+      key: 'notifications',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Messages',
+      key: 'messages',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Account Settings',
+      key: 'account-settings',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Payment method',
+      key: 'payment-method',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Purchase history',
+      key: 'purchase-history',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Public Profile',
+      key: 'public-profile',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Edit Profile',
+      key: 'edit-profile',
+      icon: <UserOutlined />
+    },
+    {
+      label: 'Help',
+      key: 'help',
+      icon: <UserOutlined />
     },
     {
       label: 'Logout',
@@ -163,6 +212,8 @@ const Header = () => {
     onClick: handleMenuClick
   };
 
+  const onSearch = (value: string) => console.log(value);
+
   return (
     <div className='header'>
       <div className='header__wrapper'>
@@ -173,6 +224,14 @@ const Header = () => {
             className='header__logo-img'
           />
         </Link>
+        <div className='header__search'>
+          <Search
+            style={{ width: '30rem' }}
+            placeholder='Search to find your suitable courses'
+            onSearch={onSearch}
+            enterButton
+          />
+        </div>
         <div className='header__nav'>
           <ul className='header__nav-list'>
             {isAuth && (
@@ -215,7 +274,10 @@ const Header = () => {
                 <Dropdown menu={menuWishlistProps} placement='bottomRight'>
                   <Badge dot={true}>
                     {/* <Avatar shape="square" size="large" /> */}
-                    <HeartOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} />
+                    <HeartOutlined
+                      className='header__nav-item-user-icon header__nav-link-icon'
+                      style={{ cursor: 'pointer' }}
+                    />
                     {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
                   </Badge>
                 </Dropdown>
@@ -227,7 +289,10 @@ const Header = () => {
                 <Dropdown menu={menuNotificationsProps} placement='bottomRight'>
                   <Badge dot={true}>
                     {/* <Avatar shape="square" size="large" /> */}
-                    <BellOutlined className='header__nav-item-notify-icon' style={{ cursor: 'pointer' }} />
+                    <BellOutlined
+                      className='header__nav-item-notify-icon header__nav-link-icon'
+                      style={{ cursor: 'pointer' }}
+                    />
                     {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
                   </Badge>
                 </Dropdown>
@@ -238,8 +303,8 @@ const Header = () => {
               <li className='header__nav-item'>
                 <Dropdown menu={menuUserProps} placement='bottomRight'>
                   <Badge dot={true}>
-                    {/* <Avatar shape="square" size="large" /> */}
-                    <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} />
+                    <Avatar className='header__nav-item-user-icon' src={userData?.avatar} />
+                    {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
                   </Badge>
                 </Dropdown>
               </li>
@@ -259,7 +324,34 @@ const Header = () => {
           </div>
         </div>
       </div>
-
+      <div className='header__categories container'>
+        <div className='header__categories-wrap'>
+          <div className='header__categories-item'>
+            <Link to=''>Frontend</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Backend</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Devops</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Fullstack</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>IOT</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Blockchain</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Ai</Link>
+          </div>
+          <div className='header__categories-item'>
+            <Link to=''>Data science</Link>
+          </div>
+        </div>
+      </div>
       <Modal title='' open={isOpenAuthModal} onOk={handleOk} onCancel={handleCancel}>
         {authState === 'login' && <Login onClick={changeAuthState} />}
         {authState === 'signup' && <Signup onClick={changeAuthState} />}

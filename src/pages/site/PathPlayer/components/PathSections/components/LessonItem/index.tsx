@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PlayCircleOutlined, CheckOutlined, CheckCircleFilled } from '@ant-design/icons';
 import ReactPlayer from 'react-player'; // Import the react-player component
 import './LessonItem.scss';
 import { ILesson } from '../../../../../../../types/lesson.type';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startPlayingVideo } from '../../../../../client.slice';
 import { formatTime } from '../../../../../../../utils/functions';
+import { RootState } from '../../../../../../../store/store';
 
 interface LessonItemProps {
   lessonItem: ILesson;
@@ -13,6 +14,26 @@ interface LessonItemProps {
 
 function LessonItem(props: LessonItemProps) {
   const { _id, name, sectionId, content, access, description, type, isDone } = props.lessonItem;
+
+  const isLessonDoneAtStore = useSelector((state: RootState) => state.client.isLessonDone);
+  const currLessonId = useSelector((state: RootState) => state.client.lessonId);
+
+  const [isVideoDone, setIsVideoDone] = useState(isDone);
+
+  console.log('is lesson Done at store', isLessonDoneAtStore);
+
+  // if (isLessonDoneAtStore && _id === currLessonId) {
+  //   setIsVideoDone(true);
+  // }
+
+  useEffect(() => {
+    console.log('is lesson done at store: ', isLessonDoneAtStore);
+    console.log('What lesson Done at store: ', currLessonId);
+
+    if (isLessonDoneAtStore && _id === currLessonId) {
+      setIsVideoDone(true);
+    }
+  }, [isLessonDoneAtStore, currLessonId, _id]);
 
   const dispatch = useDispatch();
 
@@ -44,7 +65,7 @@ function LessonItem(props: LessonItemProps) {
       </div>
       <div className='lesson-item__name'>{name}</div>
       <div className='lesson-item__is-finished'>
-        {isDone && <CheckCircleFilled className='lesson-item__is-finished-icon' />}
+        {isVideoDone && <CheckCircleFilled className='lesson-item__is-finished-icon' />}
       </div>
       <ReactPlayer
         ref={playerRef}

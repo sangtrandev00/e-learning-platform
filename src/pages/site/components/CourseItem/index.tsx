@@ -4,8 +4,9 @@ import './CourseItem.scss';
 import { ICourse } from '../../../../types/course.type';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ICourseEnrolledByUser } from '../../client.service';
 type CourseItemProps = {
-  courseItem: ICourse;
+  courseItem: ICourseEnrolledByUser | ICourse;
   courseState?: string;
   onClick: (_id: string) => void | ((e: React.MouseEvent<HTMLButtonElement>) => void);
 };
@@ -19,8 +20,18 @@ const CourseItem = (props: CourseItemProps) => {
     // e.preventDefault();
     navigate(`/fsdfds`);
   };
+
+  if (!props.courseItem) return null;
+
+  let progressPercent: string | number;
+  if (props.courseState === 'ordered') {
+    progressPercent = ((props.courseItem as ICourseEnrolledByUser).progress * 100).toFixed(2);
+  } else {
+    progressPercent = 0;
+  }
+
   return (
-    <Col onClick={() => props?.onClick(props.courseItem._id)} md={8}>
+    <Col onClick={() => props?.onClick(props.courseItem._id)} md={6}>
       <Badge.Ribbon text='Special Offer'>
         <div className='course-item'>
           <div
@@ -33,11 +44,13 @@ const CourseItem = (props: CourseItemProps) => {
           ></div>
           <div className='course-item__content'>
             <h3 className='course-item__title course-item__title--courses-page'>{props.courseItem.name}</h3>
-            <Progress className='course-item__process' percent={30} />
+            {props.courseState === 'ordered' && (
+              <Progress className='course-item__process' percent={progressPercent as number} />
+            )}
             <div className='course-item__desc'>{props.courseItem.description}</div>
             <div className='course-item__author'>
               <img
-                src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/custom/500x0_98c893731f584cae4930e0d71df6c24d.jpeg'
+                src={props.courseItem.userId.avatar || 'https://via.placeholder.com/150'}
                 alt=''
                 className='course-item__author-img'
               />
@@ -51,16 +64,18 @@ const CourseItem = (props: CourseItemProps) => {
                   </Button>
                 </Col>
                 <Col md={12}>
-                  <div className='course-item__prices'>
-                    {props.courseItem.finalPrice === 0 ? (
-                      <div className='course-item__prices-free'>FREE</div>
-                    ) : (
-                      <>
-                        <span className='course-item__prices-old'>${props.courseItem.price}</span>
-                        <span className='course-item__prices-new'>${props.courseItem.finalPrice}</span>
-                      </>
-                    )}
-                  </div>
+                  {props.courseState !== 'ordered' && (
+                    <div className='course-item__prices'>
+                      {props.courseItem.finalPrice === 0 ? (
+                        <div className='course-item__prices-free'>FREE</div>
+                      ) : (
+                        <>
+                          <span className='course-item__prices-old'>${props.courseItem.price}</span>
+                          <span className='course-item__prices-new'>${props.courseItem.finalPrice}</span>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </Col>
               </Row>
             </div>

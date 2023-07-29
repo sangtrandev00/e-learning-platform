@@ -35,15 +35,8 @@ export interface ICourse {
     name: string;
     avatar: string;
   }; // FK
-  sectionList?: ISection[];
-  usersEntrolled?: {
-    // Learners
-    userId: string;
-    lessonDone: number; // Thời gian tới bao nhiêu là để biết học sinh done khóa đó, phần này có nên sinh ra một bảng nữa hay không!
-    dateStart: string;
-  }[];
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // When is use is enrolled ? (bought the course, click enroll if course is free)

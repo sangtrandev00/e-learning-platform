@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import { ISection } from '../../../../../../../types/lesson.type';
+import { useAddSectionMutation } from '../../../../course.service';
+import { useParams } from 'react-router-dom';
 const { Option } = Select;
 
 type AddSectionProps = {
-  onSubmit: (formData: Omit<ISection, '_id'>) => void;
+  // onSubmit: (formData: Omit<ISection, '_id'>) => void;
+  courseId: string;
 };
 
 // const initialSection: Omit<ISection, '_id'> = {
@@ -16,7 +19,9 @@ type AddSectionProps = {
 // };
 
 const AddSection: React.FC<AddSectionProps> = (props) => {
+  const [addSection, addSectionResult] = useAddSectionMutation();
   const [open, setOpen] = useState(false);
+  const [form] = Form.useForm();
 
   // const [formData, setFormData] = useState<Omit<ISection, '_id'>>(initialSection);
 
@@ -33,6 +38,36 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
   const onChange = (e: RadioChangeEvent) => {
     console.log('radio checked', e.target.value);
     setValue((e.target as HTMLInputElement).value);
+  };
+
+  const submitHandler = (formData: Omit<ISection, '_id'>) => {
+    console.log(formData);
+
+    if (props.courseId) {
+      const data = {
+        name: formData.name,
+        access: formData.access,
+        courseId: props.courseId,
+        description: formData.description
+      };
+      addSection(data)
+        .unwrap()
+        .then((res) => {
+          console.log(res);
+          notification.success({
+            message: 'Add section successfully',
+            description: 'You can start adding lesson to this section',
+            duration: 2
+          });
+          form.resetFields();
+          setOpen(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      throw Error('Course id is not exist');
+    }
   };
 
   return (
@@ -56,7 +91,7 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
           <Col md={8}></Col>
           <Col md={16}>
             {/* Form maybe cange layter */}
-            <Form layout='vertical' hideRequiredMark onFinish={props.onSubmit}>
+            <Form form={form} layout='vertical' hideRequiredMark onFinish={submitHandler}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>

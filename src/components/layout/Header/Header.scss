@@ -43,6 +43,12 @@
        
         color: inherit;
         margin: 0rem 1.2rem;
+        display: flex;
+        align-items: center;
+
+        &-user-icon {
+
+        }
     }
 
     &__nav-link {
@@ -51,7 +57,29 @@
         text-decoration: none;
 
         &-icon {
-           font-size: 2rem;
+           font-size: 1.8rem;
+        }
+    }
+
+    &__categories {
+        border-top: 1px solid #ccc;
+        &-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &-item {
+            margin-right: 2rem;
+            font-size: 1.6rem;
+            padding: 1.2rem 0rem;
+            font-weight: 400;
+            text-transform: capitalize;
+            a {
+                color: inherit;
+                text-decoration: none;
+                text-transform: capitalize;
+            }
         }
     }
 }

@@ -56,13 +56,52 @@ export interface getLessonsResponse {
   lessons: ILesson[];
   message: string;
 }
+
 export interface getCourseResponse {
   course: ICourse;
   message: string;
 }
 
+export interface ICourseEnrolledByUser extends ICourse {
+  progress: number;
+  totalVideosLengthDone: number;
+}
+
+export interface getCourseEnrolledByUserResponse {
+  course: ICourseEnrolledByUser;
+  message: string;
+}
+
+export interface ICourseDetail extends ICourse {
+  lessons: number;
+  sections: number;
+  numOfReviews: number;
+  totalVideosLength: number;
+  avgRatingStars: number;
+  students: number;
+}
+
+export interface getCourseDetailResponse {
+  course: ICourseDetail;
+  message: string;
+}
+
 export interface createOrderResponse {
   order: IOrder;
+  message: string;
+}
+
+export interface getUserResponse {
+  user: IUser;
+  message: string;
+}
+
+export interface IUserDetail extends IUser {
+  courses: ICourseEnrolledByUser[];
+}
+
+export interface getUserDetailResponse {
+  user: IUserDetail;
   message: string;
 }
 
@@ -216,6 +255,50 @@ export const clientApi = createApi({
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
+    getUserDetail: build.query<getUserDetailResponse, IParams>({
+      query: (params) => ({
+        url: `/users/${params._userId}/detail`,
+        params: {
+          _limit: params._limit,
+          _page: params._page
+        }
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Orders method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Orders chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              { type: 'Clients' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
+    }),
     /**
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
@@ -282,6 +365,22 @@ export const clientApi = createApi({
         // }
       })
     }),
+    getCourseEnrolledByUser: build.query<getCourseEnrolledByUserResponse, string>({
+      query: (id) => ({
+        url: `courses/${id}/enrolled`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
+      })
+    }),
+    getCourseDetail: build.query<getCourseDetailResponse, string>({
+      query: (id) => ({
+        url: `courses/${id}/detail`
+        // headers: {
+        //   hello: 'Im Sang'
+        // }
+      })
+    }),
     getSectionsByCourseId: build.query<getSectionsResponse, string>({
       query: (courseId) => ({
         url: `sections/${courseId}/course`
@@ -298,7 +397,15 @@ export const clientApi = createApi({
         }
       })
     }),
-    getUser: build.query<IUser, string>({
+    getLessonsBySectionIdEnrolledCourse: build.query<getLessonsResponse, { sectionId: string; userId: string }>({
+      query: (payload) => ({
+        url: `lessons/${payload.sectionId}/section/course-enrolled`,
+        headers: {
+          userId: payload.userId
+        }
+      })
+    }),
+    getUser: build.query<getUserResponse, string>({
       query: (id) => ({
         url: `users/${id}`
         // headers: {
@@ -312,11 +419,15 @@ export const clientApi = createApi({
 export const {
   useGetCategoriesQuery,
   useGetCoursesQuery,
+  useGetCourseEnrolledByUserQuery,
   useGetCoursesOrderedByUserQuery,
   useGetSectionsByCourseIdQuery,
   useGetLessonsBySectionIdQuery,
+  useGetLessonsBySectionIdEnrolledCourseQuery,
   useGetUserQuery,
+  useGetUserDetailQuery,
   useGetCourseQuery,
+  useGetCourseDetailQuery,
   useCreateOrderMutation,
   useUpdateLessonDoneByUserMutation
 } = clientApi;

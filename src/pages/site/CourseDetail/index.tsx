@@ -11,12 +11,13 @@ import {
 } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
-import { useGetCourseQuery, useGetSectionsByCourseIdQuery } from '../client.service';
+import { useGetCourseDetailQuery, useGetCourseQuery, useGetSectionsByCourseIdQuery } from '../client.service';
 import { Skeleton } from 'antd';
 import { AccessStatus, CourseLevel, ICourse } from '../../../types/course.type';
 import SectionList from './components/SectionList';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../client.slice';
+import { formatTime, formatVideoLengthToHours, transformDate } from '../../../utils/functions';
 // type Props = {}
 const courseData = [
   'Deploy a feature-complete app to production.',
@@ -24,15 +25,6 @@ const courseData = [
   'Use an API client to manually test your app.',
   'Make your code more reusable and testable with dependency injection.',
   'Get a behind-the-scenes understanding of NestJS.'
-];
-
-const overviewData = [
-  '12 hours on-demand video',
-  '3 articles.',
-  '35 downloadable resources.',
-  'Access on mobile and TV.',
-  'Full lifetime access.',
-  'Certificate of completion.'
 ];
 
 const initCourseDetail = {
@@ -53,14 +45,27 @@ const initCourseDetail = {
     _id: '6468a145401d3810494f4797',
     name: 'Nguyen Van A',
     avatar: ''
-  }
+  },
+  numOfReviews: 0,
+  totalVideosLength: 0,
+  sections: 0,
+  lessons: 0,
+  students: 0,
+  avgRatingStars: 0,
+  createdAt: '',
+  updatedAt: ''
 };
 
 const CourseDetail = () => {
+  // HOOKS HERE
   const params = useParams();
+  const dispatch = useDispatch();
+
   const { courseId } = params;
 
-  const { data, isFetching } = useGetCourseQuery(courseId || '');
+  const { data, isFetching } = useGetCourseDetailQuery(courseId || '');
+
+  console.log('course detail: ', data);
 
   let courseDetail = initCourseDetail;
 
@@ -68,19 +73,56 @@ const CourseDetail = () => {
     courseDetail = data.course;
   }
 
-  const { _id, name, description, price, finalPrice, thumbnail, level, courseSlug, categoryId, userId } = courseDetail;
+  const {
+    _id,
+    name,
+    description,
+    price,
+    finalPrice,
+    thumbnail,
+    level,
+    courseSlug,
+    categoryId,
+    userId,
+    numOfReviews,
+    totalVideosLength,
+    sections,
+    lessons,
+    avgRatingStars,
+    students,
+    createdAt,
+    updatedAt
+  } = courseDetail;
+
+  console.log(numOfReviews);
 
   const { data: sectionData, isFetching: isSectionFetching } = useGetSectionsByCourseIdQuery(courseId || '');
 
   const numOfSections = sectionData?.sections.length || 0;
 
   console.log(sectionData);
-  const dispatch = useDispatch();
+
+  const overviewData = [
+    `${formatVideoLengthToHours(totalVideosLength)} on-demand video`,
+    `${sections} articles.`,
+    '35 downloadable resources.',
+    'Access on mobile and TV.',
+    'Full lifetime access.',
+    'Certificate of completion.'
+  ];
 
   const addCartHandler = () => {
     console.log('add to cart: course id: ', _id);
 
     dispatch(addToCart(_id));
+  };
+
+  const subscribeCourseHandler = () => {
+    console.log('subscribe course: course id: ', _id);
+  };
+
+  const buyNowHandler = () => {
+    console.log('buy now handler');
   };
 
   return (
@@ -114,7 +156,7 @@ const CourseDetail = () => {
                   <div className='course-detail__info-item course-detail__info-status'>Bestseller</div>
                   <div className='course-detail__info-item course-detail__info-rating'>
                     <Space>
-                      <span>4.5</span>
+                      <span>{avgRatingStars}</span>
                       <span>
                         <StarFilled className='rating-icon' />
                         <StarFilled className='rating-icon' />
@@ -122,21 +164,23 @@ const CourseDetail = () => {
                         <StarFilled className='rating-icon' />
                         <StarFilled className='rating-icon' />
                       </span>
+                      <Link to='/'>({numOfReviews} ratings)</Link>
                     </Space>
                   </div>
                   <div className='course-detail__info-item course-detail__info-students'>
                     <Space>
-                      <span>12</span>
+                      <span>{students}</span>
                       <span>students</span>
                     </Space>
                   </div>
                 </div>
                 <div className='course-detail__intro-author'>
                   <span className=''>Author</span>
-                  <Link to='/' className='course-detail__intro-author-name'>
+                  <Link to={`/user/${userId._id}`} className='course-detail__intro-author-name'>
                     {userId.name}
                   </Link>
                 </div>
+                <div className='course-detail__intro-updated-at'>Last updated {transformDate(updatedAt)}</div>
               </Col>
               <Col md={8}>
                 <div className='course-detail__overview'>
@@ -157,21 +201,36 @@ const CourseDetail = () => {
                     <div className='course-detail__overview-price'>{finalPrice === 0 ? 'FREE' : `$${finalPrice}`}</div>
                     <div className='course-detail__overview-btns'>
                       <Space>
-                        <ButtonCmp
-                          onClick={addCartHandler}
-                          className='course-detail__overview-add-to-cart btn btn-md btn-secondary'
-                        >
-                          Add to Cart
-                        </ButtonCmp>
+                        {finalPrice !== 0 && (
+                          <ButtonCmp
+                            onClick={addCartHandler}
+                            className='course-detail__overview-add-to-cart btn btn-md btn-secondary'
+                          >
+                            Add to Cart
+                          </ButtonCmp>
+                        )}
                         <Button className='course-detail__overview-wishlist-btn'>
                           <HeartOutlined />
                         </Button>
                       </Space>
                       <div>
                         <Space>
-                          <ButtonCmp className='course-detail__overview-enroll-btn btn btn-md btn-primary'>
-                            Enroll now
-                          </ButtonCmp>
+                          {finalPrice === 0 && (
+                            <ButtonCmp
+                              onClick={subscribeCourseHandler}
+                              className='course-detail__overview-enroll-btn btn btn-md btn-primary'
+                            >
+                              Enroll now
+                            </ButtonCmp>
+                          )}
+                          {finalPrice !== 0 && (
+                            <ButtonCmp
+                              onClick={buyNowHandler}
+                              className='course-detail__overview-enroll-btn btn btn-md btn-primary'
+                            >
+                              Buy now
+                            </ButtonCmp>
+                          )}
                         </Space>
                       </div>
                       <div className='course-detail__overview-guarantee'>30-Day Money-Back Guarantee</div>

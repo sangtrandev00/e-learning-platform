@@ -30,6 +30,20 @@ const PathSections = (props: Props) => {
     return sectionTemplateItem;
   });
 
+  const finalSectionItem = {
+    key: 'final',
+    label: (
+      <div className='section__title'>
+        <h3>Certification</h3>
+      </div>
+    ),
+    children: <div>Got the certification here!!!</div>
+  };
+
+  if (sectionItems) {
+    sectionItems.push(finalSectionItem);
+  }
+
   const onChange = (key: string | string[]) => {
     console.log(key);
   };

@@ -5,6 +5,10 @@ import { Col, Row, Tabs, TabsProps } from 'antd';
 import { ReadOutlined } from '@ant-design/icons';
 import Button from '../../../components/Button';
 import { UserOutlined, StockOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { useGetUserDetailQuery } from '../client.service';
+import { formatVideoLengthToHours } from '../../../utils/functions';
 
 const profileItems: TabsProps['items'] = [
   {
@@ -40,6 +44,22 @@ const tabBarStyleCss = {
 };
 
 const Profile = () => {
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  console.log('user id: ', userId);
+
+  const params = {
+    _userId: userId,
+    _limit: 12,
+    _page: 1
+  };
+
+  const { data, isFetching } = useGetUserDetailQuery(params);
+
+  const sumTotalVideosLengthDone = data?.user.courses.reduce((acc, course) => {
+    return acc + course.totalVideosLengthDone;
+  }, 0);
+
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -55,7 +75,7 @@ const Profile = () => {
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
                   </div>
-                  <div className='profile__header-item-number'>3</div>
+                  <div className='profile__header-item-number'>{data?.user.courses.length}</div>
                   <div className='profile__header-item-text'>Courses</div>
                 </div>
               </Col>
@@ -64,8 +84,10 @@ const Profile = () => {
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
                   </div>
-                  <div className='profile__header-item-number'>3</div>
-                  <div className='profile__header-item-text'>Courses</div>
+                  <div className='profile__header-item-number'>
+                    {formatVideoLengthToHours(sumTotalVideosLengthDone || 0)}
+                  </div>
+                  <div className='profile__header-item-text'>Hours</div>
                 </div>
               </Col>
               <Col md={8}>
@@ -91,8 +113,8 @@ const Profile = () => {
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
                   </div>
-                  <div className='profile__header-item-number'>3</div>
-                  <div className='profile__header-item-text'>Courses</div>
+                  <div className='profile__header-item-number'>0</div>
+                  <div className='profile__header-item-text'>POSTS</div>
                 </div>
               </Col>
               <Col md={4}>
@@ -101,7 +123,7 @@ const Profile = () => {
                     <ReadOutlined />
                   </div>
                   <div className='profile__header-item-number'>3</div>
-                  <div className='profile__header-item-text'>Courses</div>
+                  <div className='profile__header-item-text'>Achivement</div>
                 </div>
               </Col>
             </Row>

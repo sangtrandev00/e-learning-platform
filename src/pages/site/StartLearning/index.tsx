@@ -5,9 +5,11 @@ import { ReadOutlined } from '@ant-design/icons';
 import CourseItem from '../components/CourseItem';
 import CourseList from '../components/CourseList';
 import './StartLearning.scss';
-import { useGetCoursesOrderedByUserQuery, useGetCoursesQuery } from '../client.service';
+import { useGetCoursesOrderedByUserQuery, useGetCoursesQuery, useGetUserDetailQuery } from '../client.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { Link } from 'react-router-dom';
+import { formatVideoLengthToHours } from '../../../utils/functions';
 // type Props = {};
 
 const StartLearning = () => {
@@ -23,7 +25,11 @@ const StartLearning = () => {
     _page: 1
   };
 
-  const { data, isFetching } = useGetCoursesOrderedByUserQuery(params);
+  const { data, isFetching } = useGetUserDetailQuery(params);
+
+  const sumTotalVideosLengthDone = data?.user.courses.reduce((acc, course) => {
+    return acc + course.totalVideosLengthDone;
+  }, 0);
 
   return (
     <div className='start-learning'>
@@ -41,9 +47,11 @@ const StartLearning = () => {
                 </div>
                 <div className='start-learning__header-welcome-info'>
                   <div className='start-learning__header-welcome-text'>HI,</div>
-                  <div className='start-learning__header-welcome-name'>Tran Nhat Sang</div>
+                  <div className='start-learning__header-welcome-name'>{data?.user.name}</div>
                   <div className='start-learning__header-welcome-view-profile'>
-                    <ButtonCmp className='btn btn-sm btn-outline-primary'>Visit profile</ButtonCmp>
+                    <Link to='/profile'>
+                      <ButtonCmp className='btn btn-sm btn-outline-primary'>Visit profile</ButtonCmp>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -56,7 +64,7 @@ const StartLearning = () => {
                       <div className='start-learning__header-summary-item-icon'>
                         <ReadOutlined />
                       </div>
-                      <div className='start-learning__header-summary-item-number'>3</div>
+                      <div className='start-learning__header-summary-item-number'>{data?.user.courses.length || 0}</div>
                       <div className='start-learning__header-summary-item-text'>Courses</div>
                     </div>
                   </Col>
@@ -74,7 +82,9 @@ const StartLearning = () => {
                       <div className='start-learning__header-summary-item-icon'>
                         <ReadOutlined />
                       </div>
-                      <div className='start-learning__header-summary-item-number'>13</div>
+                      <div className='start-learning__header-summary-item-number'>
+                        {formatVideoLengthToHours(sumTotalVideosLengthDone || 0)}
+                      </div>
                       <div className='start-learning__header-summary-item-text'>Hours</div>
                     </div>
                   </Col>
@@ -91,7 +101,11 @@ const StartLearning = () => {
               {isFetching ? (
                 <Skeleton />
               ) : (
-                <CourseList courseState='ordered' data={data} className='start-learning__courses-row' />
+                <CourseList
+                  courseState='ordered'
+                  courses={data?.user.courses || []}
+                  className='start-learning__courses-row'
+                />
               )}
             </div>
           </div>

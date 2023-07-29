@@ -12,6 +12,7 @@ interface ClientState {
   userId: string;
   isAuth: boolean;
   lessonId: string;
+  isLessonDone: boolean;
   playingVideo: string;
   totalLectures: number;
   totalVideosLength: number;
@@ -27,6 +28,7 @@ const initialState: ClientState = {
   isAuth: false,
   lessonId: '',
   playingVideo: 'https://www.youtube.com/watch?v=GQ-toR8F7rc&ab_channel=F8Official',
+  isLessonDone: false,
   totalLectures: 0,
   totalVideosLength: 0,
   cart: localCart,
@@ -65,6 +67,9 @@ const clientSlice = createSlice({
       state.playingVideo = action.payload.content;
       state.lessonId = action.payload.lessonId;
     },
+    setCurrentLessonDone: (state) => {
+      state.isLessonDone = true;
+    },
     calcTotalLectures: (state, action: PayloadAction<number>) => {
       state.totalLectures += action.payload;
     },
@@ -78,6 +83,13 @@ const clientSlice = createSlice({
 });
 
 const clientReducer = clientSlice.reducer;
-export const { addToCart, clearCart, removeCart, startPlayingVideo, calcTotalLectures, calcTotalVideosLength } =
-  clientSlice.actions;
+export const {
+  addToCart,
+  clearCart,
+  removeCart,
+  startPlayingVideo,
+  calcTotalLectures,
+  calcTotalVideosLength,
+  setCurrentLessonDone
+} = clientSlice.actions;
 export default clientReducer;

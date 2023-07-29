@@ -3,7 +3,6 @@ import './LessonItem.scss';
 import { Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
 import { ILesson } from '../../../../../types/lesson.type';
-import ReactPlayer from 'react-player';
 import { formatTime } from '../../../../../utils/functions';
 
 type CourseDetailLessonItemProps = {
@@ -11,19 +10,16 @@ type CourseDetailLessonItemProps = {
 };
 
 const CourseDetailLessonItem = (props: CourseDetailLessonItemProps) => {
-  const { _id, name, description, access, content } = props.lessonItem;
-  const [videoDuration, setVideoDuration] = useState<number | null>(null);
+  const { _id, name, description, access, content, videoLength } = props.lessonItem;
 
-  const playerRef = useRef<ReactPlayer | null>(null);
-
-  const handleDuration = (duration: number) => {
-    setVideoDuration(duration);
-  };
+  console.log('video Length: ');
 
   return (
     <div className='course-detail__lesson-item'>
-      {!videoDuration && <Skeleton.Input active={true} size={'small'} block={true} style={{ marginBottom: '1rem' }} />}
-      {videoDuration && (
+      {!props.lessonItem && (
+        <Skeleton.Input active={true} size={'small'} block={true} style={{ marginBottom: '1rem' }} />
+      )}
+      {props.lessonItem && (
         <Collapse
           size='small'
           items={[
@@ -40,7 +36,7 @@ const CourseDetailLessonItem = (props: CourseDetailLessonItemProps) => {
                       </a>
                     )}
                     <span className='course-detail__lesson-item-label-duration'>
-                      {videoDuration ? formatTime(videoDuration) : '00:00'}
+                      {formatTime(videoLength) || '00:00'}
                     </span>
                   </div>
                 </div>
@@ -51,24 +47,6 @@ const CourseDetailLessonItem = (props: CourseDetailLessonItemProps) => {
           bordered={false}
         />
       )}
-
-      <ReactPlayer
-        ref={playerRef}
-        url={content}
-        width={0}
-        height={0}
-        onDuration={handleDuration}
-        config={{
-          youtube: {
-            playerVars: {
-              controls: 0,
-              modestbranding: 1,
-              showinfo: 0,
-              fs: 0
-            }
-          }
-        }}
-      />
     </div>
   );
 };

@@ -3,11 +3,12 @@ import React, { Fragment } from 'react';
 import CourseItem from '../CourseItem';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/Button';
-import { getCoursesResponse } from '../../client.service';
+import { ICourseEnrolledByUser, getCoursesResponse } from '../../client.service';
+import { ICourse } from '../../../../types/course.type';
 
 type CourseListProps = {
   className: string;
-  data?: getCoursesResponse;
+  courses?: ICourseEnrolledByUser[] | ICourse[];
   courseState: string;
 };
 // props: Props
@@ -28,7 +29,7 @@ const CourseList = (props: CourseListProps) => {
   return (
     <Fragment>
       <Row gutter={16} className={props.className}>
-        {props.data?.courses.map((courseItem) => (
+        {(props.courses || []).map((courseItem) => (
           <CourseItem
             courseState={props.courseState}
             key={courseItem._id}

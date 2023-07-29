@@ -30,6 +30,10 @@
 
          
         }
+
+        &-updated-at {
+            margin-top: 1.2rem;
+        }
     }
 
     &__title {
@@ -238,6 +242,8 @@
         position: absolute;
         &-img {
             width: 30rem;
+            height: 20rem;
+            object-fit: cover;
             display: inline-block;
         }
 
