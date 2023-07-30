@@ -7,9 +7,10 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import DetailItem from './components/DetailItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { useCreateOrderMutation } from '../client.service';
+import { useCreateOrderMutation, useGetUserQuery } from '../client.service';
 import './Checkout.scss';
 import { clearCart } from '../client.slice';
+import { IOrder } from '../../../types/order.type';
 const text = `
 Name on card
 TRAN NHAT SANG
@@ -54,6 +55,11 @@ const Checkout = () => {
   };
 
   const cart = useSelector((state: RootState) => state.client.cart);
+
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const { data: userData, isFetching } = useGetUserQuery(userId);
+
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,10 +77,10 @@ const Checkout = () => {
     const newOrder = {
       items: cart.items,
       user: {
-        _id: '64a26c3bc87fa04e3d1c8995',
-        email: 'morgan@gmail.com',
-        name: 'Sharon morgan',
-        phone: '0909125313'
+        _id: userData?.user._id,
+        email: userData?.user.email,
+        name: userData?.user.name,
+        phone: userData?.user.phone
       },
       transaction: {
         method: 'VNPay'
@@ -84,7 +90,7 @@ const Checkout = () => {
       vatFee: totalPrice * 0.1
     };
 
-    createOrder(newOrder)
+    createOrder(newOrder as Omit<IOrder, '_id'>)
       .unwrap()
       .then((result) => {
         console.log('result', result);

@@ -10,6 +10,7 @@ type CourseListProps = {
   className: string;
   courses?: ICourseEnrolledByUser[] | ICourse[];
   courseState: string;
+  isLoadMore?: boolean;
 };
 // props: Props
 
@@ -24,6 +25,10 @@ const CourseList = (props: CourseListProps) => {
     } else {
       navigate(`/courses/${id}`);
     }
+  };
+
+  const loadMoreHandler = () => {
+    console.log('load more');
   };
 
   return (
@@ -43,7 +48,9 @@ const CourseList = (props: CourseListProps) => {
       </Row>
 
       <div className='our-courses__btn-place'>
-        <Button className='btn btn-secondary btn-sm'>Load more</Button>
+        <Button onClick={loadMoreHandler} className='btn btn-secondary btn-sm'>
+          Load more
+        </Button>
       </div>
     </Fragment>
   );

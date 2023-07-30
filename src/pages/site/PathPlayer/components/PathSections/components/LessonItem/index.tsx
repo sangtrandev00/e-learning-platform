@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { PlayCircleOutlined, CheckOutlined, CheckCircleFilled } from '@ant-design/icons';
 import ReactPlayer from 'react-player'; // Import the react-player component
-import './LessonItem.scss';
 import { ILesson } from '../../../../../../../types/lesson.type';
 import { useDispatch, useSelector } from 'react-redux';
 import { startPlayingVideo } from '../../../../../client.slice';
 import { formatTime } from '../../../../../../../utils/functions';
 import { RootState } from '../../../../../../../store/store';
+import './LessonItem.scss';
 
 interface LessonItemProps {
   lessonItem: ILesson;

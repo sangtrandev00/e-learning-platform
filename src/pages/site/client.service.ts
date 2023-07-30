@@ -6,8 +6,6 @@ import { ICourse } from '../../types/course.type';
 import { IUser } from '../../types/user.type';
 import { IParams } from '../../types/params.type';
 import { ILesson, ISection } from '../../types/lesson.type';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import jwtDecode from 'jwt-decode';
 
 /**
@@ -257,7 +255,7 @@ export const clientApi = createApi({
     }),
     getUserDetail: build.query<getUserDetailResponse, IParams>({
       query: (params) => ({
-        url: `/users/${params._userId}/detail`,
+        url: `/users/${params._userId as string}/detail`,
         params: {
           _limit: params._limit,
           _page: params._page

@@ -3,7 +3,7 @@ import Button from '../../../../components/Button';
 import './CourseItem.scss';
 import { ICourse } from '../../../../types/course.type';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { ICourseEnrolledByUser } from '../../client.service';
 type CourseItemProps = {
   courseItem: ICourseEnrolledByUser | ICourse;
@@ -15,6 +15,10 @@ type CourseItemProps = {
 
 const CourseItem = (props: CourseItemProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  console.log('current params: ', currentPath);
 
   const clickHandler = () => {
     // e.preventDefault();
@@ -31,13 +35,16 @@ const CourseItem = (props: CourseItemProps) => {
   }
 
   return (
-    <Col onClick={() => props?.onClick(props.courseItem._id)} md={6}>
+    <Col
+      onClick={() => props?.onClick(props.courseItem._id)}
+      md={currentPath === '/start' || currentPath === '/' ? 6 : 8}
+    >
       <Badge.Ribbon text='Special Offer'>
         <div className='course-item'>
           <div
             className='course-item__img'
             style={{
-              backgroundImage: `url(${props.courseItem.thumbnail || ''})`,
+              backgroundImage: `url(${encodeURI(props.courseItem.thumbnail) || ''})`,
               backgroundPosition: 'center',
               backgroundSize: 'cover'
             }}

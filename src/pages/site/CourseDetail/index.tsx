@@ -112,13 +112,13 @@ const CourseDetail = () => {
   ];
 
   const addCartHandler = () => {
-    console.log('add to cart: course id: ', _id);
+    console.log('add to cart: course id: ', courseId);
 
-    dispatch(addToCart(_id));
+    dispatch(addToCart(courseId as string));
   };
 
   const subscribeCourseHandler = () => {
-    console.log('subscribe course: course id: ', _id);
+    console.log('subscribe course: course id: ', courseId);
   };
 
   const buyNowHandler = () => {

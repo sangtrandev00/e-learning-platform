@@ -10,6 +10,25 @@
     margin-bottom: 1rem;
     display: inline-block;
 }
+
+.search-results {
+    margin-bottom: 1rem;
+    &__text {
+        @include h-style("h3");
+        margin-bottom: 1rem;
+    }
+
+    &__sort {
+        
+    }
+
+    &__right-display {
+        font-size: 1.4rem;
+        // align-self: flex-end;
+        margin-right: auto;
+    }
+}
+
 .courses {
     margin-top: $header-height;
     background: $light-bg-color;
@@ -22,6 +41,16 @@
         margin-bottom: $section-size--sm;
         @include h-style("h2");
         text-align: center;
+    }
+
+    &__search-results {
+        display: flex;
+        &-right {
+            margin-left: auto;
+            font-size: 1.4rem;
+        }
+        margin-bottom: 1rem;;
+       
     }
 
     &__content {

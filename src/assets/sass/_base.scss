@@ -143,6 +143,15 @@ html {
 
 }
 
+.mt {
+    &-sm {
+        margin-top: $section-size--sm;
+    }
+    &-md {
+        margin-top: $section-size--md;
+    }
+}
+
 .w-full {
     width: 100%;
 }

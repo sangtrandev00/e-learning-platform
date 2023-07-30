@@ -10,7 +10,7 @@ import {
   ApartmentOutlined
 } from '@ant-design/icons';
 import CourseItem from '../components/CourseItem';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import CourseList from '../components/CourseList';
 import { useGetCourseQuery, useGetCoursesQuery } from '../client.service';
 import { IParams } from '../../../types/params.type';
@@ -19,8 +19,11 @@ import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 
 const HomePage = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const params: IParams = {
-    _limit: 3,
+    _limit: 4,
     _page: 1
   };
 
@@ -33,7 +36,7 @@ const HomePage = () => {
   return (
     <div>
       {/* Banner */}
-      <div className='banner'>
+      <div className='banner mt-sm'>
         <div className='banner__wrapper'>
           <div className='banner__wrapper-left'>
             <div className='banner__cta-section'>
@@ -167,8 +170,8 @@ const HomePage = () => {
       {/* Courses */}
 
       {isAuth && (
-        <div className='our-courses container spacing-h-md'>
-          <h2 className='our-courses__title'>Our Courses</h2>
+        <div className={`our-courses container spacing-h-md`}>
+          <h2 className='our-courses__title mt-sm'>Our Courses</h2>
           {isFetching ? (
             <Skeleton />
           ) : (

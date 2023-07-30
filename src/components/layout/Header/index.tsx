@@ -1,7 +1,7 @@
 import Button from '../../Button';
 import './Header.scss';
 import type { MenuProps } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Avatar, Badge, Dropdown, Input, Modal, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import Login from '../../../pages/site/Auth/Login';
@@ -12,6 +12,7 @@ import Signup from '../../../pages/site/Auth/Signup';
 import { closeAuthModal, openAuthModal, setAuthenticated, setUnauthenticated } from '../../../pages/auth.slice';
 import { useGetUserQuery } from '../../../pages/site/client.service';
 import { IUser } from '../../../types/user.type';
+import CategoriesNav from './components/CategoriesNav';
 
 const { Search } = Input;
 
@@ -26,7 +27,9 @@ const Header = () => {
   const userId = useSelector((state: RootState) => state.auth.userId);
   const [userData, setUserData] = useState<IUser>();
   const { data, isFetching } = useGetUserQuery(userId);
+  const location = useLocation();
 
+  const currentPath = location.pathname;
   console.log('userData: ', userData);
 
   useEffect(() => {
@@ -324,34 +327,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className='header__categories container'>
-        <div className='header__categories-wrap'>
-          <div className='header__categories-item'>
-            <Link to=''>Frontend</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Backend</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Devops</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Fullstack</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>IOT</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Blockchain</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Ai</Link>
-          </div>
-          <div className='header__categories-item'>
-            <Link to=''>Data science</Link>
-          </div>
-        </div>
-      </div>
+      {currentPath === '/' && <CategoriesNav />}
       <Modal title='' open={isOpenAuthModal} onOk={handleOk} onCancel={handleCancel}>
         {authState === 'login' && <Login onClick={changeAuthState} />}
         {authState === 'signup' && <Signup onClick={changeAuthState} />}

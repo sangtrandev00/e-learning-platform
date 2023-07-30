@@ -9,8 +9,6 @@ interface ICart {
 }
 
 interface ClientState {
-  userId: string;
-  isAuth: boolean;
   lessonId: string;
   isLessonDone: boolean;
   playingVideo: string;
@@ -24,8 +22,6 @@ interface ClientState {
 const localCart = JSON.parse(localStorage.getItem('cart') || '{items:[]}') as ICart;
 
 const initialState: ClientState = {
-  userId: '',
-  isAuth: false,
   lessonId: '',
   playingVideo: 'https://www.youtube.com/watch?v=GQ-toR8F7rc&ab_channel=F8Official',
   isLessonDone: false,
@@ -39,15 +35,16 @@ const clientSlice = createSlice({
   name: 'client',
   initialState,
   reducers: {
-    clearUser: (state) => {
-      state.userId = '';
-    },
     addToCart: (state, action: PayloadAction<string>) => {
-      const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
+      if (action.payload) {
+        const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
 
-      if (courseExistingIdx === -1) {
-        state.cart.items.push({ courseId: action.payload });
-        localStorage.setItem('cart', JSON.stringify(state.cart));
+        if (courseExistingIdx === -1) {
+          state.cart.items.push({ courseId: action.payload });
+          localStorage.setItem('cart', JSON.stringify(state.cart));
+        }
+      } else {
+        console.log('_id is null');
       }
     },
     clearCart: (state) => {
