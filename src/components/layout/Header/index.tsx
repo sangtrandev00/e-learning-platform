@@ -1,7 +1,7 @@
 import Button from '../../Button';
 import './Header.scss';
 import type { MenuProps } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { Avatar, Badge, Dropdown, Input, Modal, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import Login from '../../../pages/site/Auth/Login';
@@ -13,6 +13,7 @@ import { closeAuthModal, openAuthModal, setAuthenticated, setUnauthenticated } f
 import { useGetUserQuery } from '../../../pages/site/client.service';
 import { IUser } from '../../../types/user.type';
 import CategoriesNav from './components/CategoriesNav';
+import { setSearchQuery } from '../../../pages/site/client.slice';
 
 const { Search } = Input;
 
@@ -28,7 +29,7 @@ const Header = () => {
   const [userData, setUserData] = useState<IUser>();
   const { data, isFetching } = useGetUserQuery(userId);
   const location = useLocation();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPath = location.pathname;
   console.log('userData: ', userData);
 
@@ -215,7 +216,11 @@ const Header = () => {
     onClick: handleMenuClick
   };
 
-  const onSearch = (value: string) => console.log(value);
+  const onSearch = (value: string) => {
+    console.log(value);
+    dispatch(setSearchQuery(value));
+    setSearchParams({ _q: value });
+  };
 
   return (
     <div className='header'>

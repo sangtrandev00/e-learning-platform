@@ -5,4 +5,8 @@ export interface IParams {
   _page?: number;
   _q?: string;
   _userId?: string;
+  _author?: string[];
+  _level?: string[];
+  _price?: string[];
+  _topic?: string[];
 }

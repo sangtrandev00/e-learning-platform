@@ -27,6 +27,12 @@
         // align-self: flex-end;
         margin-right: auto;
     }
+
+    &__clear-filters {
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin-left: 1rem;
+    }
 }
 
 .courses {
@@ -100,6 +106,25 @@
                 }
             }
     
+        }
+
+        .course-level {
+            &__list {
+                @include list-reset;
+            }
+        }
+
+        .course-by-price {
+            &__list {
+                @include list-reset;
+            }
+        }
+
+        .course-topic {
+
+            &__list {
+                @include list-reset;
+            }
         }
     }
 

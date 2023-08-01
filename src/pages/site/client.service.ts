@@ -45,6 +45,17 @@ export interface getCoursesResponse {
   };
 }
 
+export interface getAuthorsResponse {
+  message: string;
+  authors: [
+    string,
+    {
+      name: string;
+      _id: string;
+    }
+  ][];
+}
+
 export interface getSectionsResponse {
   sections: ISection[];
   message: string;
@@ -169,9 +180,47 @@ export const clientApi = createApi({
     getCourses: build.query<getCoursesResponse, IParams>({
       query: (params) => ({
         url: '/courses',
-        params: {
-          _limit: params._limit
+        params: params
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Orders method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Orders chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              { type: 'Clients' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
         }
+
+        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
+    }),
+    getAuthors: build.query<getAuthorsResponse, void>({
+      query: () => ({
+        url: '/authors'
       }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
@@ -417,6 +466,7 @@ export const clientApi = createApi({
 export const {
   useGetCategoriesQuery,
   useGetCoursesQuery,
+  useGetAuthorsQuery,
   useGetCourseEnrolledByUserQuery,
   useGetCoursesOrderedByUserQuery,
   useGetSectionsByCourseIdQuery,

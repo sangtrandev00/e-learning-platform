@@ -80,6 +80,11 @@
         margin-top: 1rem;
       &-btn {
         width: 100%;
+
+        &--free {
+            background-color: $dark-bg-color;
+            color: $light-text-color;
+        }
       }
     }
    

@@ -1,10 +1,12 @@
-import { Badge, Col, Progress, Row } from 'antd';
+import { Badge, Col, Progress, Row, Spin } from 'antd';
 import Button from '../../../../components/Button';
 import './CourseItem.scss';
 import { ICourse } from '../../../../types/course.type';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom';
-import { ICourseEnrolledByUser } from '../../client.service';
+import { ICourseEnrolledByUser, useGetUserDetailQuery } from '../../client.service';
+import { RootState } from '../../../../store/store';
+
 type CourseItemProps = {
   courseItem: ICourseEnrolledByUser | ICourse;
   courseState?: string;
@@ -20,6 +22,26 @@ const CourseItem = (props: CourseItemProps) => {
 
   console.log('current params: ', currentPath);
 
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const { data, isFetching } = useGetUserDetailQuery({ _userId: userId });
+
+  let hasBought = false;
+
+  if (isAuth) {
+    console.log('authenticated');
+
+    console.log('How to check course already bought buy this user!');
+
+    console.log(data?.user.courses.map((course) => course._id));
+
+    const courseIdsByUser = data?.user.courses.map((course) => course._id);
+    if (courseIdsByUser?.includes(props.courseItem._id)) {
+      hasBought = true;
+    }
+  }
+
   const clickHandler = () => {
     // e.preventDefault();
     navigate(`/fsdfds`);
@@ -34,11 +56,20 @@ const CourseItem = (props: CourseItemProps) => {
     progressPercent = 0;
   }
 
+  const gotoCourseHandler = () => {
+    console.log('go to course handler');
+
+    navigate(`/path-player?courseId=${props.courseItem._id}`);
+  };
+
+  const viewCourseDetail = () => {
+    if (!isAuth) {
+      props?.onClick(props.courseItem._id);
+    }
+  };
+
   return (
-    <Col
-      onClick={() => props?.onClick(props.courseItem._id)}
-      md={currentPath === '/start' || currentPath === '/' ? 6 : 8}
-    >
+    <Col onClick={viewCourseDetail} md={currentPath === '/start' || currentPath === '/' ? 6 : 8}>
       <Badge.Ribbon text='Special Offer'>
         <div className='course-item'>
           <div
@@ -66,9 +97,27 @@ const CourseItem = (props: CourseItemProps) => {
             <div className='course-item__enrolls'>
               <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
                 <Col md={12}>
-                  <Button onClick={clickHandler} className='course-item__enrolls-btn btn btn-secondary btn-sm'>
-                    {props.courseState === 'ordered' ? 'Continue' : 'Enroll'}
-                  </Button>
+                  {!hasBought && (
+                    <Button
+                      onClick={clickHandler}
+                      className={`course-item__enrolls-btn btn btn-secondary btn-sm ${
+                        props.courseItem.finalPrice === 0 && props.courseState !== 'ordered'
+                          ? 'course-item__enrolls-btn--free'
+                          : ''
+                      }`}
+                    >
+                      {props.courseState === 'ordered' && 'Continue'}
+                      {props.courseState !== 'ordered' && (props.courseItem.finalPrice === 0 ? 'Enroll' : 'Buy Now')}
+                    </Button>
+                  )}
+                  {hasBought && (
+                    <Button
+                      onClick={gotoCourseHandler}
+                      className='btn btn-secondary btn-sm course-item__enrolls-btn--free'
+                    >
+                      Goto Course
+                    </Button>
+                  )}
                 </Col>
                 <Col md={12}>
                   {props.courseState !== 'ordered' && (

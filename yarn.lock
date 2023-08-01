@@ -2198,6 +2198,11 @@ react-router@6.14.1:
   dependencies:
     "@remix-run/router" "1.7.1"
 
+react-use-search-params-state@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-use-search-params-state/-/react-use-search-params-state-1.0.1.tgz#0b74fac8b4e7845ca8562bc279400c5b50f62f94"
+  integrity sha512-JqfBqMtyOMYzeapsVmd8fy75HJjN40ma9F0bSoCQqXwDe3yas4UBJWOQh2qf9q1/HO822BRkftnmZee/PfJzsw==
+
 react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"

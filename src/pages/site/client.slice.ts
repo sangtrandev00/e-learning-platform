@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IOrder } from '../../types/order.type';
+import { IParams } from '../../types/params.type';
 // import { IOrder } from '../../../types/order.type';
 // import { IUser } from '../../types/user.type';
 interface ICart {
@@ -16,6 +17,8 @@ interface ClientState {
   totalVideosLength: number;
   cart: ICart;
   totalCartPrice: number;
+  searchQuery: string;
+  params: IParams;
   //   formData: IClient;
 }
 
@@ -28,7 +31,9 @@ const initialState: ClientState = {
   totalLectures: 0,
   totalVideosLength: 0,
   cart: localCart,
-  totalCartPrice: 0
+  totalCartPrice: 0,
+  searchQuery: '',
+  params: {}
 };
 
 const clientSlice = createSlice({
@@ -72,6 +77,9 @@ const clientSlice = createSlice({
     },
     calcTotalVideosLength: (state, action: PayloadAction<number>) => {
       state.totalVideosLength += action.payload;
+    },
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
     }
     // handleFormData: (state, action: PayloadAction<IOrder>) => {
     //   state.formData = action.payload;
@@ -87,6 +95,7 @@ export const {
   startPlayingVideo,
   calcTotalLectures,
   calcTotalVideosLength,
-  setCurrentLessonDone
+  setCurrentLessonDone,
+  setSearchQuery
 } = clientSlice.actions;
 export default clientReducer;
