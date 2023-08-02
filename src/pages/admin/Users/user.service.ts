@@ -29,6 +29,11 @@ interface getUsersResponse {
   message: string;
 }
 
+interface getUserResponse {
+  user: IUser;
+  message: string;
+}
+
 export const userApi = createApi({
   reducerPath: 'userApi', // Tên field trong Redux state
   tagTypes: ['Users'], // Những kiểu tag cho phép dùng trong blogApi
@@ -107,22 +112,22 @@ export const userApi = createApi({
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
     }),
-    getUser: build.query<IUser, string>({
+    getUser: build.query<getUserResponse, string>({
       query: (id) => ({
-        url: `users/${id}`,
-        headers: {
-          hello: 'Im duoc'
-        },
-        params: {
-          first_name: 'du',
-          'last-name': 'duoc'
-        }
+        url: `users/${id}`
+        // headers: {
+        //   hello: 'Im duoc'
+        // },
+        // params: {
+        //   first_name: 'du',
+        //   'last-name': 'duoc'
+        // }
       })
     }),
-    updateUser: build.mutation<IUser, { id: string; body: IUser }>({
+    updateUser: build.mutation<IUser, { _id: string; body: Omit<IUser, '_id'> }>({
       query(data) {
         return {
-          url: `users/${data.id}`,
+          url: `user/${data._id}`,
           method: 'PUT',
           body: data.body
         };
@@ -138,7 +143,7 @@ export const userApi = createApi({
         };
       },
       // Trong trường hợp này thì Users sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Users', id }]
+      invalidatesTags: (result, error, id) => [{ type: 'Users', id: id }]
     })
   })
 });

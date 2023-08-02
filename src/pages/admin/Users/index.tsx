@@ -28,7 +28,7 @@ const Users = () => {
         <div className='users__filter'>
           <Space className='sub-header__wrap'>
             <Button onClick={() => setOpen(true)} type='primary' icon={<PlusOutlined />}>
-              New account
+              New User
             </Button>
             <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
             <Select
@@ -100,7 +100,7 @@ const Users = () => {
         </div>
         <div className='users__show-result'></div>
         <div className='users__content'>
-          <UsersList />
+          <UsersList onEditUser={() => setOpen(true)} />
         </div>
       </div>
       <AddUser isOpen={open} onClose={() => setOpen(false)} />

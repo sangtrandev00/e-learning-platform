@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd';
-import { useAddUserMutation } from '../../user.service';
-import { IUser } from '../../../../../types/user.type';
+import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
+import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
+import { IUser, UserRole } from '../../../../../types/user.type';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../store/store';
 
 const { Option } = Select;
 
@@ -11,8 +13,24 @@ interface AddUserProps {
   onClose: () => void;
 }
 
+const initialState: IUser = {
+  _id: '',
+  name: '',
+  email: '',
+  phone: '',
+  role: UserRole.USER
+};
+
 const AddUser: React.FC<AddUserProps> = (props) => {
+  const [formData, setFormData] = useState<IUser>(initialState);
   const [addUser, addUserResult] = useAddUserMutation();
+  const [updateUser, updateUserResult] = useUpdateUserMutation();
+  const [form] = Form.useForm();
+  const userId = useSelector((state: RootState) => state.user.userId);
+
+  const { data, isFetching, refetch } = useGetUserQuery(userId, {
+    skip: !userId
+  });
 
   const submitHandler = (formData: Omit<IUser, '_id'>) => {
     console.log('submit', formData);
@@ -21,23 +39,60 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
-      role: formData.role
+      role: formData.role,
+      avatar: formData.avatar
     };
 
-    addUser(newUser)
-      .then((result) => {
-        console.log(result);
-        props.onClose();
+    if (userId) {
+      console.log('update user');
+
+      updateUser({
+        _id: userId,
+        body: newUser
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .unwrap()
+        .then((result) => {
+          console.log('result: ', result);
+          props.onClose();
+
+          notification.success({
+            message: 'Update User',
+            description: 'Update user successfully!'
+          });
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    } else {
+      addUser(newUser)
+        .then((result) => {
+          console.log(result);
+          props.onClose();
+
+          notification.success({
+            message: 'Add User',
+            description: 'Add user successfully!'
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
+
+  useEffect(() => {
+    if (data && userId) {
+      setFormData(data.user);
+      form.setFieldsValue(data.user);
+    } else {
+      setFormData(initialState);
+    }
+  }, [data, userId]);
 
   return (
     <>
       <Drawer
-        title='Create a new account'
+        title={userId ? 'Edit User' : 'Add a new User'}
         width={820}
         onClose={props.onClose}
         open={props.isOpen}
@@ -52,7 +107,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
           <Col md={8}></Col>
 
           <Col md={16}>
-            <Form layout='vertical' hideRequiredMark onFinish={submitHandler}>
+            <Form form={form} layout='vertical' hideRequiredMark onFinish={submitHandler}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
@@ -71,7 +126,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name='phone' label='phone'>
+                  <Form.Item name='phone' label='Phone'>
                     <Input placeholder='Enter your phone' />
                   </Form.Item>
                 </Col>
@@ -82,6 +137,11 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                       <Option value='USER'>USER</Option>
                       <Option value='INSTRUCTOR'>INSTRUCTOR</Option>
                     </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Form.Item name='avatar' label='Avatar'>
+                    <Input placeholder='Your avatar' />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -122,7 +182,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
               </Row>
               <Form.Item>
                 <Button type='primary' htmlType='submit'>
-                  Add User
+                  Save
                 </Button>
               </Form.Item>
             </Form>

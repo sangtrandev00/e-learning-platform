@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { Avatar, Button, Skeleton, Space, Table, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Popover, Skeleton, Space, Table, Tag, Tooltip, notification } from 'antd';
 import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useState } from 'react';
@@ -8,7 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
 import { EditOutlined, EllipsisOutlined, UserOutlined, AntDesignOutlined } from '@ant-design/icons';
 import UserDetail from './components/UserDetail';
-import { useGetUsersQuery } from '../../user.service';
+import { useDeleteUserMutation, useGetUsersQuery } from '../../user.service';
+import { useDispatch } from 'react-redux';
+import { startEditUser } from '../../user.slice';
 interface DataUserType {
   key: React.Key;
   name: HTMLElement;
@@ -86,17 +88,59 @@ const columns: ColumnsType<DataUserType> = [
   }
 ];
 
+const SettingContent = (props: { userId: string }) => {
+  const [deleteUser, deleteUserResult] = useDeleteUserMutation();
+
+  const deleteUserHandler = () => {
+    console.log(props.userId);
+
+    deleteUser(props.userId)
+      .unwrap()
+      .then((result) => {
+        console.log(result);
+
+        notification.success({
+          message: 'Delete User successfully',
+          description: 'Delete User successfully hihi',
+          duration: 2
+        })
+      })
+      .catch((error) => {
+        console.log('error: ', error);
+      });
+  };
+
+  return (
+    <div>
+      <p>Content</p>
+      <a onClick={deleteUserHandler}>Delete</a>
+    </div>
+  );
+};
+
 const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sorter, extra) => {
   console.log('params', pagination, filters, sorter, extra);
 };
 
-const UsersList: React.FC = () => {
+interface UserListProps {
+  onEditUser: () => void;
+}
+
+const UsersList: React.FC<UserListProps> = (props) => {
   const [open, setOpen] = useState(false);
   const { data, isFetching } = useGetUsersQuery();
-
+  const dispatch = useDispatch();
   const showUserDetail = () => {
     console.log('click');
     setOpen(true);
+  };
+
+  const editUserHandler = (userId: string) => {
+    // startEditingUser()
+    console.log('userid: ', userId);
+    dispatch(startEditUser(userId));
+    // setOpen(true);
+    props.onEditUser();
   };
 
   const usersData = data?.users.map((user) => {
@@ -119,13 +163,13 @@ const UsersList: React.FC = () => {
       courses: (
         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
           {(user.courses || []).map((course) => (
-            <Avatar src={course.thumbnail} />
+            <Avatar key={course._id} src={course.thumbnail} />
           ))}
           {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
           <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
           <Tooltip title='Ant User' placement='top'>
             {(user.courses || []).map((course) => (
-              <Avatar src={course.thumbnail} />
+              <Avatar key={course._id} src={course.thumbnail} />
             ))}
           </Tooltip>
           {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
@@ -139,12 +183,15 @@ const UsersList: React.FC = () => {
       ),
       manage: (
         <Space>
-          <Button>
+          <Button onClick={() => editUserHandler(user._id)}>
             <EditOutlined />
           </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
+
+          <Popover placement='bottomRight' content={<SettingContent userId={user._id} />} title='Actions'>
+            <Button>
+              <EllipsisOutlined />
+            </Button>
+          </Popover>
         </Space>
       )
     };

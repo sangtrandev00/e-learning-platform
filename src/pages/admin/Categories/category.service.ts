@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICategory } from '../../../types/category.type';
 import { CustomError } from '../../../utils/helpers';
-
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
  * Thường sẽ có 2 cách tiếp cận
@@ -26,6 +25,11 @@ import { CustomError } from '../../../utils/helpers';
 
 interface getCategoriesResponse {
   categories: ICategory[];
+  message: string;
+}
+
+interface getCategoryResponse {
+  category: ICategory;
   message: string;
 }
 
@@ -107,24 +111,24 @@ export const categoryApi = createApi({
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Categories', id: 'LIST' }])
     }),
-    getCategory: build.query<ICategory, string>({
+    getCategory: build.query<getCategoryResponse, string>({
       query: (id) => ({
-        url: `categories/${id}`,
-        headers: {
-          hello: 'Im duoc'
-        },
-        params: {
-          first_name: 'du',
-          'last-name': 'duoc'
-        }
+        url: `categories/${id}/single`
+        // headers: {
+        //   hello: 'Im duoc'
+        // },
+        // params: {
+        //   first_name: 'du',
+        //   'last-name': 'duoc'
+        // }
       })
     }),
-    updateCategory: build.mutation<ICategory, { id: string; body: ICategory }>({
+    updateCategory: build.mutation<ICategory, ICategory>({
       query(data) {
         return {
-          url: `categories/${data.id}`,
+          url: `category/${data._id}`,
           method: 'PUT',
-          body: data.body
+          body: data
         };
       },
       // Trong trường hợp này thì Categories sẽ chạy lại
