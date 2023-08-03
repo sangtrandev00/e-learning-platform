@@ -29,68 +29,6 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const columns: ColumnsType<DataCategoryType> = [
-  {
-    title: 'Category',
-    dataIndex: 'name',
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe'
-      },
-      {
-        text: 'Category 1',
-        value: 'Category 1'
-      },
-      {
-        text: 'Category 2',
-        value: 'Category 2'
-      }
-    ],
-    filterMode: 'tree',
-    filterSearch: true,
-    // onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
-    width: '30%'
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description'
-    // sorter: (a, b) => Number(a.author) - Number(b.author)
-  },
-  {
-    title: 'Created at',
-    dataIndex: 'createdAt',
-    filters: [
-      {
-        text: 'London',
-        value: 'London'
-      },
-      {
-        text: 'New York',
-        value: 'New York'
-      }
-    ],
-    // onFilter: (value: string | number | boolean, record) => record.categories.startsWith(value.toString()),
-    filterSearch: true
-  },
-  {
-    title: 'Courses',
-    dataIndex: 'courses'
-  },
-  {
-    title: 'Tags',
-    dataIndex: 'tags'
-  },
-  {
-    title: 'Manage',
-    dataIndex: 'actions'
-  }
-];
-
-const onChange: TableProps<DataCategoryType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
 interface CategoryListProps {
   data: ICategory[];
   onCateEdit: (cateId: string) => void;
@@ -126,6 +64,35 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
   //     console.log('click');
   //     setOpen(true);
   //   };
+
+  const columns: ColumnsType<DataCategoryType> = [
+    {
+      title: 'Category',
+      dataIndex: 'name',
+      width: '20%'
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description'
+    },
+    {
+      title: 'Created at',
+      dataIndex: 'createdAt'
+    },
+    {
+      title: 'Courses',
+      dataIndex: 'courses',
+      sorter: (a, b) => Number(a.courses) - Number(b.courses)
+    },
+    {
+      title: 'Tags',
+      dataIndex: 'tags'
+    },
+    {
+      title: 'Manage',
+      dataIndex: 'actions'
+    }
+  ];
 
   const cateEditHandler = (cateId: string) => {
     props.onCateEdit(cateId);
@@ -175,6 +142,14 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
       pageSize: 12
     }
   });
+
+  const onChange: TableProps<DataCategoryType>['onChange'] = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+
+    setTableParams({
+      pagination
+    });
+  };
 
   return (
     <div className='users-list'>

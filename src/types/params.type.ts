@@ -9,4 +9,5 @@ export interface IParams {
   _level?: string[];
   _price?: string[];
   _topic?: string[];
+  _cateName?: string;
 }

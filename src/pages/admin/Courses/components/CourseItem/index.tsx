@@ -1,4 +1,4 @@
-import { Avatar, Badge, Card, Col, Divider, Popover, Row, Tag } from 'antd';
+import { Avatar, Badge, Card, Col, Divider, Popover, Row, Tag, notification } from 'antd';
 
 import { SettingOutlined, EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 const { Meta } = Card;
@@ -52,6 +52,12 @@ const CourseItem = (props: CourseItemProps) => {
       .unwrap()
       .then((res) => {
         console.log(res);
+
+        notification.success({
+          message: 'Success',
+          description: 'Course deleted successfully',
+        })
+
       })
       .catch((err) => {
         console.log(err);

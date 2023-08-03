@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICategory } from '../../../types/category.type';
 import { CustomError } from '../../../utils/helpers';
+import { IParams } from '../../../types/params.type';
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
  * Thường sẽ có 2 cách tiếp cận
@@ -47,8 +48,51 @@ export const categoryApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getCategories: build.query<getCategoriesResponse, void>({
-      query: () => '/categories', // method không có argument
+    getAllCategories: build.query<getCategoriesResponse, IParams>({
+      query: () => ({
+        url: '/all-categories'
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho categories method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Categories chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Categories' as const, _id })),
+              { type: 'Categories' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Categories' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Categories', id: 'LIST' }];
+      }
+    }),
+    getCategories: build.query<getCategoriesResponse, IParams>({
+      query: (params) => ({
+        url: '/categories',
+        params: params
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này

@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IUser } from '../../../types/user.type';
 import { CustomError } from '../../../utils/helpers';
+import { IParams } from '../../../types/params.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -48,8 +49,11 @@ export const userApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getUsers: build.query<getUsersResponse, void>({
-      query: () => '/users', // method không có argument
+    getUsers: build.query<getUsersResponse, IParams>({
+      query: (params) => ({
+        url: '/users',
+        params: params
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này

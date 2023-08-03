@@ -30,7 +30,7 @@ const Users = () => {
             <Button onClick={() => setOpen(true)} type='primary' icon={<PlusOutlined />}>
               New User
             </Button>
-            <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
+            <Search placeholder='Search Name of User' onSearch={onSearchHandler} style={{ width: 200 }} />
             <Select
               showSearch
               placeholder='Select a person'

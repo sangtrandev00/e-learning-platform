@@ -34,22 +34,22 @@ const columns: ColumnsType<DataUserType> = [
   {
     title: 'User',
     dataIndex: 'name',
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe'
-      },
-      {
-        text: 'Category 1',
-        value: 'Category 1'
-      },
-      {
-        text: 'Category 2',
-        value: 'Category 2'
-      }
-    ],
-    filterMode: 'tree',
-    filterSearch: true,
+    // filters: [
+    //   {
+    //     text: 'Joe',
+    //     value: 'Joe'
+    //   },
+    //   {
+    //     text: 'Category 1',
+    //     value: 'Category 1'
+    //   },
+    //   {
+    //     text: 'Category 2',
+    //     value: 'Category 2'
+    //   }
+    // ],
+    // filterMode: 'tree',
+    // filterSearch: true,
     // onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
     width: '30%'
   },
@@ -103,7 +103,7 @@ const SettingContent = (props: { userId: string }) => {
           message: 'Delete User successfully',
           description: 'Delete User successfully hihi',
           duration: 2
-        })
+        });
       })
       .catch((error) => {
         console.log('error: ', error);
@@ -118,17 +118,25 @@ const SettingContent = (props: { userId: string }) => {
   );
 };
 
-const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
 interface UserListProps {
   onEditUser: () => void;
 }
 
 const UsersList: React.FC<UserListProps> = (props) => {
   const [open, setOpen] = useState(false);
-  const { data, isFetching } = useGetUsersQuery();
+
+  const [usersParams, setUsersParams] = useState({
+    _q: ''
+  });
+
+  // useEffect(() => {
+  //   setUsersParams({
+  //     ...usersParams,
+  //     _q: ''
+  //   });
+  // }, []);
+
+  const { data, isFetching } = useGetUsersQuery(usersParams);
   const dispatch = useDispatch();
   const showUserDetail = () => {
     console.log('click');
@@ -141,6 +149,14 @@ const UsersList: React.FC<UserListProps> = (props) => {
     dispatch(startEditUser(userId));
     // setOpen(true);
     props.onEditUser();
+  };
+
+  const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+
+    console.log('pagination: ', pagination);
+
+    setTableParams({ pagination: pagination });
   };
 
   const usersData = data?.users.map((user) => {
@@ -159,7 +175,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
         </a>
       ),
       lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
+      createdAt: user.createdAt,
       courses: (
         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
           {(user.courses || []).map((course) => (

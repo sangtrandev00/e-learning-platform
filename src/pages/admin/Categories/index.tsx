@@ -12,11 +12,28 @@ import { startEditCategory } from './category.slice';
 const { Search } = Input;
 
 const Categories = () => {
-  const { data, isFetching } = useGetCategoriesQuery();
+  const [params, setParams] = useState({
+    _limit: 12,
+    _page: 12,
+    _q: '',
+    _cateName: ''
+  });
+
+  const { data, isFetching } = useGetCategoriesQuery(params);
   const [open, setOpen] = useState(false);
+
+  const cateFilterList = data?.categories.map((cate) => {
+    return {
+      value: cate.name,
+      label: cate.name
+    };
+  });
+
   const dispatch = useDispatch();
   const onSearchHandler = (value: string) => {
     console.log(value);
+
+    setParams({ ...params, _q: value });
   };
 
   const onSelectChange = (value: string) => {
@@ -40,6 +57,11 @@ const Categories = () => {
     setOpen(true);
   };
 
+  const cateFilterHandler = (value: string) => {
+    console.log('value: ', value);
+    setParams({ ...params, _cateName: value });
+  };
+
   return (
     <div className='categories'>
       <div className='users__wrap'>
@@ -48,55 +70,22 @@ const Categories = () => {
             <Button onClick={newCategoryHandler} type='primary' icon={<PlusOutlined />}>
               New Category
             </Button>
-            <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
-            <Select
-              showSearch
-              placeholder='Select a person'
-              optionFilterProp='children'
-              onChange={onSelectChange}
-              onSearch={onSelectSearch}
-              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={[
-                {
-                  value: 'jack',
-                  label: 'Jack'
-                },
-                {
-                  value: 'lucy',
-                  label: 'Lucy'
-                },
-                {
-                  value: 'tom',
-                  label: 'Tom'
-                }
-              ]}
-            />
+            <Search placeholder='Search categories' onSearch={onSearchHandler} style={{ width: 200 }} />
 
             <Select
               size='middle'
-              placeholder='Please select'
-              defaultValue={['All Categories', 'c12 fdsfds']}
+              placeholder='Please select your category'
+              defaultValue={'All Categories'}
               // onChange={handleChange}
-              style={{ width: '100%' }}
-              options={[
-                {
-                  value: 'jack',
-                  label: 'Jack'
-                },
-                {
-                  value: 'lucy',
-                  label: 'Lucy'
-                },
-                {
-                  value: 'tom',
-                  label: 'Tom'
-                }
-              ]}
+              onChange={cateFilterHandler}
+              style={{ width: '240px' }}
+              options={cateFilterList}
             />
-            <Select
+            {/* Tags filter here */}
+            {/* <Select
               size='middle'
               placeholder='Please select'
-              defaultValue={['All Authors', 'c12 fdsfds']}
+              defaultValue={['All tags', '']}
               // onChange={handleChange}
               style={{ width: '100%' }}
               options={[
@@ -113,7 +102,7 @@ const Categories = () => {
                   label: 'Tom'
                 }
               ]}
-            />
+            /> */}
           </Space>
         </div>
         <div className='users__show-result'></div>

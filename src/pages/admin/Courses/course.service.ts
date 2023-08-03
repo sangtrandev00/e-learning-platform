@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICourse } from '../../../types/course.type';
 import { CustomError } from '../../../utils/helpers';
 import { ILesson, ISection } from '../../../types/lesson.type';
+import { IParams } from '../../../types/params.type';
+import { IPagination } from '../../../types/pagination';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -27,6 +29,7 @@ import { ILesson, ISection } from '../../../types/lesson.type';
 
 interface getCoursesResponse {
   courses: ICourse[];
+  pagination: IPagination;
   message: string;
 }
 
@@ -54,8 +57,54 @@ export const courseApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getCourses: build.query<getCoursesResponse, void>({
-      query: () => '/courses', // method không có argument
+    getCourses: build.query<getCoursesResponse, IParams>({
+      query: (params) => ({
+        url: '/courses',
+        params: params
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Courses method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Courses chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "Courses";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        console.log('result provider tags: ', result);
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              { type: 'Courses' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Courses' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Courses', id: 'LIST' }];
+      }
+    }),
+    getAllCourses: build.query<getCoursesResponse, IParams>({
+      query: (params) => ({
+        url: '/courses',
+        params: params
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
@@ -338,6 +387,7 @@ export const courseApi = createApi({
 
 export const {
   useGetCoursesQuery,
+  useGetAllCoursesQuery,
   useGetSectionsQuery,
   useGetSectionsByCourseIdQuery,
   useGetLessonsBySectionIdQuery,
