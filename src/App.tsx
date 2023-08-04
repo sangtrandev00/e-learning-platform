@@ -33,6 +33,11 @@ import {
 import jwtDecode from 'jwt-decode';
 import AdminLogin from './pages/admin/Auth/Login';
 import AdminAuth from './pages/admin/Auth';
+import UsersProgress from './pages/admin/Reports/components/UsersProgress';
+import UsersSegment from './pages/admin/Reports/components/UsersSegments';
+import CoursesRevenue from './pages/admin/Reports/components/CoursesReveneue';
+import InstructorsRevene from './pages/admin/Reports/components/InstructorsRevenue';
+import CancelledSales from './pages/admin/Reports/components/CancelledSales';
 
 const router = createBrowserRouter([
   {
@@ -143,6 +148,30 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <ReportsCenter />
+          },
+          {
+            path: 'users-progress',
+            element: <UsersProgress />
+          },
+          {
+            path: 'users-segment',
+            element: <UsersSegment />
+          },
+          {
+            path: 'course-insights',
+            element: <UsersSegment />
+          },
+          {
+            path: 'courses-revenue',
+            element: <CoursesRevenue />
+          },
+          {
+            path: 'instructors-revenue',
+            element: <InstructorsRevene />
+          },
+          {
+            path: 'cancelled-sales',
+            element: <CancelledSales />
           }
         ]
       },

@@ -17,12 +17,41 @@ import {
 } from '@ant-design/icons';
 import './Dashboard.scss';
 import Chart from './components/Chart';
+import { useGetSummaryReportsQuery } from '../report.service';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPreviousDays, showChart } from '../report.slice';
+import { RootState } from '../../../store/store';
 
 const statisticItemStyle = {};
 
 const Dashboard: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const { data: summaryReportsData, isFetching: isSummaryReportFetching } = useGetSummaryReportsQuery();
+
+  const chartName = useSelector((state: RootState) => state.report.chartName);
+
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
+
+    dispatch(selectPreviousDays(Number(value)));
+  };
+
+  const showNewUserSignupsChart = () => {
+    console.log('showNewUserSignupsChart');
+
+    dispatch(showChart('new-signups'));
+  };
+
+  const showRevenuesChart = () => {
+    console.log('showRevenuesChart');
+    dispatch(showChart('revenues'));
+  };
+
+  const showCourseSalesChart = () => {
+    console.log('showCourseSalesChart');
+    dispatch(showChart('course-sales'));
   };
 
   return (
@@ -37,10 +66,31 @@ const Dashboard: React.FC = () => {
                   <span className='dashboard__chart-header-logo-text'>Your Academy</span>
                 </div>
                 <div className='dashboard__chart-header-nav'>
-                  <Button className='dashboard__chart-header-nav-item'>New signups</Button>
-                  <Button className='dashboard__chart-header-nav-item'>Revenue</Button>
-                  <Button className='dashboard__chart-header-nav-item'>Product sales</Button>
-                  <Button className='dashboard__chart-header-nav-item'>Active learners</Button>
+                  <Button
+                    type={chartName === 'new-signups' ? 'primary' : 'default'}
+                    ghost={chartName === 'new-signups' ? true : false}
+                    className='dashboard__chart-header-nav-item'
+                    onClick={showNewUserSignupsChart}
+                  >
+                    New signups
+                  </Button>
+                  <Button
+                    type={chartName === 'revenues' ? 'primary' : 'default'}
+                    ghost={chartName === 'revenues' ? true : false}
+                    className='dashboard__chart-header-nav-item'
+                    onClick={showRevenuesChart}
+                  >
+                    Revenue
+                  </Button>
+                  <Button
+                    type={chartName === 'course-sales' ? 'primary' : 'default'}
+                    ghost={chartName === 'course-sales' ? true : false}
+                    className='dashboard__chart-header-nav-item'
+                    onClick={showCourseSalesChart}
+                  >
+                    Course sales
+                  </Button>
+                  {/* <Button className='dashboard__chart-header-nav-item'>Active learners</Button> */}
                   <Select
                     className='dashboard__chart-header-nav-item dashboard__chart-header-nav-item--select'
                     defaultValue='7'
@@ -65,58 +115,66 @@ const Dashboard: React.FC = () => {
             <div className='dashboard__statistic'>
               <Row className='dashboard__statistic-row'>
                 <Col md={8}>
-                  <Statistic
-                    className='dashboard__statistic-item'
-                    valueStyle={statisticItemStyle}
-                    title='All Users'
-                    value={10}
-                    prefix={<UsergroupAddOutlined />}
-                  />
+                  <Link to='/author/users'>
+                    <Statistic
+                      className='dashboard__statistic-item'
+                      valueStyle={statisticItemStyle}
+                      title='All Users'
+                      value={summaryReportsData?.reports.users}
+                      prefix={<UsergroupAddOutlined />}
+                    />
+                  </Link>
                 </Col>
                 <Col md={8}>
                   <Statistic
                     className='dashboard__statistic-item'
                     valueStyle={statisticItemStyle}
                     title='Conversation'
-                    value={`50%`}
+                    value={`${summaryReportsData?.reports.conversations || 0}%`}
                     prefix={<RetweetOutlined />}
                   />
                 </Col>
                 <Col md={8}>
-                  <Statistic
-                    className='dashboard__statistic-item'
-                    valueStyle={statisticItemStyle}
-                    title='30 days sales'
-                    value={1128}
-                    prefix={<DollarOutlined />}
-                  />
+                  <Link to='/author/orders?days=30'>
+                    <Statistic
+                      className='dashboard__statistic-item'
+                      valueStyle={statisticItemStyle}
+                      title='30 days sales'
+                      value={summaryReportsData?.reports.saleOf30days}
+                      prefix={<DollarOutlined />}
+                    />
+                  </Link>
                 </Col>
                 <Col md={8}>
                   <Statistic
                     className='dashboard__statistic-item'
                     valueStyle={statisticItemStyle}
                     title='Avg time'
-                    value={`20 min`}
+                    value={`${summaryReportsData?.reports.avgTimeLearningPerUser || 0} min`}
                     prefix={<ClockCircleOutlined />}
                   />
                 </Col>
                 <Col md={8}>
-                  <Statistic
-                    className='dashboard__statistic-item'
-                    valueStyle={statisticItemStyle}
-                    title='Courses'
-                    value={15}
-                    prefix={<ReadOutlined />}
-                  />
+                  <Link to='/author/courses'>
+                    <Statistic
+                      className='dashboard__statistic-item'
+                      valueStyle={statisticItemStyle}
+                      title='Courses'
+                      value={summaryReportsData?.reports.courses}
+                      prefix={<ReadOutlined />}
+                    />
+                  </Link>
                 </Col>
                 <Col md={8}>
-                  <Statistic
-                    className='dashboard__statistic-item'
-                    valueStyle={statisticItemStyle}
-                    title='Course categories'
-                    value={3}
-                    prefix={<FolderOpenOutlined />}
-                  />
+                  <Link to='/author/categories'>
+                    <Statistic
+                      className='dashboard__statistic-item'
+                      valueStyle={statisticItemStyle}
+                      title='Course categories'
+                      value={summaryReportsData?.reports.categories}
+                      prefix={<FolderOpenOutlined />}
+                    />
+                  </Link>
                 </Col>
               </Row>
             </div>
@@ -138,6 +196,8 @@ const Dashboard: React.FC = () => {
                   </a>
                 </div>
                 <div className='latest-users__body dashboard__latest-item-body'>
+                  {/* Mapp all news users here!!! */}
+
                   <div className='latest-users__item'>
                     <img
                       src='https://lwfiles.mycourse.app/648eaf1c0c0c35ee7db7e0a2-public/avatars/thumbs/648eaf1c0c0c35ee7db7e0a3.jpg'

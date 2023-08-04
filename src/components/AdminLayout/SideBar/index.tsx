@@ -19,12 +19,19 @@ import './SideBar.scss';
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
-function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: 'group'
+): MenuItem {
   return {
     key,
     icon,
     children,
-    label
+    label,
+    type
   } as MenuItem;
 }
 
@@ -39,7 +46,41 @@ const items: MenuItem[] = [
     getItem('Admins', 'admins'),
     getItem('Intructors', 'intructors')
   ]),
-  getItem('Reports Center', 'reports', <BarChartOutlined />, [getItem('reports', 'reports')]),
+  getItem('Reports Center', 'reports', <BarChartOutlined />, [
+    getItem(
+      'User Analytics',
+      'user-analytics',
+      null,
+      [
+        getItem('User Progress', 'reports/users-progress'),
+        getItem('User Segment', 'reports/users-segment'),
+        getItem('Course Insights', 'reports/course-insights')
+      ],
+      'group'
+    ),
+    getItem(
+      'Exams',
+      'exams',
+      null,
+      [
+        getItem('Certifications', 'reports/certifications'),
+        getItem('Review center', 'reports/review-center'),
+        getItem('Question bank', 'reports/questions-bank')
+      ],
+      'group'
+    ),
+    getItem(
+      'Sales',
+      'sales',
+      null,
+      [
+        getItem('Orders', 'reports/orders'),
+        getItem('Courses revenues', 'reports/courses-revenue'),
+        getItem('Instructors Revenues', 'reports/instructors-revenue')
+      ],
+      'group'
+    )
+  ]),
   getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
   getItem('My account', 'account', <UserAddOutlined />),
   getItem('Need Help ?', 'help', <FileOutlined />)
