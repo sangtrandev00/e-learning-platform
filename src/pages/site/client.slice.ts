@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IOrder } from '../../types/order.type';
 import { IParams } from '../../types/params.type';
 // import { IOrder } from '../../../types/order.type';
 // import { IUser } from '../../types/user.type';
@@ -30,7 +29,9 @@ const initialState: ClientState = {
   isLessonDone: false,
   totalLectures: 0,
   totalVideosLength: 0,
-  cart: localCart,
+  cart: localCart || {
+    items: []
+  },
   totalCartPrice: 0,
   searchQuery: '',
   params: {}

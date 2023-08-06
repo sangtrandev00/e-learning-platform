@@ -1,11 +1,11 @@
-import { Badge, Col, Progress, Row, Spin } from 'antd';
+import { Badge, Col, Progress, Row } from 'antd';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../../components/Button';
-import './CourseItem.scss';
-import { ICourse } from '../../../../types/course.type';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom';
-import { ICourseEnrolledByUser, useGetUserDetailQuery } from '../../client.service';
 import { RootState } from '../../../../store/store';
+import { ICourse } from '../../../../types/course.type';
+import { ICourseEnrolledByUser, useGetUserDetailQuery } from '../../client.service';
+import './CourseItem.scss';
 
 type CourseItemProps = {
   courseItem: ICourseEnrolledByUser | ICourse;
@@ -25,7 +25,12 @@ const CourseItem = (props: CourseItemProps) => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  const { data, isFetching } = useGetUserDetailQuery({ _userId: userId });
+  const { data, isFetching } = useGetUserDetailQuery(
+    { _userId: userId },
+    {
+      skip: !userId
+    }
+  );
 
   let hasBought = false;
 

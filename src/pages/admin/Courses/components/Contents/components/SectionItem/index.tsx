@@ -1,10 +1,9 @@
-import React from 'react';
-import './SectionItem.scss';
 import { Button, Divider, Space } from 'antd';
 import { ISection } from '../../../../../../../types/lesson.type';
-import AddActivities from './AddActivities';
-import LessonItem from '../LessonItem';
 import { useGetLessonsBySectionIdQuery } from '../../../../course.service';
+import LessonItem from '../LessonItem';
+import AddActivities from './AddActivities';
+import './SectionItem.scss';
 
 type SectionItemProps = {
   section: ISection;

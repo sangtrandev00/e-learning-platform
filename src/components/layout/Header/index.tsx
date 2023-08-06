@@ -1,19 +1,19 @@
-import Button from '../../Button';
-import './Header.scss';
+import { BellOutlined, HeartOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { Avatar, Badge, Dropdown, Input, Modal, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import Login from '../../../pages/site/Auth/Login';
-import { ShoppingCartOutlined, UserOutlined, BellOutlined, HeartOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { closeAuthModal, openAuthModal, setUnauthenticated } from '../../../pages/auth.slice';
+import Login from '../../../pages/site/Auth/Login';
 import Signup from '../../../pages/site/Auth/Signup';
-import { closeAuthModal, openAuthModal, setAuthenticated, setUnauthenticated } from '../../../pages/auth.slice';
 import { useGetUserQuery } from '../../../pages/site/client.service';
-import { IUser } from '../../../types/user.type';
-import CategoriesNav from './components/CategoriesNav';
 import { setSearchQuery } from '../../../pages/site/client.slice';
+import { RootState } from '../../../store/store';
+import { IUser } from '../../../types/user.type';
+import Button from '../../Button';
+import './Header.scss';
+import CategoriesNav from './components/CategoriesNav';
 
 const { Search } = Input;
 
@@ -27,11 +27,12 @@ const Header = () => {
   const cart = useSelector((state: RootState) => state.client.cart);
   const userId = useSelector((state: RootState) => state.auth.userId);
   const [userData, setUserData] = useState<IUser>();
-  const { data, isFetching } = useGetUserQuery(userId);
+  const { data, isFetching } = useGetUserQuery(userId, {
+    skip: !userId
+  });
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPath = location.pathname;
-  console.log('userData: ', userData);
 
   useEffect(() => {
     if (data) {
@@ -272,7 +273,7 @@ const Header = () => {
 
             <li className='header__nav-item'>
               <Link className='header__nav-link' to='/view-cart'>
-                <Badge count={cart.items.length}>
+                <Badge count={cart?.items?.length || 0}>
                   <ShoppingCartOutlined className='header__nav-link-icon' />
                 </Badge>
               </Link>

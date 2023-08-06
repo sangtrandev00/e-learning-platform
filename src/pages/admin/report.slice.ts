@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AccessStatus, CourseLevel, ICourse } from '../../../types/course.type';
-import Chart from './Dashboard/components/Chart';
 
 interface reportState {
   courseId: string;

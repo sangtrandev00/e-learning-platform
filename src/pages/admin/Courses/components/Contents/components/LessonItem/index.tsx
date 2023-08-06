@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './LessonItem.scss';
 
 import { YoutubeOutlined } from '@ant-design/icons';

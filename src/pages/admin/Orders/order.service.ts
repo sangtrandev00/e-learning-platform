@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BACKEND_URL } from '../../../constant/backend-domain';
 import { IOrder } from '../../../types/order.type';
 import { CustomError } from '../../../utils/helpers';
 
@@ -34,7 +35,7 @@ export const orderApi = createApi({
   tagTypes: ['Orders'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000/admin',
+    baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
       // Set some headers here !

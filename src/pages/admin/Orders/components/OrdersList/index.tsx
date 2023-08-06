@@ -1,21 +1,20 @@
-import React, { Fragment, useEffect } from 'react';
-import { Avatar, Button, Skeleton, Space, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
+import { Avatar, Skeleton, Table, Tooltip } from 'antd';
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
+import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './OrdersList.scss';
-import { Link, useNavigate } from 'react-router-dom';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
-import { EditOutlined, EllipsisOutlined, UserOutlined, AntDesignOutlined, DownloadOutlined } from '@ant-design/icons';
+import { AntDesignOutlined, DownloadOutlined, UserOutlined } from '@ant-design/icons';
 import { useGetOrdersQuery } from '../../order.service';
-interface DataUserType {
+interface DataOrderType {
   key: React.Key;
-  name: HTMLElement;
+  name: JSX.Element;
   avatar?: string;
   email?: string;
-  courses: HTMLElement;
+  courses: JSX.Element;
   register: string;
-  transaction: HTMLElement;
+  transaction: JSX.Element;
   amount: string;
   payment: string;
 }
@@ -27,7 +26,7 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const columns: ColumnsType<DataUserType> = [
+const columns: ColumnsType<DataOrderType> = [
   {
     title: 'Learners',
     dataIndex: 'name',
@@ -73,7 +72,7 @@ const columns: ColumnsType<DataUserType> = [
   }
 ];
 
-const onChange: TableProps<DataUserType>['onChange'] = (pagination, filters, sorter, extra) => {
+const onChange: TableProps<DataOrderType>['onChange'] = (pagination, filters, sorter, extra) => {
   console.log('params', pagination, filters, sorter, extra);
 };
 
@@ -87,56 +86,57 @@ const OrdersList: React.FC = () => {
     setOpen(true);
   };
 
-  const ordersData = data?.orders.map((order) => {
-    const { transaction, user, _id, totalPrice, items } = order;
+  const ordersData: DataOrderType[] =
+    data?.orders.map((order) => {
+      const { transaction, user, _id, totalPrice, items } = order;
 
-    const orderTemplateItem = {
-      key: order._id,
-      name: (
-        <a href='#' onClick={showUserDetail}>
-          <div className='user-info'>
-            <img alt={user.name} src={user.avatar || ''} className='user-info__avatar' />
+      const orderTemplateItem = {
+        key: order._id,
+        name: (
+          <a href='#' onClick={showUserDetail}>
+            <div className='user-info'>
+              <img alt={user.name} src={user.avatar || ''} className='user-info__avatar' />
 
-            <div className='user-info__content'>
-              <div className='user-info__name'>{user.name}</div>
-              <div className='user-info__email'>{user.email}</div>
+              <div className='user-info__content'>
+                <div className='user-info__name'>{user.name}</div>
+                <div className='user-info__email'>{user.email}</div>
+              </div>
             </div>
-          </div>
-        </a>
-      ),
-      register: '19 Jul 2023 21:43:35',
+          </a>
+        ),
+        register: '19 Jul 2023 21:43:35',
 
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          {(items || []).map((course) => (
-            <Avatar src={course.thumbnail} />
-          ))}
-          {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
-          <Tooltip title='Courses' placement='top'>
+        courses: (
+          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
             {(items || []).map((course) => (
               <Avatar src={course.thumbnail} />
             ))}
-          </Tooltip>
-          {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
-        </Avatar.Group>
-      ),
-      transaction: (
-        <>
-          <div>
-            <Link to='/'>
-              Invoice <DownloadOutlined />
-            </Link>
-          </div>
-          <div>sandbox_64bccb1fc177e</div>
-        </>
-      ),
-      amount: `$${totalPrice}`,
-      payment: transaction.method
-    };
+            {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
+          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
+            <Tooltip title='Courses' placement='top'>
+              {(items || []).map((course) => (
+                <Avatar src={course.thumbnail} />
+              ))}
+            </Tooltip>
+            {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
+          </Avatar.Group>
+        ),
+        transaction: (
+          <>
+            <div>
+              <Link to='/'>
+                Invoice <DownloadOutlined />
+              </Link>
+            </div>
+            <div>sandbox_64bccb1fc177e</div>
+          </>
+        ),
+        amount: `$${totalPrice}`,
+        payment: transaction.method
+      };
 
-    return orderTemplateItem;
-  });
+      return orderTemplateItem;
+    }) || [];
 
   const ordersSource = [
     {

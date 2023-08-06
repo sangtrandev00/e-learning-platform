@@ -1,10 +1,10 @@
+import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled } from '@ant-design/icons';
+import { Button, Divider, Form, Input, Space, notification } from 'antd';
 import React, { Fragment } from 'react';
-import { Button, Checkbox, Divider, Form, Input, Space, notification } from 'antd';
 import ButtonCmp from '../../../../components/Button';
-import { GoogleOutlined, FacebookOutlined, FacebookFilled, LinkedinFilled, GithubOutlined } from '@ant-design/icons';
-import '../Auth.scss';
-import { useSignupMutation } from '../../../auth.service';
 import { IUser, UserRole } from '../../../../types/user.type';
+import { useSignupMutation } from '../../../auth.service';
+import '../Auth.scss';
 
 interface SignupProps {
   onClick: (authState: string) => void;

@@ -1,34 +1,32 @@
-import { Breadcrumb, Button, Col, Row, Select, Space, Statistic } from 'antd';
-import React from 'react';
 import {
   CalendarOutlined,
-  LikeOutlined,
-  UsergroupAddOutlined,
-  ReloadOutlined,
-  RetweetOutlined,
+  ClockCircleOutlined,
   DollarOutlined,
   FolderOpenOutlined,
+  FundOutlined,
   ReadOutlined,
-  ClockCircleOutlined,
-  UserOutlined,
-  WechatOutlined,
+  RetweetOutlined,
   StockOutlined,
-  FundOutlined
+  UserOutlined,
+  UsergroupAddOutlined,
+  WechatOutlined
 } from '@ant-design/icons';
+import { Button, Col, Row, Select, Statistic } from 'antd';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../../store/store';
+import { useGetSummaryReportsQuery } from '../report.service';
+import { selectPreviousDays, showChart } from '../report.slice';
 import './Dashboard.scss';
 import Chart from './components/Chart';
-import { useGetSummaryReportsQuery } from '../report.service';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectPreviousDays, showChart } from '../report.slice';
-import { RootState } from '../../../store/store';
 
 const statisticItemStyle = {};
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { data: summaryReportsData, isFetching: isSummaryReportFetching } = useGetSummaryReportsQuery();
+  const { data: summaryReportsData } = useGetSummaryReportsQuery();
 
   const chartName = useSelector((state: RootState) => state.report.chartName);
 
@@ -130,7 +128,7 @@ const Dashboard: React.FC = () => {
                     className='dashboard__statistic-item'
                     valueStyle={statisticItemStyle}
                     title='Conversation'
-                    value={`${summaryReportsData?.reports.conversations || 0}%`}
+                    value={`${summaryReportsData?.reports.conversions || 0}%`}
                     prefix={<RetweetOutlined />}
                   />
                 </Col>
@@ -200,6 +198,7 @@ const Dashboard: React.FC = () => {
 
                   <div className='latest-users__item'>
                     <img
+                      alt=''
                       src='https://lwfiles.mycourse.app/648eaf1c0c0c35ee7db7e0a2-public/avatars/thumbs/648eaf1c0c0c35ee7db7e0a3.jpg'
                       className='latest-users__item-avatar'
                     ></img>

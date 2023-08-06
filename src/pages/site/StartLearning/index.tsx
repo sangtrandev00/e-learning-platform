@@ -1,22 +1,16 @@
-import { Col, Row, Skeleton } from 'antd';
-import React from 'react';
-import ButtonCmp from '../../../components/Button';
 import { ReadOutlined } from '@ant-design/icons';
-import CourseItem from '../components/CourseItem';
+import { Col, Row, Skeleton } from 'antd';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import ButtonCmp from '../../../components/Button';
+import { RootState } from '../../../store/store';
+import { formatVideoLengthToHours } from '../../../utils/functions';
+import { useGetUserDetailQuery } from '../client.service';
 import CourseList from '../components/CourseList';
 import './StartLearning.scss';
-import { useGetCoursesOrderedByUserQuery, useGetCoursesQuery, useGetUserDetailQuery } from '../client.service';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { Link } from 'react-router-dom';
-import { formatVideoLengthToHours } from '../../../utils/functions';
 // type Props = {};
 
 const StartLearning = () => {
-  const moveToDetail = () => {
-    console.log('move');
-  };
-
   const userId = useSelector((state: RootState) => state.auth.userId);
 
   const params = {
@@ -25,7 +19,9 @@ const StartLearning = () => {
     _page: 1
   };
 
-  const { data, isFetching } = useGetUserDetailQuery(params);
+  const { data, isFetching } = useGetUserDetailQuery(params, {
+    skip: !userId
+  });
 
   const sumTotalVideosLengthDone = data?.user.courses.reduce((acc, course) => {
     return acc + course.totalVideosLengthDone;

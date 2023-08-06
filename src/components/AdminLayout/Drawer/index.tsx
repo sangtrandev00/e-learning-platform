@@ -1,5 +1,5 @@
 import { Button, Drawer } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { openCreateCourse } from '../../../pages/admin/Courses/course.slice';
 import { PlusCircleOutlined, LeftOutlined } from '@ant-design/icons';

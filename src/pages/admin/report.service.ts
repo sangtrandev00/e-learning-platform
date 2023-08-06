@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IUser } from '../types/user.type';
-import { CustomError } from '../utils/helpers';
+import { BACKEND_URL } from '../../constant/backend-domain';
 import { IReport } from '../../types/report.type';
-import { IOrder } from '../../types/order.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -42,7 +40,7 @@ export const reportApi = createApi({
   tagTypes: ['Reports'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000/admin',
+    baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
       // Set some headers here !
@@ -81,7 +79,7 @@ export const reportApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Reports' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -121,7 +119,7 @@ export const reportApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Reports' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -161,7 +159,7 @@ export const reportApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Reports' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -201,7 +199,7 @@ export const reportApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Reports' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
             console.log('final: ', final);

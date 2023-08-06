@@ -1,11 +1,9 @@
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
-import { ICategory } from '../../../../../types/category.type';
-import { useAddCategoryMutation, useGetCategoryQuery, useUpdateCategoryMutation } from '../../category.service';
-import { set } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
+import { ICategory } from '../../../../../types/category.type';
+import { useAddCategoryMutation, useGetCategoryQuery, useUpdateCategoryMutation } from '../../category.service';
 
 const { Option } = Select;
 

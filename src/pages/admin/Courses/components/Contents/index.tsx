@@ -1,10 +1,9 @@
-import React from 'react';
-import './contents.scss';
-import { Button, Space, notification } from 'antd';
+import { Button, Space } from 'antd';
+import { useParams } from 'react-router-dom';
+import { useGetSectionsByCourseIdQuery } from '../../course.service';
 import AddSection from './components/AddSection';
 import SectionItem from './components/SectionItem';
-import { useAddSectionMutation, useGetSectionsByCourseIdQuery, useGetSectionsQuery } from '../../course.service';
-import { useParams } from 'react-router-dom';
+import './contents.scss';
 
 const CourseContents = () => {
   const { courseId } = useParams();

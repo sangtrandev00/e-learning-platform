@@ -1,8 +1,8 @@
+import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
-import { Button, Col, Modal, Row } from 'antd';
-import ActivitiesTab from './ActivitiesTab';
 import { useDispatch } from 'react-redux';
 import { startAddSection } from '../../../../../course.slice';
+import ActivitiesTab from './ActivitiesTab';
 
 type Props = {
   sectionId: string;

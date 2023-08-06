@@ -31,7 +31,6 @@ import {
   setUnauthenticated
 } from './pages/auth.slice';
 import jwtDecode from 'jwt-decode';
-import AdminLogin from './pages/admin/Auth/Login';
 import AdminAuth from './pages/admin/Auth';
 import UsersProgress from './pages/admin/Reports/components/UsersProgress';
 import UsersSegment from './pages/admin/Reports/components/UsersSegments';

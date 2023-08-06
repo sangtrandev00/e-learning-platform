@@ -1,14 +1,12 @@
-import React from 'react';
-import './Profile.scss';
 import { Col, Row, Tabs, TabsProps } from 'antd';
+import './Profile.scss';
 // type Props = {}
-import { ReadOutlined } from '@ant-design/icons';
-import Button from '../../../components/Button';
-import { UserOutlined, StockOutlined } from '@ant-design/icons';
+import { ReadOutlined, StockOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import Button from '../../../components/Button';
 import { RootState } from '../../../store/store';
-import { useGetUserDetailQuery } from '../client.service';
 import { formatVideoLengthToHours } from '../../../utils/functions';
+import { useGetUserDetailQuery } from '../client.service';
 
 const profileItems: TabsProps['items'] = [
   {
@@ -54,7 +52,9 @@ const Profile = () => {
     _page: 1
   };
 
-  const { data, isFetching } = useGetUserDetailQuery(params);
+  const { data, isFetching } = useGetUserDetailQuery(params, {
+    skip: !userId
+  });
 
   const sumTotalVideosLengthDone = data?.user.courses.reduce((acc, course) => {
     return acc + course.totalVideosLengthDone;

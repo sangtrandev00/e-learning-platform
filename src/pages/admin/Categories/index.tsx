@@ -1,13 +1,11 @@
-import { Button, Input, Select, Skeleton, Space } from 'antd';
-import CreateCategory from './components/CreateCategory';
-import CategoriesList from './components/CategoriesList';
-import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { useAddCategoryMutation, useGetCategoriesQuery } from './category.service';
-import { ICategory } from '../../../types/category.type';
-import { set } from 'date-fns';
+import { Button, Input, Select, Skeleton, Space } from 'antd';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useGetCategoriesQuery } from './category.service';
 import { startEditCategory } from './category.slice';
+import CategoriesList from './components/CategoriesList';
+import CreateCategory from './components/CreateCategory';
 
 const { Search } = Input;
 

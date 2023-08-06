@@ -1,11 +1,7 @@
-import React from 'react';
-import LessonItem from '../LessonItem';
-import {
-  useGetLessonsBySectionIdEnrolledCourseQuery,
-  useGetLessonsBySectionIdQuery
-} from '../../../../../client.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store/store';
+import { useGetLessonsBySectionIdEnrolledCourseQuery } from '../../../../../client.service';
+import LessonItem from '../LessonItem';
 
 interface LessonListProps {
   sectionId: string;

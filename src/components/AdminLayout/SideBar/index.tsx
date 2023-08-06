@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-import { Layout, Menu, MenuProps } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import {
+  BarChartOutlined,
+  BorderOuterOutlined,
   DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-  BorderOuterOutlined,
-  UnorderedListOutlined,
   SettingOutlined,
-  UserAddOutlined,
   ShoppingCartOutlined,
-  BarChartOutlined
+  UnorderedListOutlined,
+  UserAddOutlined,
+  UserOutlined
 } from '@ant-design/icons';
+import { Layout, Menu, MenuProps } from 'antd';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import './SideBar.scss';
 

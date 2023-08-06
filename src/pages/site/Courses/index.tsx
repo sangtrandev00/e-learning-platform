@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import React, { Fragment, useEffect } from 'react';
-import './Courses.scss';
-import { Button, Checkbox, Input, Radio, Rate, Row, Select, Skeleton, Space } from 'antd';
-import CourseItem from '../components/CourseItem';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import CourseList from '../components/CourseList';
-import { useGetAuthorsQuery, useGetCategoriesQuery, useGetCoursesQuery } from '../client.service';
 import { CloseOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { set } from 'date-fns';
+import { Button, Checkbox, Input, Radio, Rate, Select, Skeleton, Space } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { StarOutlined } from '@ant-design/icons';
-import { CheckboxChangeEventTarget } from 'antd/es/checkbox/Checkbox';
+import { useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { RootState } from '../../../store/store';
+import { useGetAuthorsQuery, useGetCategoriesQuery, useGetCoursesQuery } from '../client.service';
+import CourseList from '../components/CourseList';
+import './Courses.scss';
 
-import { useSearchParamsState, SearchParamsStateType } from 'react-use-search-params-state';
+import { SearchParamsStateType, useSearchParamsState } from 'react-use-search-params-state';
 
 const { Search } = Input;
 const onSearch = (value: string) => console.log(value);
@@ -115,26 +110,32 @@ const Courses = () => {
     // console.log('e.target: ', e.target.getAttribute('author-id'));
     const newValues = checked
       ? [...filterParams._author, value]
-      : filterParams._author.filter((item) => item !== value);
+      : filterParams._author.filter((item: string) => item !== value);
     setFilterParams({ _author: newValues });
   };
 
   const filterLevelHandler = (e: CheckboxChangeEvent) => {
     const { checked, value } = e.target;
-    const newValues = checked ? [...filterParams._level, value] : filterParams._level.filter((item) => item !== value);
+    const newValues = checked
+      ? [...filterParams._level, value]
+      : filterParams._level.filter((item: string) => item !== value);
     setFilterParams({ _level: newValues });
   };
 
   const filterPriceHandler = (e: CheckboxChangeEvent) => {
     const { checked, value } = e.target;
-    const newValues = checked ? [...filterParams._price, value] : filterParams._price.filter((item) => item !== value);
+    const newValues = checked
+      ? [...filterParams._price, value]
+      : filterParams._price.filter((item: string) => item !== value);
     setFilterParams({ _price: newValues });
   };
 
   const filterTopicHandler = (e: CheckboxChangeEvent) => {
     const { checked, value } = e.target;
 
-    const newValues = checked ? [...filterParams._topic, value] : filterParams._topic.filter((item) => item !== value);
+    const newValues = checked
+      ? [...filterParams._topic, value]
+      : filterParams._topic.filter((item: string) => item !== value);
 
     setFilterParams({ _topic: newValues });
   };

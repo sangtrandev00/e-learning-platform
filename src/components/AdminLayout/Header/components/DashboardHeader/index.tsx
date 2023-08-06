@@ -1,9 +1,9 @@
+import { BellOutlined, PlusCircleOutlined, QuestionOutlined, UserOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
 import { Avatar, Button, Dropdown, Space } from 'antd';
-import React, { Fragment } from 'react';
-import { PlusCircleOutlined, BellOutlined, QuestionOutlined, UserOutlined } from '@ant-design/icons';
+import { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { openCreateCourse } from '../../../../../pages/admin/Courses/course.slice';
-import type { MenuProps } from 'antd';
 const DashboardHeader = () => {
   const adminInfoItems: MenuProps['items'] = [
     {

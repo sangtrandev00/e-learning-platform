@@ -1,5 +1,3 @@
-import { ISection } from './lesson.type';
-
 export enum AccessStatus {
   PAID = 'PAID',
   DRAFT = 'DRAFT',
@@ -35,8 +33,8 @@ export interface ICourse {
     name: string;
     avatar: string;
   }; // FK
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // When is use is enrolled ? (bought the course, click enroll if course is free)

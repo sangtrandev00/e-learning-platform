@@ -1,10 +1,8 @@
-import React from 'react';
+// type Props = {
+//   children: React.ReactNode;
+// };
 
-type Props = {
-  children: React.ReactNode;
-};
-
-const FormInput = (props: Props) => {
+const FormInput = () => {
   // Generate Input React functional Component can reusable in the future
 
   return <input type='text' placeholder='Input' />;

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BACKEND_URL } from '../constant/backend-domain';
 import { IUser } from '../types/user.type';
 import { CustomError } from '../utils/helpers';
 
@@ -17,7 +18,7 @@ import { CustomError } from '../utils/helpers';
  *
  * Cách 2: Đây là cách thường dùng với RTK query
  * 1. Sau khi thêm 1 bài post thì server sẽ trả về data của bài post đó
- * 2. Chúng ta sẽ tiến hành fetch lại API get Orders để cập nhật state redux
+ * 2. Chúng ta sẽ tiến hành fetch lại API get Authentication để cập nhật state redux
  * 3. Lúc này UI chúng ta sẽ được sync
  *
  * =====> Cách này giúp data dưới local sẽ luôn mới nhất, luôn đồng bộ với server
@@ -36,10 +37,10 @@ interface signupResponse {
 
 export const authApi = createApi({
   reducerPath: 'authApi', // Tên field trong Redux state
-  tagTypes: ['Orders'], // Những kiểu tag cho phép dùng trong blogApi
+  tagTypes: ['Authentication'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000/auth',
+    baseUrl: `${BACKEND_URL}/auth`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
       // Set some headers here !
@@ -70,9 +71,9 @@ export const authApi = createApi({
       /**
        * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
        * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Orders sẽ chạy lại
+       * Trong trường hợp này Authentication sẽ chạy lại
        */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Orders', id: 'LIST' }])
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
     }),
     adminLogin: build.mutation<loginResponse, { email: string; password: string }>({
       query(body) {
@@ -92,9 +93,9 @@ export const authApi = createApi({
       /**
        * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
        * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Orders sẽ chạy lại
+       * Trong trường hợp này Authentication sẽ chạy lại
        */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Orders', id: 'LIST' }])
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
     }),
     signup: build.mutation<signupResponse, Omit<IUser, '_id'>>({
       query(body) {
@@ -104,8 +105,8 @@ export const authApi = createApi({
           body
         };
       },
-      // Trong trường hợp này thì Orders sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Orders', id: data.id }])
+      // Trong trường hợp này thì Authentication sẽ chạy lại
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
     }),
     resetPassword: build.mutation<IUser, { id: string; body: IUser }>({
       query(data) {
@@ -115,8 +116,8 @@ export const authApi = createApi({
           body: data.body
         };
       },
-      // Trong trường hợp này thì Orders sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Orders', id: data.id }])
+      // Trong trường hợp này thì Authentication sẽ chạy lại
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Authentication', id: data.id }])
     })
   })
 });

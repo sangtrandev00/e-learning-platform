@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BACKEND_URL } from '../../../constant/backend-domain';
+import { IParams } from '../../../types/params.type';
 import { IUser } from '../../../types/user.type';
 import { CustomError } from '../../../utils/helpers';
-import { IParams } from '../../../types/params.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -40,7 +41,7 @@ export const userApi = createApi({
   tagTypes: ['Users'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000/admin',
+    baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
       // Set some headers here !
@@ -76,7 +77,7 @@ export const userApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Users' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Users' as const, _id })),
               { type: 'Users' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -137,7 +138,7 @@ export const userApi = createApi({
         };
       },
       // Trong trường hợp này thì Users sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: data.id }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: data._id }])
     }),
     deleteUser: build.mutation<Record<string, never>, string>({
       query(id) {

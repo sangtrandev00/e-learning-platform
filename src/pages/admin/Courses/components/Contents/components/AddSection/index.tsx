@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
 import type { RadioChangeEvent } from 'antd';
+import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
+import React, { useState } from 'react';
 import { ISection } from '../../../../../../../types/lesson.type';
 import { useAddSectionMutation } from '../../../../course.service';
-import { useParams } from 'react-router-dom';
 const { Option } = Select;
 
 type AddSectionProps = {

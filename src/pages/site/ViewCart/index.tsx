@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import './ViewCart.scss';
-import { Button, Col, Divider, Input, Row, Space } from 'antd';
-import ButtonCmp from '../../../components/Button';
-import CartItem from './components/CartItem';
-import { Link } from 'react-router-dom';
+import { Col, Divider, Input, Row, Space } from 'antd';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import ButtonCmp from '../../../components/Button';
 import { RootState } from '../../../store/store';
 import { removeCart } from '../client.slice';
+import './ViewCart.scss';
+import CartItem from './components/CartItem';
 const ViewCart = () => {
   const cart = useSelector((state: RootState) => state.client.cart);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -30,9 +30,9 @@ const ViewCart = () => {
           <Row>
             <Col md={18}>
               <div className='view-cart__list'>
-                <h4 className='view-cart__list-title'>{cart.items.length || 0} Courses in Cart</h4>
+                <h4 className='view-cart__list-title'>{cart?.items?.length || 0} Courses in Cart</h4>
                 <div className='view-cart__list-wrap'>
-                  {cart.items.map((cartItem) => {
+                  {(cart?.items || []).map((cartItem) => {
                     return (
                       <CartItem
                         onTotal={calcTotalCartPrice}

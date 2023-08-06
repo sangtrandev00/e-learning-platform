@@ -1,6 +1,6 @@
 import { Avatar, Badge, Card, Col, Divider, Popover, Row, Tag, notification } from 'antd';
 
-import { SettingOutlined, EditOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
 type CourseItemProps = {
@@ -10,13 +10,12 @@ type CourseItemProps = {
   course: ICourse;
 };
 
-import './CourseItem.scss';
 import { Link } from 'react-router-dom';
 import { ICourse } from '../../../../../types/course.type';
-import AuthorInfo from './AuthorInfo';
-import CourseSettings from './CourseSettings';
-import { useDispatch } from 'react-redux';
 import { useDeleteCourseMutation } from '../../course.service';
+import AuthorInfo from './AuthorInfo';
+import './CourseItem.scss';
+import CourseSettings from './CourseSettings';
 
 const CourseItem = (props: CourseItemProps) => {
   console.log('props.course: ', props.course);
@@ -55,9 +54,8 @@ const CourseItem = (props: CourseItemProps) => {
 
         notification.success({
           message: 'Success',
-          description: 'Course deleted successfully',
-        })
-
+          description: 'Course deleted successfully'
+        });
       })
       .catch((err) => {
         console.log(err);

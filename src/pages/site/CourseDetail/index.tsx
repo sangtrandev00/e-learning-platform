@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-import './CourseDetail.scss';
-import { Breadcrumb, Button, Col, Collapse, CollapseProps, List, Row, Space, Typography } from 'antd';
-import {
-  StarOutlined,
-  StarFilled,
-  CheckOutlined,
-  DownOutlined,
-  RightCircleFilled,
-  HeartOutlined
-} from '@ant-design/icons';
+import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
+import { Breadcrumb, Button, Col, List, Row, Space, Typography } from 'antd';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
-import { useGetCourseDetailQuery, useGetCourseQuery, useGetSectionsByCourseIdQuery } from '../client.service';
-import { Skeleton } from 'antd';
-import { AccessStatus, CourseLevel, ICourse } from '../../../types/course.type';
-import SectionList from './components/SectionList';
-import { useDispatch } from 'react-redux';
+import { AccessStatus, CourseLevel } from '../../../types/course.type';
+import { formatVideoLengthToHours, transformDate } from '../../../utils/functions';
+import { useGetCourseDetailQuery, useGetSectionsByCourseIdQuery } from '../client.service';
 import { addToCart } from '../client.slice';
-import { formatTime, formatVideoLengthToHours, transformDate } from '../../../utils/functions';
+import './CourseDetail.scss';
+import SectionList from './components/SectionList';
 // type Props = {}
 const courseData = [
   'Deploy a feature-complete app to production.',
@@ -69,8 +60,11 @@ const CourseDetail = () => {
 
   let courseDetail = initCourseDetail;
 
-  if (data) {
-    courseDetail = data.course;
+  if (data && data.course.createdAt) {
+    courseDetail = {
+      ...data.course,
+      createdAt: data.course.createdAt
+    };
   }
 
   const {

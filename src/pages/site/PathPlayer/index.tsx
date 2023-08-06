@@ -1,18 +1,16 @@
-import React from 'react';
-import './PathPlayer.scss';
+import { ArrowLeftOutlined, DoubleLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Col, Progress, Row, Tabs, TabsProps } from 'antd';
-import { LeftOutlined, RightOutlined, ArrowLeftOutlined, DoubleLeftOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
-import PathSections from './components/PathSections';
+import { RootState } from '../../../store/store';
+import { useGetCourseEnrolledByUserQuery } from '../client.service';
+import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
 import Notes from './components/Notes';
-import ReactPlayer from 'react-player';
+import PathSections from './components/PathSections';
 import PlayerScreen from './components/PlayerScreen/PlayerScreen';
-import { useGetCourseEnrolledByUserQuery, useGetCourseQuery } from '../client.service';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 // type Props = {};
 // props: Props
 
@@ -86,7 +84,7 @@ const PathPlayer = () => {
                 </div>
                 <h3 className='path-player__menu-header-title'>{data?.course.name}</h3>
                 <div className='path-player__menu-progress'>
-                  <Progress percent={progressPercent} status='active' />
+                  <Progress percent={progressPercent as unknown as number} status='active' />
                 </div>
               </div>
               {/* Menu Content  */}

@@ -1,17 +1,14 @@
-import { Button, Col, Row, Select, Space, Input, Skeleton, Popover, notification } from 'antd';
+import { AppstoreOutlined, EditOutlined, EllipsisOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { Button, Input, Popover, Select, Skeleton, Space, notification } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import React, { Fragment, useEffect } from 'react';
-import { AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import CourseItem from './components/CourseItem';
-import { useState } from 'react';
-import CoursesList from './components/CoursesList';
-import './Courses.scss';
-import CoursesGrid from './components/CoursesGrid';
-import { useDeleteCourseMutation, useGetAllCoursesQuery, useGetCoursesQuery } from './course.service';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { useGetAuthorsQuery } from '../../site/client.service';
 import { useGetCategoriesQuery } from '../Categories/category.service';
+import './Courses.scss';
+import CoursesGrid from './components/CoursesGrid';
+import CoursesList from './components/CoursesList';
+import { useDeleteCourseMutation, useGetAllCoursesQuery, useGetCoursesQuery } from './course.service';
 
 enum Access {
   PAID = 'PAID',
@@ -113,7 +110,8 @@ const Courses = () => {
     return {
       text: author[0],
       value: author[0],
-      _id: author[1]._id
+      _id: author[1]._id,
+      name: author[0]
     };
   });
 
@@ -266,8 +264,13 @@ const Courses = () => {
     }
   };
 
-  const authorsFitlerHandler = (value: string, record: { _id: string; text: string; name: string }) => {
-    setParams({ ...params, _author: record._id });
+  const authorsFitlerHandler = (
+    value: string,
+    option: { _id: string; text: string; name: string } | { _id: string; text: string; name: string }[]
+  ) => {
+    if (!Array.isArray(option)) {
+      setParams({ ...params, _author: option._id });
+    }
   };
 
   const paginateHandler = (page: number) => {
@@ -277,15 +280,20 @@ const Courses = () => {
     });
   };
 
-  const cateFilterHandler = (value: string, record: { _id: string; text: string; name: string }) => {
+  const cateFilterHandler = (
+    value: string,
+    option: { _id: string; text: string; name: string } | { _id: string; text: string; name: string }[]
+  ) => {
     console.log('cate filter: ', value);
 
-    console.log('record: ', record);
+    console.log('record: ', option);
 
-    setParams({
-      ...params,
-      _category: record._id
-    });
+    if (!Array.isArray(option)) {
+      setParams({
+        ...params,
+        _category: option._id
+      });
+    }
   };
 
   return (
@@ -323,7 +331,7 @@ const Courses = () => {
               defaultValue={'All Categories'}
               onChange={cateFilterHandler}
               style={{ width: '240px' }}
-              options={cateFilterList}
+              options={cateFilterList as { _id: string; text: string; value: string; name: string }[]}
             />
           )}
 

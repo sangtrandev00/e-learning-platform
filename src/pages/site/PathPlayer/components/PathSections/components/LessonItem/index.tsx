@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { PlayCircleOutlined, CheckOutlined, CheckCircleFilled } from '@ant-design/icons';
+import { CheckCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
+import { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player'; // Import the react-player component
-import { ILesson } from '../../../../../../../types/lesson.type';
 import { useDispatch, useSelector } from 'react-redux';
-import { startPlayingVideo } from '../../../../../client.slice';
-import { formatTime } from '../../../../../../../utils/functions';
 import { RootState } from '../../../../../../../store/store';
+import { ILesson } from '../../../../../../../types/lesson.type';
+import { formatTime } from '../../../../../../../utils/functions';
+import { startPlayingVideo } from '../../../../../client.slice';
 import './LessonItem.scss';
 
 interface LessonItemProps {

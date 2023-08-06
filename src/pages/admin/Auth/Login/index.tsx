@@ -1,10 +1,10 @@
-import React from 'react';
 import { Button, Checkbox, Form, Input, notification } from 'antd';
-import { useLoginMutation } from '../../../auth.service';
-import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
-import { setAdminAuthenticated } from '../../../auth.slice';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../../auth.service';
+import { setAdminAuthenticated } from '../../../auth.slice';
 
 const AdminLogin: React.FC = () => {
   const [form] = Form.useForm();

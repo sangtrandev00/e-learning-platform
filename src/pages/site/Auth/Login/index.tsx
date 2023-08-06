@@ -1,13 +1,12 @@
-import React, { Fragment } from 'react';
-import { Button, Checkbox, Divider, Form, Input, Space, notification } from 'antd';
-import ButtonCmp from '../../../../components/Button';
-import { GoogleOutlined, FacebookOutlined, FacebookFilled, LinkedinFilled, GithubOutlined } from '@ant-design/icons';
-import '../Auth.scss';
-import { useLoginMutation } from '../../../auth.service';
+import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled } from '@ant-design/icons';
+import { Button, Divider, Form, Input, Space, notification } from 'antd';
 import jwtDecode from 'jwt-decode';
-import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
-import Notification from '../../../../components/Notification';
+import ButtonCmp from '../../../../components/Button';
+import { useLoginMutation } from '../../../auth.service';
+import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
+import '../Auth.scss';
 
 interface LoginProps {
   onClick: (authState: string) => void;
@@ -15,7 +14,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = (props) => {
   const [form] = Form.useForm();
-  const [login, loginResult] = useLoginMutation();
+  const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const onFinish = (formValues: { email: string; password: string }) => {
     console.log('Success:', formValues);

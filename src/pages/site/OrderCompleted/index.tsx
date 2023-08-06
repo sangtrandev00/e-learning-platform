@@ -1,5 +1,5 @@
-import React from 'react';
 import { Button, Result } from 'antd';
+import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import './OrderCompleted.scss';
 const OrderCompleted: React.FC = () => {

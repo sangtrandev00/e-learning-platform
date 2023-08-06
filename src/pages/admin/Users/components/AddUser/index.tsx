@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
-import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
-import { IUser, UserRole } from '../../../../../types/user.type';
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
+import { IUser, UserRole } from '../../../../../types/user.type';
+import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
 
 const { Option } = Select;
 
@@ -28,7 +27,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
   const [form] = Form.useForm();
   const userId = useSelector((state: RootState) => state.user.userId);
 
-  const { data, isFetching, refetch } = useGetUserQuery(userId, {
+  const { data } = useGetUserQuery(userId, {
     skip: !userId
   });
 

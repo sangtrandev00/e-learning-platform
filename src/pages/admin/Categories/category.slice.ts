@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICategory } from '../../../types/category.type';
 
 interface CategoryState {
   categoryId: string;

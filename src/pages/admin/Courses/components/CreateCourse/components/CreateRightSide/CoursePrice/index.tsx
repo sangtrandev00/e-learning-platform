@@ -1,14 +1,15 @@
-import React from 'react';
-import './CoursePrice.scss';
-import { Input, InputNumber } from 'antd';
+import { InputNumber } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleFormData } from '../../../../../course.slice';
 import { RootState } from '../../../../../../../../store/store';
+import { handleFormData } from '../../../../../course.slice';
+import './CoursePrice.scss';
 const CoursePrice = () => {
   const formData = useSelector((state: RootState) => state.course.formData);
   const dispatch = useDispatch();
-  const handleInputChange = (value: number) => {
-    dispatch(handleFormData({ ...formData, finalPrice: value }));
+  const handleInputChange = (value: number | null) => {
+    if (value) {
+      dispatch(handleFormData({ ...formData, finalPrice: value }));
+    }
   };
 
   return (

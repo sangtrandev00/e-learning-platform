@@ -1,4 +1,3 @@
-import React from 'react';
 import './Reports.scss';
 const ReportsCenter = () => {
   return <div className='report-center'>ReportsCenter</div>;

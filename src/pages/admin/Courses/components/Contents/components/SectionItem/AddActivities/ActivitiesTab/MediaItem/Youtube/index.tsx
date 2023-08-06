@@ -1,6 +1,5 @@
-import React from 'react';
-import './Youtube.scss';
 import { YoutubeOutlined } from '@ant-design/icons';
+import './Youtube.scss';
 
 type Props = {
   onClick?: () => void;

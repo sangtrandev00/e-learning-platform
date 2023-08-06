@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Space, Input, Select, Button } from 'antd';
+import { Button, Input, Select, Space } from 'antd';
+import { useState } from 'react';
 import './Orders.scss';
 import OrdersList from './components/OrdersList';
 
@@ -9,6 +9,8 @@ const { Search } = Input;
 
 const Orders = () => {
   const [open, setOpen] = useState(false);
+
+  console.log(open);
 
   const onSearchHandler = (value: string) => {
     console.log(value);

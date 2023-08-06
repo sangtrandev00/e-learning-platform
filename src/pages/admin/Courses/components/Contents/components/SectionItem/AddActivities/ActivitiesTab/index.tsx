@@ -1,7 +1,6 @@
-import type { RadioChangeEvent } from 'antd';
-import { Radio, Space, Tabs } from 'antd';
-import React, { useState } from 'react';
 import type { TabsProps } from 'antd';
+import { Tabs } from 'antd';
+import React from 'react';
 import MediaItem from './MediaItem';
 
 const acitivityItems: TabsProps['items'] = [

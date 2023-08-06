@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import { CaretRightOutlined } from '@ant-design/icons';
 import { Col, Collapse, CollapseProps, Divider, Row, Select, theme } from 'antd';
+import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
-import type { CSSProperties } from 'react';
-import { CaretRightOutlined } from '@ant-design/icons';
-import DetailItem from './components/DetailItem';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { useCreateOrderMutation, useGetUserQuery } from '../client.service';
-import './Checkout.scss';
-import { clearCart } from '../client.slice';
 import { IOrder } from '../../../types/order.type';
+import { useCreateOrderMutation, useGetUserQuery } from '../client.service';
+import { clearCart } from '../client.slice';
+import './Checkout.scss';
+import DetailItem from './components/DetailItem';
 const text = `
 Name on card
 TRAN NHAT SANG
@@ -58,7 +58,9 @@ const Checkout = () => {
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  const { data: userData, isFetching } = useGetUserQuery(userId);
+  const { data: userData, isFetching } = useGetUserQuery(userId, {
+    skip: !userId
+  });
 
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
@@ -75,7 +77,7 @@ const Checkout = () => {
     console.log('checkout handler');
 
     const newOrder = {
-      items: cart.items,
+      items: cart?.items || [],
       user: {
         _id: userData?.user._id,
         email: userData?.user.email,
@@ -153,7 +155,7 @@ const Checkout = () => {
               </div>
               <div className='checkout__orders-detail'>
                 <h3 className='checkout__orders-detail-title'>Order details</h3>
-                {cart.items.map((cartItem) => {
+                {(cart?.items || []).map((cartItem) => {
                   return (
                     <DetailItem onTotal={calcTotalCartPrice} key={cartItem.courseId} courseId={cartItem.courseId} />
                   );

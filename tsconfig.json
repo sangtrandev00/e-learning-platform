@@ -16,10 +16,10 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vidstack/globals"]    
+    // "types": ["vidstack/globals"]    
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

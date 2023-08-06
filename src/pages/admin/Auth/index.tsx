@@ -1,7 +1,6 @@
-import React from 'react';
-import AdminLogin from './Login';
 import { Col, Row } from 'antd';
 import './Auth.scss';
+import AdminLogin from './Login';
 const AdminAuth = () => {
   return (
     <div className='admin-auth'>

@@ -7,21 +7,32 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:react-hooks/recommended',
+    'plugin:react-hooks/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: true,
-    tsconfigRootDir: __dirname,
+    tsconfigRootDir: __dirname
   },
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'prettier', 'react'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    '@typescript-eslint/no-non-null-assertion': 'off',
-  },
-}
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    '@typescript-eslint/no-non-null-assertion': 'off'
+    // 'no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
+    // 'prettier/prettier': [
+    //   'warn',
+    //   {
+    //     arrowParens: 'always',
+    //     trailingComma: 'none',
+    //     tabWidth: 2,
+    //     endOfLine: 'auto',
+    //     useTabs: false,
+    //     singleQuote: true,
+    //     printWidth: 120,
+    //     jsxSingleQuote: true
+    //   }
+    // ]
+  }
+};

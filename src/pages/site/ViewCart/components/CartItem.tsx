@@ -1,9 +1,9 @@
-import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
-import React, { Fragment, useEffect } from 'react';
 import { StarFilled, TagOutlined } from '@ant-design/icons';
+import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
+import { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useGetCourseQuery } from '../../client.service';
 import { AccessStatus, CourseLevel, ICourse } from '../../../../types/course.type';
+import { useGetCourseQuery } from '../../client.service';
 import './CartItem.scss';
 
 type CartItemProps = {
@@ -44,19 +44,7 @@ const CartItem = (props: CartItemProps) => {
     courseData = data.course;
   }
 
-  const {
-    _id,
-    name,
-    description,
-    price,
-    finalPrice,
-    access,
-    level,
-    thumbnail,
-    courseSlug,
-    categoryId,
-    userId: author
-  } = courseData;
+  const { _id, name, finalPrice, thumbnail, userId: author } = courseData;
 
   useEffect(() => {
     props.onTotal(finalPrice);

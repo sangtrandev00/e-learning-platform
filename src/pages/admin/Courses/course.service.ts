@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BACKEND_URL } from '../../../constant/backend-domain';
 import { ICourse } from '../../../types/course.type';
-import { CustomError } from '../../../utils/helpers';
 import { ILesson, ISection } from '../../../types/lesson.type';
-import { IParams } from '../../../types/params.type';
 import { IPagination } from '../../../types/pagination';
+import { IParams } from '../../../types/params.type';
+import { CustomError } from '../../../utils/helpers';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -48,7 +49,7 @@ export const courseApi = createApi({
   tagTypes: ['Courses'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000/admin',
+    baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
       // Set some headers here !
@@ -86,7 +87,7 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Courses' as const, _id })),
               { type: 'Courses' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -129,7 +130,7 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Courses' as const, _id })),
               { type: 'Courses' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -167,7 +168,7 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Courses' as const, _id })),
               { type: 'Courses' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -214,7 +215,7 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Courses' as const, _id })),
               { type: 'Courses' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -261,7 +262,7 @@ export const courseApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Courses' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Courses' as const, _id })),
               { type: 'Courses' as const, id: 'LIST' }
             ];
             console.log('final: ', final);

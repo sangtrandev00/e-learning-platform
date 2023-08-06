@@ -1,6 +1,5 @@
-import React from 'react';
-import YoutubeMedia from './Youtube';
 import AddLesson from '../../../../AddLesson';
+import YoutubeMedia from './Youtube';
 
 // interface MediaItemProps {
 //   onCloseActivies: () => void;

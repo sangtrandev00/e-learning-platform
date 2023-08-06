@@ -1,24 +1,22 @@
-import React, { Fragment, useEffect } from 'react';
 import { Avatar, Button, Popover, Skeleton, Space, Table, Tag, Tooltip, notification } from 'antd';
-import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
+import React, { Fragment, useState } from 'react';
 import './UsersList.scss';
-import { Link, useNavigate } from 'react-router-dom';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
-import { EditOutlined, EllipsisOutlined, UserOutlined, AntDesignOutlined } from '@ant-design/icons';
-import UserDetail from './components/UserDetail';
-import { useDeleteUserMutation, useGetUsersQuery } from '../../user.service';
+import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
+import { useDeleteUserMutation, useGetUsersQuery } from '../../user.service';
 import { startEditUser } from '../../user.slice';
+import UserDetail from './components/UserDetail';
 interface DataUserType {
   key: React.Key;
-  name: HTMLElement;
+  name: JSX.Element;
   avatar?: string;
   email?: string;
-  courses: HTMLElement;
-  tags: HTMLElement;
-  createdAt: string; // Convert to date: Example: 18 jun 2023
+  courses: JSX.Element;
+  tags: JSX.Element;
+  createdAt: string | undefined; // Convert to date: Example: 18 jun 2023
   lastLogin: string;
   actions?: any;
 }
@@ -159,156 +157,64 @@ const UsersList: React.FC<UserListProps> = (props) => {
     setTableParams({ pagination: pagination });
   };
 
-  const usersData = data?.users.map((user) => {
-    const userTemplateItem = {
-      key: user._id,
-      name: (
-        <a href='#' onClick={showUserDetail}>
-          <div className='user-info'>
-            <img alt={user.name} src={user.avatar} className='user-info__avatar' />
+  const usersData: DataUserType[] =
+    data?.users.map((user) => {
+      const userTemplateItem = {
+        key: user._id,
+        name: (
+          <>
+            <a href='#' onClick={showUserDetail}>
+              <div className='user-info'>
+                <img alt={user.name} src={user.avatar} className='user-info__avatar' />
 
-            <div className='user-info__content'>
-              <div className='user-info__name'>{user.name}</div>
-              <div className='user-info__email'>{user.email}</div>
-            </div>
-          </div>
-        </a>
-      ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: user.createdAt,
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          {(user.courses || []).map((course) => (
-            <Avatar key={course._id} src={course.thumbnail} />
-          ))}
-          {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
-          <Tooltip title='Ant User' placement='top'>
+                <div className='user-info__content'>
+                  <div className='user-info__name'>{user.name}</div>
+                  <div className='user-info__email'>{user.email}</div>
+                </div>
+              </div>
+            </a>
+          </>
+        ),
+        lastLogin: '19 Jul 2023 21:43:35',
+        createdAt: user.createdAt,
+        courses: (
+          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
             {(user.courses || []).map((course) => (
               <Avatar key={course._id} src={course.thumbnail} />
             ))}
-          </Tooltip>
-          {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
-        </Avatar.Group>
-      ),
-      tags: (
-        <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
-        </>
-      ),
-      manage: (
-        <Space>
-          <Button onClick={() => editUserHandler(user._id)}>
-            <EditOutlined />
-          </Button>
-
-          <Popover placement='bottomRight' content={<SettingContent userId={user._id} />} title='Actions'>
-            <Button>
-              <EllipsisOutlined />
+            {/* <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
+          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar> */}
+            <Tooltip title='Ant User' placement='top'>
+              {(user.courses || []).map((course) => (
+                <Avatar key={course._id} src={course.thumbnail} />
+              ))}
+            </Tooltip>
+            {/* <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} /> */}
+          </Avatar.Group>
+        ),
+        tags: (
+          <>
+            <Tag color='magenta'>magenta</Tag>
+            <Tag color='red'>red</Tag>
+          </>
+        ),
+        manage: (
+          <Space>
+            <Button onClick={() => editUserHandler(user._id)}>
+              <EditOutlined />
             </Button>
-          </Popover>
-        </Space>
-      )
-    };
 
-    return userTemplateItem;
-  });
+            <Popover placement='bottomRight' content={<SettingContent userId={user._id} />} title='Actions'>
+              <Button>
+                <EllipsisOutlined />
+              </Button>
+            </Popover>
+          </Space>
+        )
+      };
 
-  const usersSource = [
-    {
-      key: '1',
-      name: (
-        <a href='#' onClick={showUserDetail}>
-          <div className='user-info'>
-            <img
-              src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
-            />
-
-            <div className='user-info__content'>
-              <div className='user-info__name'>sangtrandev</div>
-              <div className='user-info__email'>sangtnps20227@fpt.edu.vn</div>
-            </div>
-          </div>
-        </a>
-      ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-          <Tooltip title='Ant User' placement='top'>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-          </Tooltip>
-          <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
-        </Avatar.Group>
-      ),
-      tags: (
-        <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
-        </>
-      ),
-      manage: (
-        <Space>
-          <Button>
-            <EditOutlined />
-          </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Space>
-      )
-    },
-    {
-      key: '2',
-      name: (
-        <a href='#'>
-          <div className='user-info'>
-            <img
-              src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
-            />
-
-            <div className='user-info__content'>
-              <div className='user-info__name'>trannhatsang</div>
-              <div className='user-info__email'>nhatsang@gmail.com</div>
-            </div>
-          </div>
-        </a>
-      ),
-      lastLogin: '19 Jul 2023 21:43:35',
-      createdAt: '17 Jul 2023 21:38:07',
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-          <Tooltip title='Ant User' placement='top'>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-          </Tooltip>
-          <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
-        </Avatar.Group>
-      ),
-      tags: (
-        <>
-          <Tag color='magenta'>magenta</Tag>
-          <Tag color='red'>red</Tag>
-        </>
-      ),
-      manage: (
-        <Space>
-          <Button>
-            <EditOutlined />
-          </Button>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Space>
-      )
-    }
-  ];
+      return userTemplateItem;
+    }) || [];
 
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {

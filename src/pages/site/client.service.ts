@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IOrder } from '../../types/order.type';
-import { CustomError } from '../../utils/helpers';
+import jwtDecode from 'jwt-decode';
+import { BACKEND_URL } from '../../constant/backend-domain';
 import { ICategory } from '../../types/category.type';
 import { ICourse } from '../../types/course.type';
-import { IUser } from '../../types/user.type';
-import { IParams } from '../../types/params.type';
 import { ILesson, ISection } from '../../types/lesson.type';
-import jwtDecode from 'jwt-decode';
+import { IOrder } from '../../types/order.type';
+import { IParams } from '../../types/params.type';
+import { IUser } from '../../types/user.type';
+import { CustomError } from '../../utils/helpers';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -88,6 +89,8 @@ export interface ICourseDetail extends ICourse {
   totalVideosLength: number;
   avgRatingStars: number;
   students: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface getCourseDetailResponse {
@@ -119,7 +122,7 @@ export const clientApi = createApi({
   tagTypes: ['Clients'], // Những kiểu tag cho phép dùng trong blogApi
   keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000',
+    baseUrl: `${BACKEND_URL}`,
     prepareHeaders(headers) {
       headers.set('authorization', 'Bearer ABCXYZ');
 
@@ -163,7 +166,7 @@ export const clientApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -204,7 +207,7 @@ export const clientApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -244,7 +247,7 @@ export const clientApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -260,7 +263,7 @@ export const clientApi = createApi({
     }),
     getCoursesOrderedByUser: build.query<getCoursesResponse, IParams>({
       query: (params) => ({
-        url: `/courses/${params._userId}/ordered`,
+        url: `/courses/${params._userId as string}/ordered`,
         params: {
           _limit: params._limit,
           _page: params._page
@@ -288,7 +291,7 @@ export const clientApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
@@ -332,7 +335,7 @@ export const clientApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Clients' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
             console.log('final: ', final);
