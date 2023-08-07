@@ -21,7 +21,7 @@ interface ClientState {
   //   formData: IClient;
 }
 
-const localCart = JSON.parse(localStorage.getItem('cart') || '{items:[]}') as ICart;
+const localCart = JSON.parse(localStorage.getItem('cart') || JSON.stringify({ cart: [] })) as ICart;
 
 const initialState: ClientState = {
   lessonId: '',

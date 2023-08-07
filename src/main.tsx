@@ -9,6 +9,8 @@ const notificationRoot = document.createElement('div');
 notificationRoot.id = 'notification-root';
 document.body.appendChild(notificationRoot);
 
+console.log('Hello world from main.tsx');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>

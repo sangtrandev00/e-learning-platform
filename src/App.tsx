@@ -1,42 +1,42 @@
-import './assets/sass/reset.css';
-import './assets/sass/_reset.scss';
-import './assets/sass/_base.scss';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootLayout from './components/layout/RootLayout';
-import RootAdminLayout from './components/AdminLayout/RootLayout';
-import HomePage from './pages/site/Home';
-import Dashboard from './pages/admin/Dashboard';
-import ErrorPage from './pages/Error/404Error';
-import CoursesList from './pages/admin/Courses/Courses';
-import SiteCourses from './pages/site/Courses';
-import CourseDetail from './pages/site/CourseDetail';
-import AdminCourseDetail from './pages/admin/Courses/components/CourseDetail';
-import ViewCart from './pages/site/ViewCart';
-import Checkout from './pages/site/Checkout';
-import StartLearning from './pages/site/StartLearning';
-import Profile from './pages/site/Profile';
-import PathPlayer from './pages/site/PathPlayer';
-import Users from './pages/admin/Users';
-import Categories from './pages/admin/Categories';
-import Settings from './pages/admin/Settings';
-import Orders from './pages/admin/Orders';
-import OrderCompleted from './pages/site/OrderCompleted';
-import ReportsCenter from './pages/admin/Reports';
-import { useDispatch } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './assets/sass/_base.scss';
+import './assets/sass/_reset.scss';
+import './assets/sass/reset.css';
+import RootAdminLayout from './components/AdminLayout/RootLayout';
+import RootLayout from './components/layout/RootLayout';
+import AdminAuth from './pages/admin/Auth';
+import Categories from './pages/admin/Categories';
+import AdminCourseDetail from './pages/admin/Courses/components/CourseDetail';
+import CoursesList from './pages/admin/Courses/Courses';
+import Dashboard from './pages/admin/Dashboard';
+import Orders from './pages/admin/Orders';
+import ReportsCenter from './pages/admin/Reports';
+import CancelledSales from './pages/admin/Reports/components/CancelledSales';
+import CoursesRevenue from './pages/admin/Reports/components/CoursesReveneue';
+import InstructorsRevene from './pages/admin/Reports/components/InstructorsRevenue';
+import UsersProgress from './pages/admin/Reports/components/UsersProgress';
+import UsersSegment from './pages/admin/Reports/components/UsersSegments';
+import Settings from './pages/admin/Settings';
+import Users from './pages/admin/Users';
 import {
   setAdminAuthenticated,
   setAdminUnauthenticated,
   setAuthenticated,
   setUnauthenticated
 } from './pages/auth.slice';
-import jwtDecode from 'jwt-decode';
-import AdminAuth from './pages/admin/Auth';
-import UsersProgress from './pages/admin/Reports/components/UsersProgress';
-import UsersSegment from './pages/admin/Reports/components/UsersSegments';
-import CoursesRevenue from './pages/admin/Reports/components/CoursesReveneue';
-import InstructorsRevene from './pages/admin/Reports/components/InstructorsRevenue';
-import CancelledSales from './pages/admin/Reports/components/CancelledSales';
+import ErrorPage from './pages/Error/404Error';
+import Checkout from './pages/site/Checkout';
+import CourseDetail from './pages/site/CourseDetail';
+import SiteCourses from './pages/site/Courses';
+import HomePage from './pages/site/Home';
+import OrderCompleted from './pages/site/OrderCompleted';
+import PathPlayer from './pages/site/PathPlayer';
+import Profile from './pages/site/Profile';
+import StartLearning from './pages/site/StartLearning';
+import ViewCart from './pages/site/ViewCart';
 
 const router = createBrowserRouter([
   {
