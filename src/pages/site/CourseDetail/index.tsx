@@ -11,11 +11,11 @@ import './CourseDetail.scss';
 import SectionList from './components/SectionList';
 // type Props = {}
 const courseData = [
-  'Deploy a feature-complete app to production.',
-  'Write integration and unit tests to ensure your code is working',
-  'Use an API client to manually test your app.',
-  'Make your code more reusable and testable with dependency injection.',
-  'Get a behind-the-scenes understanding of NestJS.'
+  'Will learning some things at this course -- task 1.',
+  'Will learning some things at this course -- task 2',
+  'Will learning some things at this course -- task 3',
+  'Will learning some things at this course -- task 4.',
+  'Will learning some things at this course -- task 5.'
 ];
 
 const initCourseDetail = {
@@ -99,7 +99,7 @@ const CourseDetail = () => {
   const overviewData = [
     `${formatVideoLengthToHours(totalVideosLength)} on-demand video`,
     `${sections} articles.`,
-    '35 downloadable resources.',
+    '0 downloadable resources.',
     'Access on mobile and TV.',
     'Full lifetime access.',
     'Certificate of completion.'
@@ -281,7 +281,10 @@ const CourseDetail = () => {
               <div className='course-detail__content-wrap'>
                 <div className='course-detail__content-summary'>
                   <Row className='course-detail__content-summary-row'>
-                    <Col md='12'>{numOfSections} sections • 243 lectures • 19h 44m total length</Col>
+                    <Col md='12'>
+                      {numOfSections} sections • {lessons} lectures • {formatVideoLengthToHours(totalVideosLength)}{' '}
+                      total length
+                    </Col>
                     <Col className='course-detail__content-summary-col col-right' md='12'>
                       <Link to='/'>Expand all sections</Link>
                     </Col>

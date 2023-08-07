@@ -2,6 +2,7 @@ import { Badge, Col, Progress, Row } from 'antd';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../../components/Button';
+import { BACKEND_URL } from '../../../../constant/backend-domain';
 import { RootState } from '../../../../store/store';
 import { ICourse } from '../../../../types/course.type';
 import { ICourseEnrolledByUser, useGetUserDetailQuery } from '../../client.service';
@@ -73,6 +74,14 @@ const CourseItem = (props: CourseItemProps) => {
     }
   };
 
+  let backgroundImageUrl = '';
+
+  if (props.courseItem.thumbnail.startsWith('http')) {
+    backgroundImageUrl = encodeURI(props.courseItem.thumbnail);
+  } else {
+    backgroundImageUrl = encodeURI(`${BACKEND_URL}/${props.courseItem.thumbnail}`);
+  }
+
   return (
     <Col onClick={viewCourseDetail} md={currentPath === '/start' || currentPath === '/' ? 6 : 8}>
       <Badge.Ribbon text='Special Offer'>
@@ -80,7 +89,7 @@ const CourseItem = (props: CourseItemProps) => {
           <div
             className='course-item__img'
             style={{
-              backgroundImage: `url(${encodeURI(props.courseItem.thumbnail) || ''})`,
+              backgroundImage: `url(${backgroundImageUrl || ''})`,
               backgroundPosition: 'center',
               backgroundSize: 'cover'
             }}

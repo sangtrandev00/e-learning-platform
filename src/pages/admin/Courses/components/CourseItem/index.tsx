@@ -11,6 +11,7 @@ type CourseItemProps = {
 };
 
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../../../../../constant/backend-domain';
 import { ICourse } from '../../../../../types/course.type';
 import { useDeleteCourseMutation } from '../../course.service';
 import AuthorInfo from './AuthorInfo';
@@ -64,6 +65,13 @@ const CourseItem = (props: CourseItemProps) => {
     console.log(deleteCourseResult);
   };
 
+  let thumbnailUrl = '';
+  if (thumbnail.startsWith('http')) {
+    thumbnailUrl = thumbnail;
+  } else {
+    thumbnailUrl = `${BACKEND_URL}/${thumbnail}`;
+  }
+
   return (
     <Col className='course-content__item' md={props.md}>
       <Link to={_id}>
@@ -71,7 +79,7 @@ const CourseItem = (props: CourseItemProps) => {
           <Card
             className='course-content__item-card'
             // style={{ width: 300 }}
-            cover={<img className='course-content__item-thumb' alt={name} src={thumbnail} />}
+            cover={<img className='course-content__item-thumb' alt={name} src={thumbnailUrl} />}
             actions={[
               <div></div>,
               <EditOutlined key='edit' />,
