@@ -5,7 +5,7 @@ export interface IOrder {
     _id: string;
     email: string;
     name: string;
-    phone: string;
+    phone?: string;
     avatar?: string;
     createdAt?: string;
   };
@@ -23,7 +23,7 @@ interface ITransaction {
   method: string; // STRIPE, PAYPAL, VNPAY, MOMO
 }
 
-interface IOrderItem {
+export interface IOrderItem {
   courseId: string;
   name?: string;
   finalPrice?: number;

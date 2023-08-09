@@ -15,7 +15,7 @@ export enum CourseLevel {
 }
 
 export interface ICourse {
-  _id: string; // youtube id
+  _id: string;
   name: string;
   description: string;
   price: number;

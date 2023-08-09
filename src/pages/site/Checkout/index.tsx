@@ -1,13 +1,12 @@
 import { CaretRightOutlined } from '@ant-design/icons';
-import { Col, Collapse, CollapseProps, Divider, Row, Select, theme } from 'antd';
+import { Col, Collapse, CollapseProps, Divider, Row, Select, Skeleton, theme } from 'antd';
 import type { CSSProperties } from 'react';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
 import { RootState } from '../../../store/store';
 import { IOrder } from '../../../types/order.type';
-import { useCreateOrderMutation, useGetUserQuery } from '../client.service';
+import { useCreateOrderMutation, useGetRetrieveCartQuery, useGetUserQuery } from '../client.service';
 import { clearCart } from '../client.slice';
 import './Checkout.scss';
 import DetailItem from './components/DetailItem';
@@ -55,6 +54,19 @@ const Checkout = () => {
   };
 
   const cart = useSelector((state: RootState) => state.client.cart);
+  const courseIds = cart.items.map((item) => item.courseId);
+
+  const { data: cartData, isFetching: isCartFetching } = useGetRetrieveCartQuery(
+    { courseIds },
+    {
+      skip: !courseIds.length
+    }
+  );
+
+  console.log('cartData: ', cartData);
+
+  const cartItems = cartData?.cart.items || [];
+  const totalPrice = cartData?.cart.totalPrice || 0;
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
@@ -62,16 +74,8 @@ const Checkout = () => {
     skip: !userId
   });
 
-  const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let sumFinalPrice = 0;
-
-  const calcTotalCartPrice = (finalPrice: number) => {
-    console.log('calcTotalCartPrice');
-    sumFinalPrice += finalPrice;
-    setTotalPrice(sumFinalPrice);
-  };
 
   const checkoutHandler = () => {
     console.log('checkout handler');
@@ -155,15 +159,12 @@ const Checkout = () => {
               </div>
               <div className='checkout__orders-detail'>
                 <h3 className='checkout__orders-detail-title'>Order details</h3>
-                {(cart?.items || []).map((cartItem) => {
-                  return (
-                    <DetailItem onTotal={calcTotalCartPrice} key={cartItem.courseId} courseId={cartItem.courseId} />
-                  );
-                })}
-                {/* <DetailItem />
-                <DetailItem />
-                <DetailItem />
-                <DetailItem /> */}
+               {isCartFetching && <Skeleton />}
+                {!isCartFetching && (
+                   cartItems.map((cartItem: { _id: string; name: string; thumbnail: string; finalPrice: number }) => {
+                    return <DetailItem key={cartItem._id} courseItem={cartItem} />;
+                  })
+                )}
               </div>
             </div>
           </Col>

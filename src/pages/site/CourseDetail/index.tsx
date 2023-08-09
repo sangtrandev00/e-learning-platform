@@ -1,11 +1,20 @@
 import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, List, Row, Space, Typography } from 'antd';
-import { useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Breadcrumb, Button, Col, List, Row, Space, Typography, notification } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
+import { BACKEND_URL } from '../../../constant/backend-domain';
+import { RootState } from '../../../store/store';
 import { AccessStatus, CourseLevel } from '../../../types/course.type';
+import { IOrder } from '../../../types/order.type';
 import { formatVideoLengthToHours, transformDate } from '../../../utils/functions';
-import { useGetCourseDetailQuery, useGetSectionsByCourseIdQuery } from '../client.service';
+import { openAuthModal } from '../../auth.slice';
+import {
+  useCreateOrderMutation,
+  useGetCourseDetailQuery,
+  useGetSectionsByCourseIdQuery,
+  useGetUserQuery
+} from '../client.service';
 import { addToCart } from '../client.slice';
 import './CourseDetail.scss';
 import SectionList from './components/SectionList';
@@ -51,12 +60,17 @@ const CourseDetail = () => {
   // HOOKS HERE
   const params = useParams();
   const dispatch = useDispatch();
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+
+  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(userId);
 
   const { courseId } = params;
 
   const { data, isFetching } = useGetCourseDetailQuery(courseId || '');
-
-  console.log('course detail: ', data);
+  const [createOrder, createOrderResult] = useCreateOrderMutation();
+  const navigate = useNavigate();
 
   let courseDetail = initCourseDetail;
 
@@ -77,7 +91,7 @@ const CourseDetail = () => {
     level,
     courseSlug,
     categoryId,
-    userId,
+    userId: author,
     numOfReviews,
     totalVideosLength,
     sections,
@@ -88,13 +102,16 @@ const CourseDetail = () => {
     updatedAt
   } = courseDetail;
 
-  console.log(numOfReviews);
+  let thumbnailUrl = '';
+  if (thumbnail.startsWith('https')) {
+    thumbnailUrl = thumbnail;
+  } else {
+    thumbnailUrl = `${BACKEND_URL}/${thumbnail}`;
+  }
 
   const { data: sectionData, isFetching: isSectionFetching } = useGetSectionsByCourseIdQuery(courseId || '');
 
   const numOfSections = sectionData?.sections.length || 0;
-
-  console.log(sectionData);
 
   const overviewData = [
     `${formatVideoLengthToHours(totalVideosLength)} on-demand video`,
@@ -107,16 +124,69 @@ const CourseDetail = () => {
 
   const addCartHandler = () => {
     console.log('add to cart: course id: ', courseId);
-
     dispatch(addToCart(courseId as string));
   };
 
   const subscribeCourseHandler = () => {
     console.log('subscribe course: course id: ', courseId);
+
+    if (isAuth) {
+      const orderItem = {
+        courseId: courseId as string,
+        name: name,
+        thumbnail: thumbnail,
+        finalPrice: finalPrice
+      };
+
+      const newOrder: Omit<IOrder, '_id'> = {
+        items: [orderItem],
+        user: {
+          _id: userId,
+          email: userData?.user.email || '',
+          name: userData?.user.name || '',
+          phone: userData?.user.phone || '',
+          avatar: userData?.user.avatar || ''
+        },
+        transaction: {
+          method: 'VNPAY'
+        },
+        totalPrice: 0,
+        vatFee: 0,
+        note: 'ENROLL COURSE FREE'
+      };
+
+      createOrder(newOrder)
+        .unwrap()
+        .then((result) => {
+          console.log(result);
+
+          navigate(`/cart/subscribe/course/${orderItem.courseId}`);
+          notification.success({
+            message: 'Enroll course successfully'
+          });
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    } else {
+      notification.error({
+        message: 'Please login to enroll this course'
+      });
+
+      dispatch(openAuthModal());
+    }
   };
 
   const buyNowHandler = () => {
-    console.log('buy now handler');
+    if (isAuth) {
+      console.log('buy now handler');
+    } else {
+      notification.error({
+        message: 'Please login to buy this course'
+      });
+
+      dispatch(openAuthModal());
+    }
   };
 
   return (
@@ -170,8 +240,8 @@ const CourseDetail = () => {
                 </div>
                 <div className='course-detail__intro-author'>
                   <span className=''>Author</span>
-                  <Link to={`/user/${userId._id}`} className='course-detail__intro-author-name'>
-                    {userId.name}
+                  <Link to={`/user/${author._id}`} className='course-detail__intro-author-name'>
+                    {author.name}
                   </Link>
                 </div>
                 <div className='course-detail__intro-updated-at'>Last updated {transformDate(updatedAt)}</div>
@@ -180,7 +250,7 @@ const CourseDetail = () => {
                 <div className='course-detail__overview'>
                   <div className='course-detail__thumbnail'>
                     <img
-                      src={thumbnail || 'https://img-c.udemycdn.com/course/240x135/3510096_5891.jpg'}
+                      src={thumbnailUrl || 'https://img-c.udemycdn.com/course/240x135/3510096_5891.jpg'}
                       alt=''
                       className='course-detail__thumbnail-img'
                     />
@@ -304,7 +374,7 @@ const CourseDetail = () => {
             <Row>
               <Col md={12} className='course-detail__author-info'>
                 <p className='course-detail__author-intro'>Meet the intructor</p>
-                <h2 className='course-detail__author-name'>{userId.name}</h2>
+                <h2 className='course-detail__author-name'>{author.name}</h2>
                 <p className='course-detail__author-desc'>
                   Patrick Jones is a content marketing professional since 2002. He has a Masters Degree in Digital
                   Marketing and a Bachelors in Education and has been teaching marketing strategies for over 15 years in
@@ -315,8 +385,8 @@ const CourseDetail = () => {
               <Col md={12} className='course-detail__author-avatar'>
                 <img
                   className='course-detail__author-img'
-                  src={userId.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
-                  alt={userId.name}
+                  src={author.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
+                  alt={author.name}
                 />
               </Col>
             </Row>

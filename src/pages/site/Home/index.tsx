@@ -1,22 +1,21 @@
-import './Home.scss';
-import Button from '../../../components/Button';
-import { Col, Row, Skeleton, Space } from 'antd';
 import {
+  ApartmentOutlined,
+  DingtalkOutlined,
   EditOutlined,
-  UserOutlined,
   FlagOutlined,
   FundFilled,
-  DingtalkOutlined,
-  ApartmentOutlined
+  UserOutlined
 } from '@ant-design/icons';
-import CourseItem from '../components/CourseItem';
-import { Link, useLocation } from 'react-router-dom';
-import CourseList from '../components/CourseList';
-import { useGetCourseQuery, useGetCoursesQuery } from '../client.service';
-import { IParams } from '../../../types/params.type';
-import { RootState } from '../../../store/store';
-import { useSelector } from 'react-redux';
+import { Col, Row, Skeleton, Space } from 'antd';
 import { Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import Button from '../../../components/Button';
+import { RootState } from '../../../store/store';
+import { IParams } from '../../../types/params.type';
+import { useGetCoursesQuery, useGetPopularCoursesQuery } from '../client.service';
+import CourseList from '../components/CourseList';
+import './Home.scss';
 
 const HomePage = () => {
   const location = useLocation();
@@ -29,9 +28,25 @@ const HomePage = () => {
 
   const { data, isFetching } = useGetCoursesQuery(params);
 
+  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(params);
+
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
   console.log(data);
+
+  // const popularCourses = data?.courses
+  const popularCourses = popularCoursesData?.courses;
+  console.log(popularCourses);
+
+  // Frontend courses
+
+  const frontendCourses = data?.courses.filter((course) => course.categoryId.name === 'frontend');
+
+  // Backend courses
+  const backendCourses = data?.courses.filter((course) => course.categoryId.name === 'backend');
+
+  // Devops courses
+  const devopsCourses = data?.courses.filter((course) => course.categoryId.name === 'devops');
 
   return (
     <div>
@@ -159,10 +174,10 @@ const HomePage = () => {
       {!isAuth && (
         <div className='our-courses container spacing-h-md'>
           <h2 className='our-courses__title'>Popular Courses</h2>
-          {isFetching ? (
+          {isPoppularCoursesFetching ? (
             <Skeleton />
           ) : (
-            <CourseList courseState='notOrdered' courses={data?.courses} className='our-courses__wrapper' />
+            <CourseList courseState='notOrdered' courses={popularCourses} className='our-courses__wrapper' />
           )}
         </div>
       )}
@@ -187,7 +202,7 @@ const HomePage = () => {
         {isFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={data?.courses} className='our-courses__wrapper' />
+          <CourseList courseState='notOrdered' courses={frontendCourses} className='our-courses__wrapper' />
         )}
       </div>
 
@@ -197,7 +212,7 @@ const HomePage = () => {
         {isFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={data?.courses} className='our-courses__wrapper' />
+          <CourseList courseState='notOrdered' courses={backendCourses} className='our-courses__wrapper' />
         )}
       </div>
 
@@ -208,7 +223,7 @@ const HomePage = () => {
         {isFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={data?.courses} className='our-courses__wrapper' />
+          <CourseList courseState='notOrdered' courses={devopsCourses} className='our-courses__wrapper' />
         )}
       </div>
     </div>

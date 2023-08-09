@@ -37,6 +37,8 @@ const Courses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sortParams, setSortParams] = useSearchParamsState(sortDefaults);
 
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
   console.log(searchParams);
 
   console.log('filterParams: ', filterParams);
@@ -56,7 +58,8 @@ const Courses = () => {
     _level: levelValue,
     _price: priceValue,
     _sort: sortValue,
-    _topic: topicValue
+    _topic: topicValue,
+    userId
   };
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);

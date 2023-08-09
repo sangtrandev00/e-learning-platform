@@ -1,25 +1,43 @@
-import { Col, Divider, Input, Row, Space } from 'antd';
-import { useState } from 'react';
+import { Col, Divider, Input, Row, Skeleton, Space, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
 import { RootState } from '../../../store/store';
+import { openAuthModal } from '../../auth.slice';
+import { useGetRetrieveCartQuery } from '../client.service';
 import { removeCart } from '../client.slice';
 import './ViewCart.scss';
 import CartItem from './components/CartItem';
 const ViewCart = () => {
   const cart = useSelector((state: RootState) => state.client.cart);
-  const [totalPrice, setTotalPrice] = useState(0);
+
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const courseIds = cart.items.map((item) => item.courseId);
+
+  const { data: cartData, isFetching: isCartFetching } = useGetRetrieveCartQuery({ courseIds });
+
+  const totalPrice = cartData?.cart.totalPrice || 0;
+  const cartItems = cartData?.cart.items || [];
+
   const dispatch = useDispatch();
-  let sumFinalPrice = 0;
-  const calcTotalCartPrice = (finalPrice: number) => {
-    sumFinalPrice += finalPrice;
-    setTotalPrice(sumFinalPrice);
-  };
+  const navigate = useNavigate();
 
   const removeCartHandler = (courseId: string) => {
     console.log('remove from cart: course id: ', courseId);
     dispatch(removeCart(courseId));
+  };
+
+  const checkoutHandler = () => {
+    if (isAuth) {
+      console.log('checkout handler');
+      navigate('/checkout');
+    } else {
+      notification.error({
+        message: 'Please login to checkout'
+      });
+
+      dispatch(openAuthModal());
+    }
   };
 
   return (
@@ -32,16 +50,18 @@ const ViewCart = () => {
               <div className='view-cart__list'>
                 <h4 className='view-cart__list-title'>{cart?.items?.length || 0} Courses in Cart</h4>
                 <div className='view-cart__list-wrap'>
-                  {(cart?.items || []).map((cartItem) => {
-                    return (
-                      <CartItem
-                        onTotal={calcTotalCartPrice}
-                        key={cartItem.courseId}
-                        courseId={cartItem.courseId}
-                        onRemove={removeCartHandler}
-                      />
-                    );
-                  })}
+                  {isCartFetching && <Skeleton />}
+                  {!isCartFetching &&
+                    cartItems.map((cartItem) => {
+                      return (
+                        <CartItem
+                          // onTotal={calcTotalCartPrice}
+                          key={cartItem._id}
+                          courseItem={cartItem}
+                          onRemove={removeCartHandler}
+                        />
+                      );
+                    })}
                 </div>
               </div>
             </Col>
@@ -49,9 +69,9 @@ const ViewCart = () => {
               <div className='view-cart__summary'>
                 <h4 className='view-cart__summary-title'>Total: </h4>
                 <h3 className='view-cart__summary-price'>${totalPrice}</h3>
-                <Link to='/checkout'>
+                <div onClick={checkoutHandler}>
                   <div className='view-cart__summary-btn btn btn-md'>Checkout</div>
-                </Link>
+                </div>
                 <Divider />
                 <div className='view-cart__summary-promo'>
                   <span className='view-cart__summary-promo-title'>Promo code</span>

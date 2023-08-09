@@ -1,11 +1,14 @@
 import type { PaginationProps } from 'antd';
-import { Pagination, Row } from 'antd';
+import { Pagination, Row, notification } from 'antd';
 import { Fragment, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../../../components/Button';
+import { RootState } from '../../../../store/store';
 import { ICourse } from '../../../../types/course.type';
+import { IOrder, IOrderItem } from '../../../../types/order.type';
 import { IPagination } from '../../../../types/pagination';
-import { ICourseEnrolledByUser } from '../../client.service';
+import { ICourseEnrolledByUser, useCreateOrderMutation, useGetUserQuery } from '../../client.service';
 import CourseItem from '../CourseItem';
 import './CourseList.scss';
 type CourseListProps = {
@@ -21,10 +24,19 @@ type CourseListProps = {
 const CourseList = (props: CourseListProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const [createOrder, createOrderResult] = useCreateOrderMutation();
+
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  // const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+
+  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(userId);
+
   const params = {
     _limit: searchParams.get('_limit') ? Number(searchParams.get('_limit')) : 12,
     _page: searchParams.get('_p') ? Number(searchParams.get('_p')) : 1,
-    _q: searchParams.get('_q') || ''
+    userId: userId
   };
 
   const moveToDetail = (id: string) => {
@@ -53,6 +65,41 @@ const CourseList = (props: CourseListProps) => {
     setCurrent(page);
   };
 
+  const subscribeCourseHandler = (orderItem: IOrderItem) => {
+    console.log('subscribe course', orderItem);
+
+    const newOrder: Omit<IOrder, '_id'> = {
+      items: [orderItem],
+      user: {
+        _id: userId,
+        email: userData?.user.email || '',
+        name: userData?.user.name || '',
+        phone: userData?.user.phone || '',
+        avatar: userData?.user.avatar || ''
+      },
+      transaction: {
+        method: 'VNPAY'
+      },
+      totalPrice: 0,
+      vatFee: 0,
+      note: 'ENROLL COURSE FREE'
+    };
+
+    createOrder(newOrder)
+      .unwrap()
+      .then((result) => {
+        console.log(result);
+
+        navigate(`../cart/subscribe/course/${orderItem.courseId}`);
+        notification.success({
+          message: 'Enroll course successfully'
+        });
+      })
+      .catch((error) => {
+        console.log('error: ', error);
+      });
+  };
+
   return (
     <Fragment>
       <Row gutter={16} className={props.className}>
@@ -62,6 +109,7 @@ const CourseList = (props: CourseListProps) => {
             key={courseItem._id}
             courseItem={courseItem}
             onClick={moveToDetail}
+            onEnroll={subscribeCourseHandler}
           />
         ))}
         {/* <CourseItem onClick={moveToDetail} />

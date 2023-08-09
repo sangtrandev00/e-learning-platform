@@ -1,17 +1,22 @@
-import { Badge, Col, Progress, Row } from 'antd';
-import { useSelector } from 'react-redux';
+import { Badge, Col, Progress, Row, notification } from 'antd';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../../components/Button';
 import { BACKEND_URL } from '../../../../constant/backend-domain';
 import { RootState } from '../../../../store/store';
 import { ICourse } from '../../../../types/course.type';
+import { IOrderItem } from '../../../../types/order.type';
+import { openAuthModal } from '../../../auth.slice';
 import { ICourseEnrolledByUser, useGetUserDetailQuery } from '../../client.service';
+import { addToCart } from '../../client.slice';
 import './CourseItem.scss';
 
 type CourseItemProps = {
   courseItem: ICourseEnrolledByUser | ICourse;
   courseState?: string;
   onClick: (_id: string) => void | ((e: React.MouseEvent<HTMLButtonElement>) => void);
+  onEnroll?: (courseItem: IOrderItem) => void;
 };
 
 // Generate style of course-item__img
@@ -19,9 +24,12 @@ type CourseItemProps = {
 const CourseItem = (props: CourseItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const currentPath = location.pathname;
 
   console.log('current params: ', currentPath);
+
+  console.log('course item: ', props.courseItem);
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const userId = useSelector((state: RootState) => state.auth.userId);
@@ -35,22 +43,59 @@ const CourseItem = (props: CourseItemProps) => {
 
   let hasBought = false;
 
-  if (isAuth) {
-    console.log('authenticated');
-
-    console.log('How to check course already bought buy this user!');
-
-    console.log(data?.user.courses.map((course) => course._id));
-
-    const courseIdsByUser = data?.user.courses.map((course) => course._id);
-    if (courseIdsByUser?.includes(props.courseItem._id)) {
-      hasBought = true;
-    }
+  if ((props.courseItem as ICourseEnrolledByUser).isBought) {
+    hasBought = true;
   }
 
-  const clickHandler = () => {
-    // e.preventDefault();
-    navigate(`/fsdfds`);
+  // if (isAuth) {
+  //   console.log('authenticated');
+
+  //   console.log('How to check course already bought buy this user!');
+
+  //   console.log(data?.user.courses.map((course) => course._id));
+
+  //   const courseIdsByUser = data?.user.courses.map((course) => course._id);
+  //   if (courseIdsByUser?.includes(props.courseItem._id)) {
+  //     hasBought = true;
+  //   }
+  // }
+
+  const btnClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const btnEl = e.target as HTMLButtonElement;
+    const dataAction = btnEl.dataset.action;
+
+    console.log('btn click handler!!!');
+
+    // If already logined
+
+    if (isAuth) {
+      if (dataAction === 'buynow') {
+        dispatch(addToCart(props.courseItem._id));
+
+        navigate('/checkout');
+      } else if (dataAction === 'enroll') {
+        console.log('go to enroll page');
+
+        const newOrderItem: IOrderItem = {
+          courseId: props.courseItem._id,
+          name: props.courseItem.name,
+          thumbnail: props.courseItem.thumbnail,
+          finalPrice: props.courseItem.finalPrice
+        };
+
+        if (newOrderItem) {
+          props.onEnroll && props.onEnroll(newOrderItem);
+        }
+      }
+    } else {
+      // If not logined
+
+      notification.warning({ message: 'You need to login to enroll/buy this course' });
+
+      dispatch(openAuthModal());
+    }
+
+    // console.log('enrolled or buy now!');
   };
 
   if (!props.courseItem) return null;
@@ -62,16 +107,18 @@ const CourseItem = (props: CourseItemProps) => {
     progressPercent = 0;
   }
 
-  const gotoCourseHandler = () => {
-    console.log('go to course handler');
+  const gotoCourseHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('go to course handler', e.target);
 
     navigate(`/path-player?courseId=${props.courseItem._id}`);
   };
 
   const viewCourseDetail = () => {
-    if (!isAuth) {
-      props?.onClick(props.courseItem._id);
-    }
+    console.log('click course item!!!');
+
+    // if (!isAuth) {
+    props?.onClick(props.courseItem._id);
+    // }
   };
 
   let backgroundImageUrl = '';
@@ -83,11 +130,12 @@ const CourseItem = (props: CourseItemProps) => {
   }
 
   return (
-    <Col onClick={viewCourseDetail} md={currentPath === '/start' || currentPath === '/' ? 6 : 8}>
+    <Col md={currentPath === '/start' || currentPath === '/' ? 6 : 8}>
       <Badge.Ribbon text='Special Offer'>
         <div className='course-item'>
           <div
             className='course-item__img'
+            onClick={viewCourseDetail}
             style={{
               backgroundImage: `url(${backgroundImageUrl || ''})`,
               backgroundPosition: 'center',
@@ -95,7 +143,9 @@ const CourseItem = (props: CourseItemProps) => {
             }}
           ></div>
           <div className='course-item__content'>
-            <h3 className='course-item__title course-item__title--courses-page'>{props.courseItem.name}</h3>
+            <h3 onClick={viewCourseDetail} className='course-item__title course-item__title--courses-page'>
+              {props.courseItem.name}
+            </h3>
             {props.courseState === 'ordered' && (
               <Progress className='course-item__process' percent={progressPercent as number} />
             )}
@@ -113,14 +163,14 @@ const CourseItem = (props: CourseItemProps) => {
                 <Col md={12}>
                   {!hasBought && (
                     <Button
-                      onClick={clickHandler}
+                      onClick={btnClickHandler}
+                      action={props.courseItem.finalPrice === 0 ? 'enroll' : 'buynow'}
                       className={`course-item__enrolls-btn btn btn-secondary btn-sm ${
                         props.courseItem.finalPrice === 0 && props.courseState !== 'ordered'
                           ? 'course-item__enrolls-btn--free'
                           : ''
                       }`}
                     >
-                      {props.courseState === 'ordered' && 'Continue'}
                       {props.courseState !== 'ordered' && (props.courseItem.finalPrice === 0 ? 'Enroll' : 'Buy Now')}
                     </Button>
                   )}
@@ -128,10 +178,24 @@ const CourseItem = (props: CourseItemProps) => {
                     <Button
                       onClick={gotoCourseHandler}
                       className='btn btn-secondary btn-sm course-item__enrolls-btn--free'
+                      action='goto-course'
                     >
                       Goto Course
                     </Button>
                   )}
+
+                  {/* {props.courseState === 'ordered' && (
+                    <Button
+                      onClick={clickHandler}
+                      className={`course-item__enrolls-btn btn btn-secondary btn-sm ${
+                        props.courseItem.finalPrice === 0 && props.courseState !== 'ordered'
+                          ? 'course-item__enrolls-btn--free'
+                          : ''
+                      }`}
+                    >
+                      Continue
+                    </Button>
+                  )} */}
                 </Col>
                 <Col md={12}>
                   {props.courseState !== 'ordered' && (

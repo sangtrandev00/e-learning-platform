@@ -1,12 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { notification } from 'antd';
+import { ICart } from '../../types/cart.type';
 import { IParams } from '../../types/params.type';
 // import { IOrder } from '../../../types/order.type';
 // import { IUser } from '../../types/user.type';
-interface ICart {
-  items: {
-    courseId: string;
-  }[];
-}
 
 interface ClientState {
   lessonId: string;
@@ -48,6 +45,9 @@ const clientSlice = createSlice({
         if (courseExistingIdx === -1) {
           state.cart.items.push({ courseId: action.payload });
           localStorage.setItem('cart', JSON.stringify(state.cart));
+          notification.success({
+            message: 'Add to cart successfully!'
+          });
         }
       } else {
         console.log('_id is null');

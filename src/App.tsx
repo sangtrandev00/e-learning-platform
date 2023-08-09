@@ -28,6 +28,7 @@ import {
   setUnauthenticated
 } from './pages/auth.slice';
 import ErrorPage from './pages/Error/404Error';
+import AuthorProfile from './pages/site/AuthorProfile';
 import Checkout from './pages/site/Checkout';
 import CourseDetail from './pages/site/CourseDetail';
 import SiteCourses from './pages/site/Courses';
@@ -36,6 +37,7 @@ import OrderCompleted from './pages/site/OrderCompleted';
 import PathPlayer from './pages/site/PathPlayer';
 import Profile from './pages/site/Profile';
 import StartLearning from './pages/site/StartLearning';
+import SubsribeCourse from './pages/site/SubscribeCourse';
 import ViewCart from './pages/site/ViewCart';
 
 const router = createBrowserRouter([
@@ -87,6 +89,15 @@ const router = createBrowserRouter([
       {
         path: 'about-us',
         element: <div>About Us Page</div>
+      },
+      {
+        path: 'user',
+        children: [
+          {
+            path: '/:userId',
+            element: <AuthorProfile />
+          }
+        ]
       }
     ],
     errorElement: <ErrorPage page='/author' />
@@ -188,6 +199,15 @@ const router = createBrowserRouter([
   {
     path: 'author-login',
     element: <AdminAuth />
+  },
+  {
+    path: 'cart/subscribe/course/',
+    children: [
+      {
+        path: ':courseId',
+        element: <SubsribeCourse />
+      }
+    ]
   }
 ]);
 
