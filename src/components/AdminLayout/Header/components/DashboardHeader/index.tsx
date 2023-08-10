@@ -1,16 +1,43 @@
-import { BellOutlined, PlusCircleOutlined, QuestionOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, PlusCircleOutlined, QuestionOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Avatar, Button, Dropdown, Space } from 'antd';
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../../../../../constant/backend-domain';
 import { openCreateCourse } from '../../../../../pages/admin/Courses/course.slice';
+import { useGetUserQuery } from '../../../../../pages/admin/Users/user.service';
+import { setAdminUnauthenticated } from '../../../../../pages/auth.slice';
+import { RootState } from '../../../../../store/store';
 const DashboardHeader = () => {
+  const adminId = useSelector((state: RootState) => state.auth.adminId);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { data, isFetching } = useGetUserQuery(adminId, {
+    skip: !adminId
+  });
+
+  let avatarThumnailUrl = '';
+
+  if (data?.user.avatar) {
+    if (data?.user.avatar.startsWith('http')) {
+      avatarThumnailUrl = data?.user.avatar;
+    } else {
+      avatarThumnailUrl = `${BACKEND_URL}/${data?.user.avatar}`;
+    }
+  }
+
+  const adminLogoutHandler = () => {
+    dispatch(setAdminUnauthenticated());
+    navigate('/author-login');
+  };
+
   const adminInfoItems: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <a target='_blank' rel='noopener noreferrer' href='https://www.antgroup.com'>
-          1st menu item
+          {data?.user.name || 'Admin author Name'}
         </a>
       )
     },
@@ -24,15 +51,9 @@ const DashboardHeader = () => {
     },
     {
       key: 'logout',
-      label: (
-        <a target='_blank' rel='noopener noreferrer' href='https://www.luohanacademy.com'>
-          Logout
-        </a>
-      )
+      label: <a onClick={adminLogoutHandler}>Logout</a>
     }
   ];
-
-  const dispatch = useDispatch();
 
   const openCreateCourseHandler = () => {
     dispatch(openCreateCourse(true));
@@ -41,16 +62,6 @@ const DashboardHeader = () => {
   return (
     <Fragment>
       <Space>
-        {/* <Button
-          type='text'
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            fontSize: '16px',
-            width: 64,
-            height: 64
-          }}
-        /> */}
         <h3 className='admin-header__page-title'>Dashboard</h3>
 
         <Button onClick={openCreateCourseHandler}>
@@ -76,7 +87,7 @@ const DashboardHeader = () => {
           <span>Help</span>
         </Button>
         <Dropdown menu={{ items: adminInfoItems }} placement='bottom' arrow>
-          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} icon={<UserOutlined />} />
+          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} src={avatarThumnailUrl} />
         </Dropdown>
       </Space>
     </Fragment>

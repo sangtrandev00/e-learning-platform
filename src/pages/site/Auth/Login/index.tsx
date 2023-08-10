@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import ButtonCmp from '../../../../components/Button';
-import { useLoginMutation } from '../../../auth.service';
+import { useLoginMutation, useUpdateLastLoginMutation } from '../../../auth.service';
 import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
 import '../Auth.scss';
 
@@ -16,9 +16,10 @@ const Login: React.FC<LoginProps> = (props) => {
   const [form] = Form.useForm();
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
-  const onFinish = (formValues: { email: string; password: string }) => {
-    console.log('Success:', formValues);
 
+  const [updateLastLogin, updateLastLoginResult] = useUpdateLastLoginMutation();
+
+  const onFinish = (formValues: { email: string; password: string }) => {
     const userCredentials: { email: string; password: string } = {
       email: formValues.email,
       password: formValues.password
@@ -34,6 +35,21 @@ const Login: React.FC<LoginProps> = (props) => {
           const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(
             loginResponse.token
           );
+
+          // Update last login at database
+          const currentDate = new Date();
+          updateLastLogin({
+            userId: decodedToken.userId,
+            lastLogin: currentDate
+          })
+            .unwrap()
+            .then((result) => {
+              console.log('result: ', result);
+              notification.success({ type: 'success', message: 'update last login successully!', duration: 2 });
+            })
+            .catch((error) => {
+              console.log('error: ', error);
+            });
 
           localStorage.setItem('token', loginResponse.token);
           const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds

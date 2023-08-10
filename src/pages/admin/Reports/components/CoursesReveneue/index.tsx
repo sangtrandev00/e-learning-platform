@@ -1,5 +1,5 @@
-const CoursesRevenue = () => {
+const CoursesRevenues = () => {
   return <div>CoursesRevenue</div>;
 };
 
-export default CoursesRevenue;
+export default CoursesRevenues;

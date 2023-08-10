@@ -1,6 +1,6 @@
+import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { Fragment } from 'react';
-import { PlusCircleOutlined } from '@ant-design/icons';
 
 const UsersHeader = () => {
   return (
@@ -16,7 +16,7 @@ const UsersHeader = () => {
         height: 64
       }}
     /> */}
-        <h3 className='admin-header__page-title'>Dashboard</h3>
+        <h3 className='admin-header__page-title'>Users</h3>
 
         <Button>
           <PlusCircleOutlined />
@@ -24,11 +24,11 @@ const UsersHeader = () => {
         </Button>
         <Button>
           <PlusCircleOutlined />
-          Preview Hompage
+          Bulk actions
         </Button>
         <Button>
           <PlusCircleOutlined />
-          Preview Hompage after login
+          Export users report
         </Button>
       </Space>
     </Fragment>

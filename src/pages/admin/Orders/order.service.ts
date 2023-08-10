@@ -27,6 +27,8 @@ import { CustomError } from '../../../utils/helpers';
 
 interface getOrdersResponse {
   orders: IOrder[];
+  count: number;
+  total: number;
   message: string;
 }
 
@@ -44,8 +46,11 @@ export const orderApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getOrders: build.query<getOrdersResponse, void>({
-      query: () => '/orders', // method không có argument
+    getOrders: build.query<getOrdersResponse, { courseId: string; date: string }>({
+      query: (params) => ({
+        url: '/orders',
+        params: params
+      }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
        * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
@@ -68,7 +73,7 @@ export const orderApi = createApi({
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }) => ({ type: 'Orders' as const, _id })),
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Orders' as const, _id })),
               { type: 'Orders' as const, id: 'LIST' }
             ];
             console.log('final: ', final);

@@ -4,7 +4,7 @@ import { Button, Space } from 'antd';
 import { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { openCreateCourse } from '../../../../../pages/admin/Courses/course.slice';
-const CoursesHeader = () => {
+const UsersProgressHeader = () => {
   const adminInfoItems: MenuProps['items'] = [
     {
       key: '1',
@@ -41,20 +41,24 @@ const CoursesHeader = () => {
   return (
     <Fragment>
       <Space>
-        <h3 className='admin-header__page-title'>Courses</h3>
+        <h3 className='admin-header__page-title'>User Progress</h3>
 
         <Button onClick={openCreateCourseHandler}>
           <PlusCircleOutlined />
-          Create Course
-        </Button>
-        {/* <Button>
-          <PlusCircleOutlined />
-          Preview Hompage
+          Save Segment
         </Button>
         <Button>
           <PlusCircleOutlined />
-          Preview Hompage after login
-        </Button> */}
+          View segments
+        </Button>
+        <Button>
+          <PlusCircleOutlined />
+          Shedule report
+        </Button>
+        <Button>
+          <PlusCircleOutlined />
+          Export user progress
+        </Button>
       </Space>
       <Space className='admin-header__notify'>
         {/* <Button>
@@ -73,4 +77,4 @@ const CoursesHeader = () => {
   );
 };
 
-export default CoursesHeader;
+export default UsersProgressHeader;

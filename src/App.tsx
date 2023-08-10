@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './assets/sass/_base.scss';
 import './assets/sass/_reset.scss';
 import './assets/sass/reset.css';
+import InstructorsRevenues from './components/AdminLayout/Header/components/InstructorsRevenues';
 import RootAdminLayout from './components/AdminLayout/RootLayout';
 import RootLayout from './components/layout/RootLayout';
 import AdminAuth from './pages/admin/Auth';
@@ -15,8 +16,14 @@ import Dashboard from './pages/admin/Dashboard';
 import Orders from './pages/admin/Orders';
 import ReportsCenter from './pages/admin/Reports';
 import CancelledSales from './pages/admin/Reports/components/CancelledSales';
-import CoursesRevenue from './pages/admin/Reports/components/CoursesReveneue';
+import Certifications from './pages/admin/Reports/components/Certifications';
+import CourseInsights from './pages/admin/Reports/components/CourseInsights';
+import {
+  default as CoursesRevenue,
+  default as CoursesRevenues
+} from './pages/admin/Reports/components/CoursesReveneue';
 import InstructorsRevene from './pages/admin/Reports/components/InstructorsRevenue';
+import ReviewsCenter from './pages/admin/Reports/components/ReviewsCenter';
 import UsersProgress from './pages/admin/Reports/components/UsersProgress';
 import UsersSegment from './pages/admin/Reports/components/UsersSegments';
 import Settings from './pages/admin/Settings';
@@ -94,7 +101,7 @@ const router = createBrowserRouter([
         path: 'user',
         children: [
           {
-            path: '/:userId',
+            path: ':userId',
             element: <AuthorProfile />
           }
         ]
@@ -169,7 +176,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'course-insights',
-            element: <UsersSegment />
+            element: <CourseInsights />
           },
           {
             path: 'courses-revenue',
@@ -182,6 +189,22 @@ const router = createBrowserRouter([
           {
             path: 'cancelled-sales',
             element: <CancelledSales />
+          },
+          {
+            path: 'courses-revenues',
+            element: <CoursesRevenues />
+          },
+          {
+            path: 'instructors-revenues',
+            element: <InstructorsRevenues />
+          },
+          {
+            path: 'certifications',
+            element: <Certifications />
+          },
+          {
+            path: 'reviews-center',
+            element: <ReviewsCenter />
           }
         ]
       },

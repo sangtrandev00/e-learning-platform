@@ -75,6 +75,31 @@ export const authApi = createApi({
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
     }),
+    updateLastLogin: build.mutation<loginResponse, { userId: string; lastLogin: Date }>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: `${body.userId}/last-login`,
+            method: 'PATCH',
+            body: {
+              lastLogin: body.lastLogin
+            }
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Authentication sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
+    }),
+
     adminLogin: build.mutation<loginResponse, { email: string; password: string }>({
       query(body) {
         try {
@@ -122,4 +147,4 @@ export const authApi = createApi({
   })
 });
 
-export const { useLoginMutation, useSignupMutation, useResetPasswordMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useResetPasswordMutation, useUpdateLastLoginMutation } = authApi;

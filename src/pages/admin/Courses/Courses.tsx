@@ -3,6 +3,7 @@ import { Button, Input, Popover, Select, Skeleton, Space, notification } from 'a
 import { Header } from 'antd/es/layout/layout';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../../../constant/backend-domain';
 import { useGetAuthorsQuery } from '../../site/client.service';
 import { useGetCategoriesQuery } from '../Categories/category.service';
 import './Courses.scss';
@@ -147,11 +148,19 @@ const Courses = () => {
           updatedAt
         } = courseItem;
 
+        let thumbnailUrl = thumbnail;
+
+        if (thumbnail.startsWith('http')) {
+          thumbnailUrl = thumbnail;
+        } else {
+          thumbnailUrl = `${BACKEND_URL}/${thumbnail}`;
+        }
+
         const courseTemplateItem: DataCourseType = {
           key: `${_id}`,
           name: (
             <div className='table__col-name'>
-              <img title={name} className='table__col-name-img' src={thumbnail} />
+              <img title={name} className='table__col-name-img' src={thumbnailUrl} />
               <span className='table__col-name-text'>{name}</span>
             </div>
           ),
@@ -208,17 +217,25 @@ const Courses = () => {
           updatedAt
         } = courseItem;
 
+        let thumbnailUrl = '';
+        if (thumbnail.startsWith('http')) {
+          thumbnailUrl = thumbnail;
+        } else {
+          thumbnailUrl = `${BACKEND_URL}/${thumbnail}`;
+        }
+
         const courseTemplateItem: DataCourseType = {
           key: `${_id}`,
           name: (
             <div className='table__col-name'>
-              <img title={name} className='table__col-name-img' src={thumbnail} />
+              <img title={name} className='table__col-name-img' src={thumbnailUrl} />
               <span className='table__col-name-text'>{name}</span>
             </div>
           ),
           author: userId.name,
           categories: categoryId.name,
           access: Access.FREE,
+          // Gio Tinh. -> Course detail
           finalPrice: finalPrice,
           price: price,
           learners: 10,

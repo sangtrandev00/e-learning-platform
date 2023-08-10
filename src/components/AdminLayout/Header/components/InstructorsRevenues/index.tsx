@@ -4,7 +4,7 @@ import { Button, Space } from 'antd';
 import { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { openCreateCourse } from '../../../../../pages/admin/Courses/course.slice';
-const CoursesHeader = () => {
+const InstructorsRevenues = () => {
   const adminInfoItems: MenuProps['items'] = [
     {
       key: '1',
@@ -41,36 +41,16 @@ const CoursesHeader = () => {
   return (
     <Fragment>
       <Space>
-        <h3 className='admin-header__page-title'>Courses</h3>
+        <h3 className='admin-header__page-title'>Instructors Revenues</h3>
 
         <Button onClick={openCreateCourseHandler}>
           <PlusCircleOutlined />
-          Create Course
+          Export Data
         </Button>
-        {/* <Button>
-          <PlusCircleOutlined />
-          Preview Hompage
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          Preview Hompage after login
-        </Button> */}
       </Space>
-      <Space className='admin-header__notify'>
-        {/* <Button>
-          <BellOutlined />
-          <span>What's new</span>
-        </Button>
-        <Button>
-          <QuestionOutlined />
-          <span>Help</span>
-        </Button>
-        <Dropdown menu={{ items: adminInfoItems }} placement='bottom' arrow>
-          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} icon={<UserOutlined />} />
-        </Dropdown> */}
-      </Space>
+      <Space className='admin-header__notify'></Space>
     </Fragment>
   );
 };
 
-export default CoursesHeader;
+export default InstructorsRevenues;

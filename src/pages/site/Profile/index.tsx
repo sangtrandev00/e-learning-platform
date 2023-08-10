@@ -123,7 +123,7 @@ const Profile = () => {
                     <ReadOutlined />
                   </div>
                   <div className='profile__header-item-number'>3</div>
-                  <div className='profile__header-item-text'>Achivement</div>
+                  <div className='profile__header-item-text'>Achievement</div>
                 </div>
               </Col>
             </Row>

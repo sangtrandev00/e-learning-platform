@@ -52,7 +52,7 @@ const items: MenuItem[] = [
       null,
       [
         getItem('User Progress', 'reports/users-progress'),
-        getItem('User Segment', 'reports/users-segment'),
+        // getItem('User Segment', 'reports/users-segment'),
         getItem('Course Insights', 'reports/course-insights')
       ],
       'group'
@@ -63,8 +63,8 @@ const items: MenuItem[] = [
       null,
       [
         getItem('Certifications', 'reports/certifications'),
-        getItem('Review center', 'reports/review-center'),
-        getItem('Question bank', 'reports/questions-bank')
+        getItem('Review center', 'reports/reviews-center')
+        // getItem('Question bank', 'reports/questions-bank')
       ],
       'group'
     ),
@@ -75,7 +75,8 @@ const items: MenuItem[] = [
       [
         getItem('Orders', 'reports/orders'),
         getItem('Courses revenues', 'reports/courses-revenue'),
-        getItem('Instructors Revenues', 'reports/instructors-revenue')
+        getItem('Instructors Revenues', 'reports/instructors-revenue'),
+        getItem('Cancelled Sales', 'reports/cancelled-sales')
       ],
       'group'
     )

@@ -1,0 +1,59 @@
+.users-progress {
+
+    &__wrap {
+
+
+    }
+
+    &__row {
+       background-color: #fff;
+       margin-top: 1rem;
+       padding: 1rem;
+    }
+
+    &__col {
+
+    }
+
+    &__select-course {
+
+        &-title {
+            margin: 2rem 0rem 1rem;
+        }
+
+        &-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__select-user {
+
+        &-title {
+            margin: 2rem 0rem 1rem;
+        }
+
+        &-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__btns {
+        margin: 2rem 0rem 1rem;
+        
+        &-filter {
+
+        }
+
+        &-reset {
+
+        }
+    }
+
+    &__filter-result {
+        margin: 1rem 0rem;
+    }
+}

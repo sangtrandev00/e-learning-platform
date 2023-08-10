@@ -56,6 +56,14 @@ const authSlice = createSlice({
     },
     closeAuthModal(state) {
       state.isOpenAuthModal = false;
+    },
+    logout(state) {
+      state.userId = '';
+      state.isAuth = false;
+    },
+    adminLogout(state) {
+      state.adminId = '';
+      state.isAdminAuth = false;
     }
   }
 });
@@ -68,6 +76,8 @@ export const {
   setAdminAuthenticated,
   setAdminUnauthenticated,
   openAuthModal,
-  closeAuthModal
+  closeAuthModal,
+  logout,
+  adminLogout
 } = authSlice.actions;
 export default authReducer;

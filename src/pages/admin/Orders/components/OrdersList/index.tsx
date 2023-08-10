@@ -1,12 +1,12 @@
-import { Avatar, Skeleton, Table, Tooltip } from 'antd';
+import { Avatar, Table, Tooltip } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './OrdersList.scss';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
-import { AntDesignOutlined, DownloadOutlined, UserOutlined } from '@ant-design/icons';
-import { useGetOrdersQuery } from '../../order.service';
+import { DownloadOutlined } from '@ant-design/icons';
+import { IOrder } from '../../../../../types/order.type';
 interface DataOrderType {
   key: React.Key;
   name: JSX.Element;
@@ -72,14 +72,12 @@ const columns: ColumnsType<DataOrderType> = [
   }
 ];
 
-const onChange: TableProps<DataOrderType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
+interface OrdersListProps {
+  ordersList: IOrder[];
+}
 
-const OrdersList: React.FC = () => {
+const OrdersList: React.FC<OrdersListProps> = (props) => {
   const [open, setOpen] = useState(false);
-
-  const { data, isFetching } = useGetOrdersQuery();
 
   const showUserDetail = () => {
     console.log('click');
@@ -87,7 +85,7 @@ const OrdersList: React.FC = () => {
   };
 
   const ordersData: DataOrderType[] =
-    data?.orders.map((order) => {
+    props.ordersList.map((order) => {
       const { transaction, user, _id, totalPrice, items } = order;
 
       const orderTemplateItem = {
@@ -138,92 +136,6 @@ const OrdersList: React.FC = () => {
       return orderTemplateItem;
     }) || [];
 
-  const ordersSource = [
-    {
-      key: '1',
-      name: (
-        <a href='#' onClick={showUserDetail}>
-          <div className='user-info'>
-            <img
-              src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
-            />
-
-            <div className='user-info__content'>
-              <div className='user-info__name'>sangtrandev</div>
-              <div className='user-info__email'>sangtnps20227@fpt.edu.vn</div>
-            </div>
-          </div>
-        </a>
-      ),
-      register: '19 Jul 2023 21:43:35',
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-          <Tooltip title='Ant User' placement='top'>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-          </Tooltip>
-          <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
-        </Avatar.Group>
-      ),
-      transaction: (
-        <>
-          <div>
-            <Link to='/'>
-              Invoice <DownloadOutlined />
-            </Link>
-          </div>
-          <div>sandbox_64bccb1fc177e</div>
-        </>
-      ),
-      amount: `$16`,
-      payment: 'sandbox'
-    },
-    {
-      key: '2',
-      name: (
-        <a href='#'>
-          <div className='user-info'>
-            <img
-              alt=''
-              src='https://lwfiles.mycourse.app/64b5524f42f5698b2785b91e-public/avatars/thumbs/64b5524f42f5698b2785b91f.jpg'
-              className='user-info__avatar'
-            />
-
-            <div className='user-info__content'>
-              <div className='user-info__name'>trannhatsang</div>
-              <div className='user-info__email'>nhatsang@gmail.com</div>
-            </div>
-          </div>
-        </a>
-      ),
-      register: '19 Jul 2023 21:43:35',
-      courses: (
-        <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-          <Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=2' />
-          <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-          <Tooltip title='Ant User' placement='top'>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-          </Tooltip>
-          <Avatar style={{ backgroundColor: '#1677ff' }} icon={<AntDesignOutlined />} />
-        </Avatar.Group>
-      ),
-      transaction: (
-        <>
-          <div>
-            <Link to='/'>
-              Invoice <DownloadOutlined />
-            </Link>
-          </div>
-          <div>sandbox_64bccb1fc177e</div>
-        </>
-      ),
-      amount: `$16`,
-      payment: 'VNPAY'
-    }
-  ];
-
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -231,15 +143,20 @@ const OrdersList: React.FC = () => {
     }
   });
 
+  const onChange: TableProps<DataOrderType>['onChange'] = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+
+    setTableParams({
+      pagination
+    });
+  };
+
   return (
     <Fragment>
-      {isFetching && <Skeleton />}
-      {!isFetching && (
-        <div className='users-list'>
-          {/* {isFetching && <Skeleton />} */}
-          <Table columns={columns} dataSource={ordersData} onChange={onChange} pagination={tableParams.pagination} />
-        </div>
-      )}
+      <div className='users-list'>
+        {/* {isFetching && <Skeleton />} */}
+        <Table columns={columns} dataSource={ordersData} onChange={onChange} pagination={tableParams.pagination} />
+      </div>
     </Fragment>
   );
 };
