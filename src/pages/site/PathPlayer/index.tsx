@@ -1,10 +1,14 @@
 import { ArrowLeftOutlined, DoubleLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Col, Progress, Row, Tabs, TabsProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
-import { useGetCourseEnrolledByUserQuery } from '../client.service';
+import {
+  useCreateCertificateMutation,
+  useGetCertificateQuery,
+  useGetCourseEnrolledByUserQuery
+} from '../client.service';
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
@@ -17,33 +21,79 @@ import PlayerScreen from './components/PlayerScreen/PlayerScreen';
 const PathPlayer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const courseId = searchParams.get('courseId');
-
+  const userId = useSelector((state: RootState) => state.auth.userId);
   const { data, isFetching, refetch } = useGetCourseEnrolledByUserQuery(courseId as string);
+
+  const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
+
+  const cerficiateParams = {
+    userId,
+    courseId: courseId || ''
+  };
+
+  const { data: certificateData, isFetching: isFetchingCertificate } = useGetCertificateQuery(cerficiateParams);
 
   const progressPercent = ((data?.course.progress || 0) * 100).toFixed(2);
   const [currProgress, setCurrProgress] = useState(progressPercent);
+  const [isCreated, setIsCreated] = useState(false);
   const lessonId = useSelector((state: RootState) => state.client.lessonId);
   const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
 
-  // Handle change progress when player finish the current lesson (watching!)
-  useEffect(() => {
-    console.log('update lesson here at local state, at path player set progress ', isLessonDone);
+  const isCreateNewCertificate =
+    Number(progressPercent) === 100 && !certificateData?.certificate && isFetchingCertificate === false;
 
-    // Refetch data here
-    refetch()
-      .then((result) => {
-        console.log('refetch succuefully!', result);
-      })
-      .catch((error) => {
-        console.log('error: ', error);
-      });
-  }, [isLessonDone, refetch]);
+  console.log('is create new certificate: ', isCreateNewCertificate);
+
+  if (isCreateNewCertificate) {
+    const newCertificate = {
+      userId,
+      courseId: courseId || '',
+      completionDate: new Date().toISOString()
+    };
+
+    console.log('create new: ', newCertificate);
+    // createCertificate(newCertificate)
+    //   .unwrap()
+    //   .then((result) => {
+    //     console.log('create certificate successfully!', result);
+
+    //     setIsCreated(true);
+    //   })
+    //   .catch((error) => {
+    //     console.log('error: ', error);
+    //   });
+    // if (!isCreated) {
+
+    // }
+  }
+
+  // Handle change progress when player finish the current lesson (watching!)
+  // useEffect(() => {
+  //   console.log('update lesson here at local state, at path player set progress ', isLessonDone);
+
+  //   // Refetch data here
+  //   refetch()
+  //     .then((result) => {
+  //       console.log('refetch successfully!', result);
+  //       console.log('done: ', isLessonDone);
+  //     })
+  //     .catch((error) => {
+  //       console.log('error: ', error);
+  //     });
+  // }, [isLessonDone]);
 
   const tabItems: TabsProps['items'] = [
     {
       key: 'pathsections',
       label: `Path`,
-      children: <PathSections courseId={courseId as string} className='path-player__menu-content' />
+      children: (
+        <PathSections
+          courseId={courseId as string}
+          progressPercent={progressPercent}
+          certificate={certificateData?.certificate}
+          className='path-player__menu-content'
+        />
+      )
     },
     {
       key: 'discuss',

@@ -1,20 +1,27 @@
-import { Fragment } from 'react';
-import LessonItem from './components/LessonItem';
 import { Collapse, CollapseProps } from 'antd';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../../../../../constant/backend-domain';
+import { RootState } from '../../../../../store/store';
+import { ICertificate } from '../../../../../types/certificate';
+import { useGetSectionsByCourseIdQuery } from '../../../client.service';
 import './PathSections.scss';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useGetLessonsBySectionIdQuery, useGetSectionsByCourseIdQuery } from '../../../client.service';
 import PathPlayerLessonList from './components/LessonList';
 
 type Props = {
   className: string;
   courseId: string;
+  progressPercent: string;
+  certificate: ICertificate | undefined;
 };
 
 const PathSections = (props: Props) => {
   const { data: sectionData, isFetching } = useGetSectionsByCourseIdQuery(props.courseId);
-
-  // const {data: lessonData, isFetching: isLessonFetching} = useGetLessonsBySectionIdQuery()
+  const userId = useSelector((state: RootState) => state.auth.userId);
+  let certificateName = '';
+  if (props.certificate) {
+    certificateName = props.certificate.certificateName;
+  }
 
   const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
     const { _id, name, description, access } = sectionItem;
@@ -37,7 +44,14 @@ const PathSections = (props: Props) => {
         <h3>Certification</h3>
       </div>
     ),
-    children: <div>Got the certification here!!!</div>
+    children:
+      Number(props.progressPercent) === 100 && props.certificate ? (
+        <Link target='_blank' to={`${BACKEND_URL}/images/${certificateName}`}>
+          Got the certification here!!!
+        </Link>
+      ) : (
+        <div>Complete the videos first to get the certificate</div>
+      )
   };
 
   if (sectionItems) {

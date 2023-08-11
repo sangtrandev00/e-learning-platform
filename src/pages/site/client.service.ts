@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import jwtDecode from 'jwt-decode';
 import { BACKEND_URL } from '../../constant/backend-domain';
 import { ICategory } from '../../types/category.type';
+import { ICertificate } from '../../types/certificate';
 import { ICourse } from '../../types/course.type';
 import { ILesson, ISection } from '../../types/lesson.type';
 import { IOrder } from '../../types/order.type';
@@ -128,6 +129,22 @@ export interface IUserDetail extends IUser {
 
 export interface getUserDetailResponse {
   user: IUserDetail;
+  message: string;
+}
+
+export interface certificateRequest {
+  courseId: string;
+  userId: string;
+  completionDate: string;
+}
+
+export interface createCertificateResponse {
+  message: string;
+  certificate: ICertificate;
+}
+
+export interface getCertificateResponse {
+  certificate: ICertificate;
   message: string;
 }
 
@@ -538,6 +555,35 @@ export const clientApi = createApi({
         // }
       })
     }),
+    getCertificate: build.query<getCertificateResponse, { courseId: string; userId: string }>({
+      query: (params) => ({
+        url: `get-certificate`,
+        params: params
+      })
+    }),
+    createCertificate: build.mutation<createCertificateResponse, certificateRequest>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: `generate-certificate`,
+            method: 'POST',
+            body: body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Orders sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
+    }),
+
     getLessonsBySectionId: build.query<getLessonsResponse, { sectionId: string; userId: string }>({
       query: (payload) => ({
         url: `lessons/${payload.sectionId}/section`,
@@ -581,5 +627,7 @@ export const {
   useGetCourseDetailQuery,
   useCreateOrderMutation,
   useUpdateLessonDoneByUserMutation,
-  useGetRetrieveCartQuery
+  useGetRetrieveCartQuery,
+  useGetCertificateQuery,
+  useCreateCertificateMutation
 } = clientApi;

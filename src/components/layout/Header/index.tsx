@@ -52,7 +52,7 @@ const Header = () => {
       icon: <Avatar src={userData?.avatar} />
     },
     {
-      label: 'My Learning',
+      label: <Link to='/start'>My Learning</Link>,
       key: 'mylearning',
       icon: <UserOutlined />
     },
@@ -246,7 +246,7 @@ const Header = () => {
             {isAuth && (
               <li className='header__nav-item'>
                 <Link to='/start' className='header__nav-link'>
-                  Start
+                  My Learning
                 </Link>
               </li>
             )}
