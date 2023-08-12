@@ -2,8 +2,11 @@ import { AppstoreOutlined, EditOutlined, EllipsisOutlined, UnorderedListOutlined
 import { Button, Input, Popover, Select, Skeleton, Space, notification } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { BACKEND_URL } from '../../../constant/backend-domain';
+import { RootState } from '../../../store/store';
+import { UserRole } from '../../../types/user.type';
 import { useGetAuthorsQuery } from '../../site/client.service';
 import { useGetCategoriesQuery } from '../Categories/category.service';
 import './Courses.scss';
@@ -65,6 +68,8 @@ const SettingContent = (props: { courseId: string }) => {
 
 const Courses = () => {
   const [viewTable, setViewTable] = useState<string>('grid');
+  const adminId = useSelector((state: RootState) => state.auth.adminId);
+  const adminRole = useSelector((state: RootState) => state.auth.adminRole);
 
   const onSelectChange = (value: string) => {
     console.log(`selected ${value}`);
@@ -86,14 +91,15 @@ const Courses = () => {
 
   const [params, setParams] = useState({
     _q: '',
-    _author: '',
+    _author: adminRole === UserRole.ADMIN ? 'all' : adminId,
     _category: '',
     _page: 1,
     _limit: 8
   });
 
   const [allCoursesParams, setAllCoursesParams] = useState({
-    _q: ''
+    _q: '',
+    _author: adminRole === UserRole.ADMIN ? 'all' : adminId
   });
 
   const [courseData, setCourseData] = useState<DataCourseType[]>();
@@ -352,7 +358,7 @@ const Courses = () => {
             />
           )}
 
-          {viewTable === 'grid' && (
+          {viewTable === 'grid' && adminRole === UserRole.ADMIN && (
             <Select
               size='middle'
               placeholder='Please select Your Authors'

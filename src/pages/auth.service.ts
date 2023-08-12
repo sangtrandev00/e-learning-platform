@@ -147,4 +147,10 @@ export const authApi = createApi({
   })
 });
 
-export const { useLoginMutation, useSignupMutation, useResetPasswordMutation, useUpdateLastLoginMutation } = authApi;
+export const {
+  useLoginMutation,
+  useAdminLoginMutation,
+  useSignupMutation,
+  useResetPasswordMutation,
+  useUpdateLastLoginMutation
+} = authApi;

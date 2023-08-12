@@ -42,7 +42,11 @@ export const categoryApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers.set('authorization', `Bearer ${adminToken}`);
+      }
+
       // Set some headers here !
       return headers;
     }
@@ -134,7 +138,7 @@ export const categoryApi = createApi({
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
      */
-    addCategory: build.mutation<ICategory, Omit<ICategory, '_id'>>({
+    addCategory: build.mutation<{ category: ICategory; message: string }, Omit<ICategory, '_id'>>({
       query(body) {
         try {
           // throw Error('hehehehe')
@@ -177,7 +181,7 @@ export const categoryApi = createApi({
         };
       },
       // Trong trường hợp này thì Categories sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Categories', id: data._id }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Categories', id: 'LIST' }])
     }),
     deleteCategory: build.mutation<Record<string, never>, string>({
       query(id) {
@@ -187,7 +191,13 @@ export const categoryApi = createApi({
         };
       },
       // Trong trường hợp này thì Categorys sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Categories', id }]
+      invalidatesTags: (result, error, id) => {
+        console.log('result: ', result);
+        console.log('error: ', error);
+        console.log('id: ', id);
+
+        return [{ type: 'Categories', id: 'LIST' }];
+      }
     })
   })
 });

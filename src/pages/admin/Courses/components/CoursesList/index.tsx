@@ -1,14 +1,13 @@
-import React, { Fragment, useEffect } from 'react';
-import { Button, Skeleton, Space, Table } from 'antd';
-import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
-import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import './CoursesList.scss';
-import { useGetCategoriesQuery } from '../../../Categories/category.service';
+import { Table } from 'antd';
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../store/store';
 import { useGetAuthorsQuery } from '../../../../site/client.service';
+import { useGetCategoriesQuery } from '../../../Categories/category.service';
+import { useGetCoursesQuery } from '../../course.service';
+import './CoursesList.scss';
 
 enum Access {
   PAID = 'PAID',
@@ -44,6 +43,7 @@ interface CoursesListProps {
 }
 
 const CoursesList: React.FC<CoursesListProps> = (props) => {
+  const adminId = useSelector((state: RootState) => state.auth.adminId);
   const { data: dataList, isFetching } = useGetCoursesQuery({ _q: '' });
   const { data: categoriesData, isFetching: isCategoriesFetching } = useGetCategoriesQuery({ _q: '' });
   const { data: authorsData, isFetching: isAuthorFetching } = useGetAuthorsQuery();

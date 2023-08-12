@@ -51,7 +51,10 @@ export const courseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers.set('authorization', `Bearer ${adminToken}`);
+      }
       // Set some headers here !
       return headers;
     }
@@ -380,7 +383,7 @@ export const courseApi = createApi({
       invalidatesTags: (result, error, id) => {
         console.log(result, error, id);
 
-        return [{ type: 'Courses', id }];
+        return [{ type: 'Courses', id: 'LIST' }];
       }
     })
   })

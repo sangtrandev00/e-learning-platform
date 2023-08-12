@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { ICategory } from '../../../../../types/category.type';
+import { CategoryError } from '../../../../../utils/helpers';
 import { useAddCategoryMutation, useGetCategoryQuery, useUpdateCategoryMutation } from '../../category.service';
 
 const { Option } = Select;
@@ -82,7 +83,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
 
     if (categoryId) {
       console.log('updated cate: ', updatedCategory);
-
+      props.onClose();
       updateCategory(updatedCategory)
         .then((result) => {
           console.log('update success', result);
@@ -93,17 +94,33 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
             duration: 2
           });
         })
-        .catch((error) => {
+        .catch((error: CategoryError) => {
           console.log('error: ', error);
+
+          notification.error({
+            message: 'Update Category failed',
+            description: error.data.message
+          })
+
         });
     } else {
       addCategory(formData)
         .unwrap()
         .then((result) => {
           console.log(result);
+          props.onClose();
+          notification.success({
+            message: 'Add category successfully!',
+            description: result.message
+          });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((error: { status: number; data: { message: string; errorType: string } }) => {
+          console.log('error: ', error);
+
+          notification.error({
+            message: 'Add category failed',
+            description: error.data.message
+          });
         });
       console.log(addCategoryResult);
     }
@@ -138,11 +155,11 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
         >
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
+              <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter category name' }]}>
                 <Input
                   name='name'
                   // value={formData.name}
-                  placeholder='Please enter user name'
+                  placeholder='Please enter category name'
                   onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
                 />
               </Form.Item>

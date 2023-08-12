@@ -92,7 +92,7 @@ const Courses = () => {
   //     .catch((error) => {
   //       console.log(error);
   //     });
-  // }, [refetch]);
+  // }, [isAuth]);
 
   const navigate = useNavigate();
 

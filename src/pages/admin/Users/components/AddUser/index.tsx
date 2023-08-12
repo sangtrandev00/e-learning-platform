@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { IUser, UserRole } from '../../../../../types/user.type';
+import { UserError } from '../../../../../utils/helpers';
 import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
 
 const { Option } = Select;
@@ -17,6 +18,7 @@ const initialState: IUser = {
   name: '',
   email: '',
   phone: '',
+  password: '',
   role: UserRole.USER
 };
 
@@ -39,7 +41,8 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       email: formData.email,
       phone: formData.phone,
       role: formData.role,
-      avatar: formData.avatar
+      avatar: formData.avatar,
+      password: formData.password
     };
 
     if (userId) {
@@ -67,14 +70,26 @@ const AddUser: React.FC<AddUserProps> = (props) => {
         .then((result) => {
           console.log(result);
           props.onClose();
-
           notification.success({
             message: 'Add User',
             description: 'Add user successfully!'
           });
+          // if(result.status === 401) {
+          //   notification.error({
+          //     message: 'Add User',
+          //     description: 'Add user failed!'
+          //   });
+          // }else {
+
+          // }
         })
-        .catch((error) => {
+        .catch((error: UserError) => {
           console.log(error);
+
+          notification.error({
+            message: 'Add User failed',
+            description: error.data.message
+          });
         });
     }
   };
@@ -134,6 +149,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                     <Select placeholder='Please select a role'>
                       <Option value='ADMIN'>ADMIN</Option>
                       <Option value='USER'>USER</Option>
+                      <Option value='TEACHER'>TEACHER</Option>
                       <Option value='INSTRUCTOR'>INSTRUCTOR</Option>
                     </Select>
                   </Form.Item>
@@ -166,6 +182,14 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                       <Option value='private'>Private</Option>
                       <Option value='public'>Public</Option>
                     </Select>
+                  </Form.Item>
+
+                  <Form.Item
+                    name='password'
+                    label='Password'
+                    rules={[{ required: true, message: 'Please enter the password' }]}
+                  >
+                    <Input.Password type='password' placeholder='password' />
                   </Form.Item>
                 </Col>
               </Row>

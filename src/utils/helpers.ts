@@ -1,4 +1,4 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 /**
  * Kiểu ErrorFormObject dành cho trường hợp bao quát
@@ -29,24 +29,20 @@ interface EntityError {
  * Thu hẹp một error có kiểu không xác định về `FetchBaseQueryError`
  */
 
-export function isFetchBaseQueryError(
-  error: unknown
-): error is FetchBaseQueryError {
-  return typeof error === "object" && error !== null && "status" in error;
+export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
+  return typeof error === 'object' && error !== null && 'status' in error;
 }
 
 /**
  * Thu hẹp một error có kiểu không xác định về một object với thuộc tính message: string (SerializedError)
  */
 
-export function isErrorWithMessage(
-  error: unknown
-): error is { message: string } {
+export function isErrorWithMessage(error: unknown): error is { message: string } {
   return (
-    typeof error === "object" &&
+    typeof error === 'object' &&
     error !== null &&
-    "message" in error &&
-    typeof (error as any).message === "string"
+    'message' in error &&
+    typeof (error as { message: string }).message === 'string'
   );
 }
 
@@ -58,7 +54,7 @@ export function isEntityError(error: unknown): error is EntityError {
   return (
     isFetchBaseQueryError(error) &&
     error.status === 422 &&
-    typeof error.data === "object" &&
+    typeof error.data === 'object' &&
     error.data !== null &&
     !(error.data instanceof Array)
   );
@@ -67,6 +63,40 @@ export function isEntityError(error: unknown): error is EntityError {
 export class CustomError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "CustomError";
+    this.name = 'CustomError';
   }
+}
+
+export interface CategoryError {
+  status: number;
+  data: {
+    message: string;
+    errorType: string;
+  };
+}
+
+export interface UserError {
+  status: number;
+  data: {
+    message: string;
+    errorType: string;
+  };
+}
+
+export interface CourseError {
+  status: number;
+  data: {
+    message: string;
+    errorType: string;
+  };
+}
+
+export interface adminLoginError {
+  error: {
+    data: {
+      message: string;
+      errorType: string;
+    };
+    status: number;
+  };
 }

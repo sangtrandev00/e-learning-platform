@@ -226,6 +226,7 @@ const Header = () => {
   return (
     <div className='header'>
       <div className='header__wrapper'>
+        {/* <Spin size='large' /> */}
         <Link to='/' className='header__logo'>
           <img
             src='https://cdn.mycourse.app/images/site-templates/79ae2363c5798f1d6e79d14f2c7c3730.png'

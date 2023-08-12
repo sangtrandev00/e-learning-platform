@@ -42,3 +42,17 @@ export function getHeaders() {
     };
   }
 }
+
+export function getHeadersAdmin() {
+  const adminToken = localStorage.getItem('adminToken');
+  if (adminToken) {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    };
+  } else {
+    return {
+      'Content-Type': 'application/json'
+    };
+  }
+}

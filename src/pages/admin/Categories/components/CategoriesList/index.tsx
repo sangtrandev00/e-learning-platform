@@ -1,17 +1,16 @@
-import React, { Fragment, useEffect } from 'react';
-import { Button, Popover, Skeleton, Space, Table } from 'antd';
-import type { ColumnsType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
+import { Button, Popover, Space, Table, notification } from 'antd';
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
+import React, { useState } from 'react';
 import './CategoriesList.scss';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { ICategory } from '../../../../../types/category.type';
-import type { MenuProps } from 'antd';
-import { useDispatch } from 'react-redux';
-import { startEditCategory } from '../../category.slice';
 import Link from 'antd/es/typography/Link';
+import { useDispatch } from 'react-redux';
+import { ICategory } from '../../../../../types/category.type';
+import { CategoryError } from '../../../../../utils/helpers';
 import { useDeleteCategoryMutation } from '../../category.service';
+import { startEditCategory } from '../../category.slice';
 interface DataCategoryType {
   key: React.Key;
   name: any;
@@ -43,9 +42,19 @@ const SettingContent = (cateId: string) => {
       .unwrap()
       .then((result) => {
         console.log(result);
+
+        notification.success({
+          message: 'Delete cate successfully',
+          description: result.message
+        });
       })
-      .catch((error) => {
+      .catch((error: CategoryError) => {
         console.log('error: ', error);
+
+        notification.error({
+          message: 'Delete cate failed',
+          description: error.data.message
+        });
       });
   };
 

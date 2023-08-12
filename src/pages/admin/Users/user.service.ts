@@ -43,7 +43,10 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers.set('authorization', `Bearer ${adminToken}`);
+      }
       // Set some headers here !
       return headers;
     }
@@ -107,6 +110,8 @@ export const userApi = createApi({
             body
           };
         } catch (error: any) {
+          console.log('error: ', error);
+
           throw new CustomError((error as CustomError).message);
         }
       },

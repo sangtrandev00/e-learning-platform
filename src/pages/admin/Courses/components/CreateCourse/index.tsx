@@ -1,14 +1,13 @@
-import { Button, Col, Modal, Row, Space } from 'antd';
+import { Button, Col, Modal, Row, Space, notification } from 'antd';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
-import { useEffect, useState } from 'react';
-import { openCreateCourse } from '../../course.slice';
-import { ReadOutlined } from '@ant-design/icons';
-import CreateRightSide from './components/CreateRightSide';
-import './CreateCourse.scss';
-import { AccessStatus, ICourse, CourseLevel } from '../../../../../types/course.type';
-import CreateLeftSide from './components/CreateLeftSide';
+import { AccessStatus, CourseLevel, ICourse } from '../../../../../types/course.type';
 import { useAddCourseMutation } from '../../course.service';
+import { openCreateCourse } from '../../course.slice';
+import './CreateCourse.scss';
+import CreateLeftSide from './components/CreateLeftSide';
+import CreateRightSide from './components/CreateRightSide';
 
 const initStateCourse: ICourse = {
   _id: '',
@@ -46,7 +45,7 @@ const CreateCourse = () => {
   const [open, setOpen] = useState(false);
   const formData = useSelector((state: RootState) => state.course.formData);
   const [addCourse, addCourseResult] = useAddCourseMutation();
-
+  const adminId = useSelector((state: RootState) => state.auth.adminId);
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
@@ -60,13 +59,32 @@ const CreateCourse = () => {
   };
 
   const handleFinished = () => {
-    addCourse(formData)
+    const newCourse = {
+      ...formData,
+      userId: {
+        _id: adminId,
+        name: 'DEV',
+        avatar: ''
+      }
+    };
+
+    addCourse(newCourse)
       .unwrap()
       .then((result) => {
         console.log(result);
+
+        notification.success({
+          message: 'Add Course',
+          description: 'Add course successfully!'
+        });
       })
       .catch((error) => {
         console.log(error);
+
+        notification.error({
+          message: 'Add Course',
+          description: 'Add course failed!'
+        });
       });
   };
 

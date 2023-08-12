@@ -1,17 +1,19 @@
 import jwtDecode from 'jwt-decode';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './assets/sass/_base.scss';
 import './assets/sass/_reset.scss';
 import './assets/sass/reset.css';
 import InstructorsRevenues from './components/AdminLayout/Header/components/InstructorsRevenues';
 import RootAdminLayout from './components/AdminLayout/RootLayout';
+import BigSpinner from './components/BigSpinner';
 import RootLayout from './components/layout/RootLayout';
+import ErrorPage from './pages/Error/404Error';
 import AdminAuth from './pages/admin/Auth';
 import Categories from './pages/admin/Categories';
-import AdminCourseDetail from './pages/admin/Courses/components/CourseDetail';
 import CoursesList from './pages/admin/Courses/Courses';
+import AdminCourseDetail from './pages/admin/Courses/components/CourseDetail';
 import Dashboard from './pages/admin/Dashboard';
 import Orders from './pages/admin/Orders';
 import ReportsCenter from './pages/admin/Reports';
@@ -34,7 +36,6 @@ import {
   setAuthenticated,
   setUnauthenticated
 } from './pages/auth.slice';
-import ErrorPage from './pages/Error/404Error';
 import AuthorProfile from './pages/site/AuthorProfile';
 import Checkout from './pages/site/Checkout';
 import CourseDetail from './pages/site/CourseDetail';
@@ -46,193 +47,14 @@ import Profile from './pages/site/Profile';
 import StartLearning from './pages/site/StartLearning';
 import SubsribeCourse from './pages/site/SubscribeCourse';
 import ViewCart from './pages/site/ViewCart';
+import { RootState } from './store/store';
+import { UserRole } from './types/user.type';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: '/courses',
-        children: [
-          {
-            index: true,
-            element: <SiteCourses />
-          },
-          {
-            path: ':courseId',
-            element: <CourseDetail />
-          }
-        ]
-      },
-      {
-        path: 'start',
-        element: <StartLearning />
-      },
-      {
-        path: 'profile',
-        element: <Profile />
-      },
-      {
-        path: 'view-cart',
-        element: <ViewCart />
-      },
-      {
-        path: 'checkout',
-        element: <Checkout />
-      },
-      {
-        path: 'order-completed',
-        element: <OrderCompleted />
-      },
-      {
-        path: 'contact',
-        element: <div>Contact Page</div>
-      },
-      {
-        path: 'about-us',
-        element: <div>About Us Page</div>
-      },
-      {
-        path: 'user',
-        children: [
-          {
-            path: ':userId',
-            element: <AuthorProfile />
-          }
-        ]
-      }
-    ],
-    errorElement: <ErrorPage page='/author' />
-  },
-  {
-    path: '/author',
-    element: <RootAdminLayout />,
-    children: [
-      {
-        path: 'dashboard',
-        element: <Dashboard />
-      },
-      {
-        path: 'courses',
+// function ProtectedRoute({ path, element }) {
+//   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-        children: [
-          {
-            index: true,
-            element: <CoursesList />
-          },
-          {
-            id: 'course-detail',
-            path: ':courseId',
-            element: <AdminCourseDetail />
-          }
-        ]
-      },
-      {
-        path: 'users',
-        children: [
-          {
-            index: true,
-            element: <Users />
-          }
-        ]
-      },
-      {
-        path: 'orders',
-        children: [
-          {
-            index: true,
-            element: <Orders />
-          }
-        ]
-      },
-      {
-        path: 'categories',
-        children: [
-          {
-            index: true,
-            element: <Categories />
-          }
-        ]
-      },
-      {
-        path: 'reports',
-        children: [
-          {
-            index: true,
-            element: <ReportsCenter />
-          },
-          {
-            path: 'users-progress',
-            element: <UsersProgress />
-          },
-          {
-            path: 'users-segment',
-            element: <UsersSegment />
-          },
-          {
-            path: 'course-insights',
-            element: <CourseInsights />
-          },
-          {
-            path: 'courses-revenue',
-            element: <CoursesRevenue />
-          },
-          {
-            path: 'instructors-revenue',
-            element: <InstructorsRevene />
-          },
-          {
-            path: 'cancelled-sales',
-            element: <CancelledSales />
-          },
-          {
-            path: 'courses-revenues',
-            element: <CoursesRevenues />
-          },
-          {
-            path: 'instructors-revenues',
-            element: <InstructorsRevenues />
-          },
-          {
-            path: 'certifications',
-            element: <Certifications />
-          },
-          {
-            path: 'reviews-center',
-            element: <ReviewsCenter />
-          }
-        ]
-      },
-      {
-        path: 'settings',
-        element: <Settings />
-      }
-    ],
-    errorElement: <div>Admin Error</div>
-  },
-  {
-    path: 'path-player',
-    element: <PathPlayer />
-  },
-  {
-    path: 'author-login',
-    element: <AdminAuth />
-  },
-  {
-    path: 'cart/subscribe/course/',
-    children: [
-      {
-        path: ':courseId',
-        element: <SubsribeCourse />
-      }
-    ]
-  }
-]);
+//   return <Route path={path} element={isAuth ? element : <Navigate to="/author-login" />} />;
+// }
 
 function App() {
   if (!localStorage.getItem('cart')) {
@@ -285,7 +107,206 @@ function App() {
     }
   }, [dispatch]);
 
-  return <RouterProvider router={router} />;
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const isAdminAuth = useSelector((state: RootState) => state.auth.isAdminAuth);
+  const adminRole = useSelector((state: RootState) => state.auth.adminRole);
+
+  useEffect(() => {
+    console.log('change ', isAdminAuth);
+    console.log('role ', adminRole);
+  }, [isAdminAuth, adminRole]);
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />
+        },
+        {
+          path: '/courses',
+          children: [
+            {
+              index: true,
+              element: <SiteCourses />
+            },
+            {
+              path: ':courseId',
+              element: <CourseDetail />
+            }
+          ]
+        },
+        {
+          path: 'start',
+          element: isAuth ? <StartLearning /> : <ErrorPage page='/' />
+        },
+        {
+          path: 'profile',
+          element: isAuth ? <Profile /> : <ErrorPage page='/' />
+        },
+        {
+          path: 'view-cart',
+          element: <ViewCart />
+        },
+        {
+          path: 'checkout',
+          element: isAuth ? <Checkout /> : <ErrorPage page='/' />
+        },
+        {
+          path: 'order-completed',
+          element: isAuth ? <OrderCompleted /> : <ErrorPage page='/' />
+        },
+        {
+          path: 'contact',
+          element: <div>Contact Page</div>
+        },
+        {
+          path: 'about-us',
+          element: <div>About Us Page</div>
+        },
+        {
+          path: 'user',
+          children: [
+            {
+              path: ':userId',
+              element: <AuthorProfile />
+            }
+          ]
+        }
+      ],
+      errorElement: <ErrorPage page='/author' />
+    },
+    {
+      path: '/author',
+      element: isAdminAuth ? <RootAdminLayout /> : <ErrorPage page='/author-login' />,
+      children: [
+        {
+          path: 'dashboard',
+          element: <Dashboard />
+        },
+        {
+          path: 'courses',
+
+          children: [
+            {
+              index: true,
+              element: <CoursesList />
+            },
+            {
+              id: 'course-detail',
+              path: ':courseId',
+              element: <AdminCourseDetail />
+            }
+          ]
+        },
+        {
+          path: 'users',
+          children: [
+            {
+              index: true,
+              element: adminRole === UserRole.ADMIN ? <Users /> : <Navigate to='/error' />
+            }
+          ]
+        },
+        {
+          path: 'orders',
+          children: [
+            {
+              index: true,
+              element: adminRole === UserRole.ADMIN ? <Orders /> : <Navigate to='/error' />
+            }
+          ]
+        },
+        {
+          path: 'categories',
+          children: [
+            {
+              index: true,
+              element: <Categories />
+            }
+          ]
+        },
+        {
+          path: 'reports',
+          children:
+            adminRole === UserRole.ADMIN
+              ? [
+                  {
+                    index: true,
+                    element: <ReportsCenter />
+                  },
+                  {
+                    path: 'users-progress',
+                    element: <UsersProgress />
+                  },
+                  {
+                    path: 'users-segment',
+                    element: <UsersSegment />
+                  },
+                  {
+                    path: 'course-insights',
+                    element: <CourseInsights />
+                  },
+                  {
+                    path: 'courses-revenue',
+                    element: <CoursesRevenue />
+                  },
+                  {
+                    path: 'instructors-revenue',
+                    element: <InstructorsRevene />
+                  },
+                  {
+                    path: 'cancelled-sales',
+                    element: <CancelledSales />
+                  },
+                  {
+                    path: 'courses-revenues',
+                    element: <CoursesRevenues />
+                  },
+                  {
+                    path: 'instructors-revenues',
+                    element: <InstructorsRevenues />
+                  },
+                  {
+                    path: 'certifications',
+                    element: <Certifications />
+                  },
+                  {
+                    path: 'reviews-center',
+                    element: <ReviewsCenter />
+                  }
+                ]
+              : []
+        },
+        {
+          path: 'settings',
+          element: <Settings />
+        }
+      ],
+      errorElement: <div>Admin Error</div>
+    },
+    {
+      path: 'path-player',
+      element: isAuth ? <PathPlayer /> : <ErrorPage page='/' />
+    },
+    {
+      path: 'author-login',
+      element: <AdminAuth />
+    },
+    {
+      path: 'cart/subscribe/course/',
+      children: [
+        {
+          path: ':courseId',
+          element: isAuth ? <SubsribeCourse /> : <ErrorPage page='/' />
+        }
+      ]
+    }
+  ]);
+
+  return <RouterProvider router={router} fallbackElement={<BigSpinner />} />;
 }
 
 export default App;

@@ -3,12 +3,14 @@ import jwtDecode from 'jwt-decode';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../../../auth.service';
+import { UserRole } from '../../../../types/user.type';
+import { adminLoginError } from '../../../../utils/helpers';
+import { useAdminLoginMutation } from '../../../auth.service';
 import { setAdminAuthenticated } from '../../../auth.slice';
 
 const AdminLogin: React.FC = () => {
   const [form] = Form.useForm();
-  const [login, loginResult] = useLoginMutation();
+  const [adminLogin, adminLoginResult] = useAdminLoginMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onFinish = (formValues: { email: string; password: string }) => {
@@ -19,7 +21,7 @@ const AdminLogin: React.FC = () => {
       password: formValues.password
     };
 
-    login(adminCredentials)
+    adminLogin(adminCredentials)
       .then((result) => {
         console.log(result);
 
@@ -27,9 +29,8 @@ const AdminLogin: React.FC = () => {
           console.log(result.data);
 
           const loginResponse: { token: string; message: string; userId: string } = result.data;
-          const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(
-            loginResponse.token
-          );
+          const decodedToken: { exp: number; iat: number; userId: string; email: string; adminRole: UserRole } =
+            jwtDecode(loginResponse.token);
 
           localStorage.setItem('adminToken', loginResponse.token);
           const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds
@@ -42,9 +43,7 @@ const AdminLogin: React.FC = () => {
             form.resetFields();
             notification.success({ type: 'success', message: loginResponse.message, duration: 2 });
 
-            setTimeout(() => {
-              navigate('/author/dashboard');
-            }, 2000);
+            navigate('/author/dashboard');
           } else {
             // Token has expired, handle accordingly (e.g., prompt user to log in again)
             console.log('Token has expired. Please log in again.');
@@ -52,17 +51,27 @@ const AdminLogin: React.FC = () => {
         }
 
         // Handling error failed login here
-        // if ('error' in result) {
-        //   if ('status' in result.error) {
-        //     console.log('show notification!');
-        //   }
-        // }
+        if ('error' in result) {
+          if ('status' in result.error) {
+            console.log('show notification!');
+
+            notification.error({
+              message: 'Login failed',
+              description: (result as adminLoginError).error.data.message
+            });
+          }
+        }
         // if (result.error.status === 500) {
         //   console.log('show notification!');
         // }
       })
-      .catch((error) => {
+      .catch((error: adminLoginError) => {
         console.log(error);
+
+        notification.error({
+          message: 'Login failed',
+          description: error.error.data.message
+        });
       });
   };
 

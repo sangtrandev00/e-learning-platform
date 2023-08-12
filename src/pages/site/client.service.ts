@@ -537,7 +537,36 @@ export const clientApi = createApi({
         // headers: {
         //   hello: 'Im Sang'
         // }
-      })
+      }),
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Orders chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
+              { type: 'Clients' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
     }),
     getCourseDetail: build.query<getCourseDetailResponse, string>({
       query: (id) => ({

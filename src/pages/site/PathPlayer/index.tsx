@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, DoubleLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Col, Progress, Row, Tabs, TabsProps } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
@@ -39,48 +39,58 @@ const PathPlayer = () => {
   const lessonId = useSelector((state: RootState) => state.client.lessonId);
   const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
 
+  console.log('certificate data: ', certificateData);
+
   const isCreateNewCertificate =
     Number(progressPercent) === 100 && !certificateData?.certificate && isFetchingCertificate === false;
 
   console.log('is create new certificate: ', isCreateNewCertificate);
 
-  if (isCreateNewCertificate) {
-    const newCertificate = {
-      userId,
-      courseId: courseId || '',
-      completionDate: new Date().toISOString()
-    };
+  useEffect(() => {
+    if (isCreateNewCertificate && !isCreated) {
+      const newCertificate = {
+        userId,
+        courseId: courseId || '',
+        completionDate: new Date().toISOString()
+      };
 
-    console.log('create new: ', newCertificate);
-    // createCertificate(newCertificate)
-    //   .unwrap()
-    //   .then((result) => {
-    //     console.log('create certificate successfully!', result);
+      console.log('create new: ', newCertificate);
+      console.log('result: ', createCertificateResult);
+      createCertificate(newCertificate)
+        .unwrap()
+        .then((result) => {
+          console.log('create certificate successfully!', result);
 
-    //     setIsCreated(true);
-    //   })
-    //   .catch((error) => {
-    //     console.log('error: ', error);
-    //   });
-    // if (!isCreated) {
+          setIsCreated(true);
 
-    // }
-  }
+          refetch()
+            .then((result) => {
+              console.log('result: ', result);
+            })
+            .catch((error) => {
+              console.log('eror: ', error);
+            });
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    }
+  }, [isCreateNewCertificate, isCreated]);
 
   // Handle change progress when player finish the current lesson (watching!)
-  // useEffect(() => {
-  //   console.log('update lesson here at local state, at path player set progress ', isLessonDone);
+  useEffect(() => {
+    console.log('update lesson here at local state, at path player set progress ', isLessonDone);
 
-  //   // Refetch data here
-  //   refetch()
-  //     .then((result) => {
-  //       console.log('refetch successfully!', result);
-  //       console.log('done: ', isLessonDone);
-  //     })
-  //     .catch((error) => {
-  //       console.log('error: ', error);
-  //     });
-  // }, [isLessonDone]);
+    // Refetch data here
+    refetch()
+      .then((result) => {
+        console.log('refetch successfully!', result);
+        console.log('done: ', isLessonDone);
+      })
+      .catch((error) => {
+        console.log('error: ', error);
+      });
+  }, [isLessonDone, refetch]);
 
   const tabItems: TabsProps['items'] = [
     {
