@@ -1,16 +1,17 @@
 import { Skeleton, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
+import { formatVideoLengthToHours } from '../../../../../../../utils/functions';
 import { useGetReportsCourseInsightsQuery } from '../../../../../report.service';
 
 interface DataType {
   key: string;
   name: string;
   learners: number;
-  avgStudyTime: number;
+  avgStudyTime: string;
   views: number;
   socialInteractions: number;
-  totalVideosLength: number;
+  totalVideosLength: string;
   lessons: number;
 }
 
@@ -68,10 +69,10 @@ const AllCourses = () => {
       key: report._id,
       name: report.name,
       learners: report.learners,
-      avgStudyTime: report.avgStudyTime,
+      avgStudyTime: formatVideoLengthToHours(+report.avgStudyTime),
       views: report.views,
       socialInteractions: report.socialInteractions,
-      totalVideosLength: report.totalVideosLength,
+      totalVideosLength: formatVideoLengthToHours(+report.totalVideosLength),
       lessons: report.lessons
     };
     return reportTemplateItem;

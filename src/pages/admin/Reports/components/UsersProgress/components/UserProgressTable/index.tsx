@@ -1,5 +1,6 @@
 import { Skeleton, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { formatVideoLengthToHours } from '../../../../../../../utils/functions';
 import { useGetReportsUserProgressQuery } from '../../../../../report.service';
 
 interface DataType {
@@ -95,7 +96,7 @@ const UsersProgressTable = () => {
       registered: report.registered,
       lastLogin: report.lastLogin,
       lastEnrollment: report.lastEnrollment,
-      studyTime: report.studyTime,
+      studyTime: formatVideoLengthToHours(+report.studyTime),
       totalTimeOnPlatform: report.totalTimeOnPlatform,
       allCourses: report.allCourses,
       completedCourses: report.completedCourses,
