@@ -1,9 +1,9 @@
-import { BellOutlined, HeartOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, HeartOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Avatar, Badge, Dropdown, Input, Modal, Space } from 'antd';
+import { Avatar, Badge, Drawer, Dropdown, Input, Modal, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { closeAuthModal, openAuthModal, setUnauthenticated } from '../../../pages/auth.slice';
 import Login from '../../../pages/site/Auth/Login';
 import Signup from '../../../pages/site/Auth/Signup';
@@ -19,7 +19,8 @@ const { Search } = Input;
 
 const Header = () => {
   // State here
-
+  const [showCategoriesNav, setShowCategoriesNav] = useState(true);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
   // const [isModalOpen, setIsModalOpen] = useState(false);
   const isOpenAuthModal = useSelector((state: RootState) => state.auth.isOpenAuthModal);
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
@@ -31,6 +32,7 @@ const Header = () => {
     skip: !userId
   });
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPath = location.pathname;
 
@@ -221,12 +223,40 @@ const Header = () => {
     console.log(value);
     dispatch(setSearchQuery(value));
     setSearchParams({ _q: value });
+    navigate(`courses?_q=${value}`);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowCategoriesNav(false);
+      } else {
+        setShowCategoriesNav(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+
+      console.log('hide unmount');
+    };
+  }, []);
+
+  const onCloseMobileMenu = () => {
+    setOpenMobileMenu(false);
+  };
+
+  const showMobileMenuHandler = () => {
+    setOpenMobileMenu(true);
   };
 
   return (
     <div className='header'>
       <div className='header__wrapper'>
         {/* <Spin size='large' /> */}
+        <MenuOutlined onClick={showMobileMenuHandler} className='header__menu-mobile font-bold lg:hidden' />
         <Link to='/' className='header__logo'>
           <img
             src='https://cdn.mycourse.app/images/site-templates/79ae2363c5798f1d6e79d14f2c7c3730.png'
@@ -256,7 +286,7 @@ const Header = () => {
                 Home
               </Link>
             </li>
-            <li className='header__nav-item'>
+            <li className='header__nav-item '>
               <Link to='/courses' className='header__nav-link'>
                 Courses
               </Link>
@@ -272,13 +302,13 @@ const Header = () => {
               </Link>
             </li>
 
-            <li className='header__nav-item'>
+            {/* <li className='header__nav-item header__nav-item--cart'>
               <Link className='header__nav-link' to='/view-cart'>
                 <Badge count={cart?.items?.length || 0}>
                   <ShoppingCartOutlined className='header__nav-link-icon' />
                 </Badge>
               </Link>
-            </li>
+            </li> */}
             {isAuth && (
               <li className='header__nav-item'>
                 <Dropdown menu={menuWishlistProps} placement='bottomRight'>
@@ -308,18 +338,25 @@ const Header = () => {
                 </Dropdown>
               </li>
             )}
-
-            {isAuth && (
-              <li className='header__nav-item'>
-                <Dropdown menu={menuUserProps} placement='bottomRight'>
-                  <Badge dot={true}>
-                    <Avatar className='header__nav-item-user-icon' src={userData?.avatar} />
-                    {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
-                  </Badge>
-                </Dropdown>
-              </li>
-            )}
           </ul>
+          {isAuth && (
+            <div className='header__nav-item header__nav-item--user'>
+              <Dropdown menu={menuUserProps} placement='bottomRight'>
+                <Badge dot={true}>
+                  <Avatar className='header__nav-item-user-icon' src={userData?.avatar} />
+                  {/* <UserOutlined className='header__nav-item-user-icon' style={{ cursor: 'pointer' }} /> */}
+                </Badge>
+              </Dropdown>
+            </div>
+          )}
+
+          <div className='header__nav-item header__nav-item--cart'>
+            <Link className='header__nav-link' to='/view-cart'>
+              <Badge count={cart?.items?.length || 0}>
+                <ShoppingCartOutlined className='header__nav-link-icon' />
+              </Badge>
+            </Link>
+          </div>
           <div className='header__auth'>
             {!isAuth && (
               <Space>
@@ -334,11 +371,27 @@ const Header = () => {
           </div>
         </div>
       </div>
-      {currentPath === '/' && <CategoriesNav />}
+      {currentPath === '/' && showCategoriesNav && <CategoriesNav />}
       <Modal title='' open={isOpenAuthModal} onOk={handleOk} onCancel={handleCancel}>
         {authState === 'login' && <Login onClick={changeAuthState} />}
         {authState === 'signup' && <Signup onClick={changeAuthState} />}
       </Modal>
+
+      <Drawer
+        title='Mobile menu'
+        placement={'left'}
+        width={300}
+        onClose={onCloseMobileMenu}
+        open={openMobileMenu}
+        extra={
+          <Space>
+            <Button onClick={onCloseMobileMenu}>Cancel</Button>
+            <Button onClick={onCloseMobileMenu}>OK</Button>
+          </Space>
+        }
+      >
+        <div>Content in here</div>
+      </Drawer>
     </div>
   );
 };

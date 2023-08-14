@@ -378,16 +378,20 @@ const Courses = () => {
                   <Radio.Group>
                     <Space direction='vertical'>
                       <Radio value={1}>
-                        <Rate allowHalf defaultValue={2.5} />
+                        <Rate allowHalf defaultValue={4.5} />
+                        <span className='ml-2 font-normal'> 4.5 & up</span>
                       </Radio>
                       <Radio value={2}>
-                        <Rate allowHalf defaultValue={2.5} />
+                        <Rate allowHalf defaultValue={4.0} />
+                        <span className='ml-2 font-normal'> 4.0 & up</span>
                       </Radio>
                       <Radio value={3}>
-                        <Rate allowHalf defaultValue={2.5} />
+                        <Rate allowHalf defaultValue={3.5} />
+                        <span className='ml-2 font-normal'> 3.5 & up</span>
                       </Radio>
                       <Radio value={4}>
-                        <Rate allowHalf defaultValue={2.5} />
+                        <Rate allowHalf defaultValue={3} />
+                        <span className='ml-2 font-normal'> 3 & up</span>
                       </Radio>
                       {/* <Radio value={4}>
                         More...

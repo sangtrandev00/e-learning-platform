@@ -47,6 +47,22 @@ $main-text--sm: 1.5rem;
 
 // Fixed size/width/height
 
+
+// Break points
+$breakpoint: (
+    mobile-sm: 376px,
+    mobile: 576px,
+    tablet: 768px,
+    tablet-lg: 1024px,
+    desktop: 1280px,
+    desktop-md: 1536px,
+    desktop-lg: 1920px
+);
+
+// $breakpoint-tablet: 768px; // Tablet breakpoint
+// $breakpoint-mobile: 376px; // iPhone 6 breakpoint
+
+
 $header-height: 8rem;
 
 @mixin main-text {
@@ -126,20 +142,33 @@ html {
 
 .spacing-h {
     &-sm {
-        padding: $section-size--sm 0;   
+        padding-top: $section-size--sm;
+        padding-bottom: $section-size--sm;   
     }
 
     &-md {
-        padding: $section-size--md 0;
+        padding-top: $section-size--md;
+        padding-bottom: $section-size--md;
     }
 
     &-lg {
-        padding: $section-size--lg 0;
+        padding-top: $section-size--lg;
+        padding-bottom: $section-size--lg;
     }
 
     &-xl {
-        padding: $section-size--xl 0;
+        padding-top: $section-size--xl;
+        padding-bottom: $section-size--xl;
     }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        
+    }
+
 
 }
 
@@ -159,3 +188,29 @@ html {
 .w-half {
     width: 50%;
 }
+
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+
+.d-none {
+    display: none;
+}
+
+.ant-btn.ant-input-search-button {
+    background-color: $brand-primary-color;
+}
+
+.ant-btn.ant-btn-primary{
+    background-color: $brand-primary-color;
+}
+
+.ant-btn-icon {
+    color: $light-text-color;
+}
+

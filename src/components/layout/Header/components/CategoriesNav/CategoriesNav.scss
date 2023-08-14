@@ -1,0 +1,17 @@
+@import "../../../../../assets/sass/base";
+
+.header__categories {
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        &-wrap {
+            padding: 0rem 2rem;  
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        display: none;
+        
+    }
+
+    
+}

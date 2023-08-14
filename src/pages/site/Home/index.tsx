@@ -7,51 +7,193 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import { Col, Row, Skeleton, Space } from 'antd';
-import { Fragment } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Fragment, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { RootState } from '../../../store/store';
 import { IParams } from '../../../types/params.type';
+import { openAuthModal } from '../../auth.slice';
 import { useGetCoursesQuery, useGetPopularCoursesQuery } from '../client.service';
 import CourseList from '../components/CourseList';
 import './Home.scss';
 
 const HomePage = () => {
+  const [courseLimit, setCourseLimit] = useState(4);
+
+  console.log('course limit: ', courseLimit);
+  console.log('window scrreen', window.innerWidth);
+  // Update screenSize when the window is resized
+
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const currentPath = location.pathname;
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const userId = useSelector((state: RootState) => state.auth.userId);
 
   const params: IParams = {
     _limit: 4,
     _page: 1
   };
 
-  const { data, isFetching } = useGetCoursesQuery(params);
+  const [popularParams, setPopularParams] = useState(params);
 
-  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(params);
+  const [userCoursesParams, setUserCoursesParams] = useState({
+    _limit: 4,
+    _page: 1,
+    userId: userId
+  });
 
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const [frontendParams, setFrontendParams] = useState({
+    _limit: 4,
+    _page: 1,
+    _topic: ['64b363573bbbb6317297378d'], // frontend,
+    userId: userId
+  });
+  const [backendParams, setBackendParams] = useState({
+    _limit: 4,
+    _page: 1,
+    _topic: ['646781266859a50acfca8e93'], // backend,
+    userId: userId
+  });
+  const [devopsParams, setDevopsParams] = useState({
+    _limit: 4,
+    _page: 1,
+    _topic: ['64b363b13bbbb6317297378f'], // devops,
+    userId: userId
+  });
 
-  console.log(data);
+  const { data: userCoursesData, isFetching } = useGetCoursesQuery(userCoursesParams);
+  const { data: frontendData, isFetching: isFrontendFetching } = useGetCoursesQuery(frontendParams);
+  const { data: backendData, isFetching: isBackendFetching } = useGetCoursesQuery(backendParams);
+  const { data: devopsData, isFetching: isDevopsFetching } = useGetCoursesQuery(devopsParams);
+  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(popularParams);
+
+  const isPopularLoadMore =
+    (popularCoursesData?.pagination._totalRows || 0) > (popularCoursesData?.courses.length || 0);
+
+  const isUserCoursesLoadMore = (userCoursesData?.pagination._totalRows || 0) > (userCoursesData?.courses.length || 0);
+  const isFrontendLoadMore = (frontendData?.pagination._totalRows || 0) > (frontendData?.courses.length || 0);
+  const isBackendLoadMore = (backendData?.pagination._totalRows || 0) > (backendData?.courses.length || 0);
+  const isDevopsLoadMore = (devopsData?.pagination._totalRows || 0) > (devopsData?.courses.length || 0);
+
+  console.log(userCoursesData);
+  // users courses
+  const usersCourses = userCoursesData?.courses;
 
   // const popularCourses = data?.courses
   const popularCourses = popularCoursesData?.courses;
-  console.log(popularCourses);
+
+  // const totalPopularCourses = popularCoursesData?.pagination;
 
   // Frontend courses
 
-  const frontendCourses = data?.courses.filter((course) => course.categoryId.name === 'frontend');
+  const frontendCourses = frontendData?.courses;
 
   // Backend courses
-  const backendCourses = data?.courses.filter((course) => course.categoryId.name === 'backend');
+  const backendCourses = backendData?.courses;
 
   // Devops courses
-  const devopsCourses = data?.courses.filter((course) => course.categoryId.name === 'devops');
+  const devopsCourses = devopsData?.courses;
+
+  const startNowHandler = () => {
+    console.log('start now');
+
+    if (isAuth) {
+      navigate('/start');
+    } else {
+      dispatch(openAuthModal());
+    }
+  };
+
+  const popularLoadMoreHandler = () => {
+    console.log('load more popular');
+
+    setPopularParams({
+      ...popularParams,
+      _limit: (popularParams._limit || 0) + 4
+    });
+  };
+
+  const usersCoursesLoadMoreHandler = () => {
+    console.log('load more');
+
+    setUserCoursesParams({
+      ...userCoursesParams,
+      _limit: (userCoursesParams._limit || 0) + 4
+    });
+  };
+
+  const frontendLoadMoreHandler = () => {
+    console.log('load more frontend');
+
+    setFrontendParams({
+      ...frontendParams,
+      _limit: (frontendParams._limit || 0) + 4
+    });
+  };
+
+  const backendLoadMoreHandler = () => {
+    console.log('load more backend');
+
+    setBackendParams({
+      ...backendParams,
+      _limit: (backendParams._limit || 0) + 4
+    });
+  };
+
+  const devopsLoadMoreHandler = () => {
+    console.log('load more devops');
+
+    setDevopsParams({
+      ...devopsParams,
+      _limit: (devopsParams._limit || 0) + 4
+    });
+  };
+
+  // const updateScreenSize = useCallback(() => {
+  //   if (window.innerWidth >= 992) {
+  //     // setScreenSize('desktop');
+  //     setCourseLimit(4);
+  //   } else if (window.innerWidth >= 768) {
+  //     // setScreenSize('tablet');
+  //     setUserCoursesParams({
+  //       ...userCoursesParams,
+  //       _limit: 3
+  //     });
+
+  //     setPopularParams({
+  //       ...popularParams,
+  //       _limit: 3
+  //     });
+
+  //     setFrontendParams({
+  //       ...frontendParams,
+  //       _limit: 3
+  //     });
+  //     setCourseLimit(3);
+  //   } else if (window.innerWidth >= 375) {
+  //     // setScreenSize('mobile');
+  //     setCourseLimit(2);
+  //     // setScreenSize('mobile');
+  //     setCourseLimit(2);
+  //   }
+  // }, [frontendParams, popularParams, userCoursesParams]);
+
+  // useEffect(() => {
+  //   window.addEventListener('resize', updateScreenSize);
+  //   updateScreenSize(); // Initial screen size detection
+
+  //   return () => {
+  //     window.removeEventListener('resize', updateScreenSize);
+  //   };
+  // }, [updateScreenSize]);
 
   return (
     <div>
       {/* Banner */}
-      <div className='banner mt-sm'>
+      <div className='banner mt-sm '>
         <div className='banner__wrapper'>
           <div className='banner__wrapper-left'>
             <div className='banner__cta-section'>
@@ -62,7 +204,9 @@ const HomePage = () => {
               </p>
               <div className='banner__cta--btns'>
                 <Space>
-                  <Button className='banner__cta-start-now btn btn-md btn-secondary'>Start Now</Button>
+                  <Button onClick={startNowHandler} className='banner__cta-start-now btn btn-md btn-secondary'>
+                    Start Now
+                  </Button>
                   <Link to='/courses'>
                     <Button className='btn btn-md btn-tertiary'>View Courses</Button>
                   </Link>
@@ -121,21 +265,21 @@ const HomePage = () => {
           {/* Statistics */}
           <div className='statistics spacing-h-md '>
             <Row className='statistics__list container'>
-              <Col className='statistics__item' md={8}>
+              <Col className='statistics__item' md={8} xs={24}>
                 <div className='statistics__item-img'>
                   <UserOutlined className='statistics__item-icon' />
                 </div>
                 <h3 className='statistics__item-number'>19,200</h3>
                 <p className='statistics__item-content'>STUDENTS</p>
               </Col>
-              <Col className='statistics__item' md={8}>
+              <Col className='statistics__item' md={8} xs={24}>
                 <div className='statistics__item-img'>
                   <FlagOutlined className='statistics__item-icon' />
                 </div>
                 <h3 className='statistics__item-number'>92.000</h3>
                 <p className='statistics__item-content'>LEARNING STEPS DONE</p>
               </Col>
-              <Col className='statistics__item' md={8}>
+              <Col className='statistics__item' md={8} xs={24}>
                 <div className='statistics__item-img'>
                   <FundFilled className='statistics__item-icon' />
                 </div>
@@ -172,12 +316,18 @@ const HomePage = () => {
       {/* Popular Course Enrolled */}
 
       {!isAuth && (
-        <div className='our-courses container spacing-h-md'>
+        <div className='our-courses container spacing-h-sm'>
           <h2 className='our-courses__title'>Popular Courses</h2>
           {isPoppularCoursesFetching ? (
             <Skeleton />
           ) : (
-            <CourseList courseState='notOrdered' courses={popularCourses} className='our-courses__wrapper' />
+            <CourseList
+              courseState='notOrdered'
+              onLoadMore={popularLoadMoreHandler}
+              isLoadMore={isPopularLoadMore}
+              courses={popularCourses}
+              className='our-courses__wrapper'
+            />
           )}
         </div>
       )}
@@ -185,45 +335,69 @@ const HomePage = () => {
       {/* Courses */}
 
       {isAuth && (
-        <div className={`our-courses container spacing-h-md`}>
+        <div className={`our-courses container spacing-h-sm`}>
           <h2 className='our-courses__title mt-sm'>Our Courses</h2>
           {isFetching ? (
             <Skeleton />
           ) : (
-            <CourseList courseState='notOrdered' courses={data?.courses} className='our-courses__wrapper' />
+            <CourseList
+              courseState='notOrdered'
+              courses={usersCourses}
+              onLoadMore={usersCoursesLoadMoreHandler}
+              isLoadMore={isUserCoursesLoadMore}
+              className='our-courses__wrapper'
+            />
           )}
         </div>
       )}
 
       {/* Frontend */}
 
-      <div className='our-courses container spacing-h-md'>
+      <div className='our-courses container spacing-h-sm'>
         <h2 className='our-courses__title'>Frontend</h2>
-        {isFetching ? (
+        {isFrontendFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={frontendCourses} className='our-courses__wrapper' />
+          <CourseList
+            courseState='notOrdered'
+            isLoadMore={isFrontendLoadMore}
+            onLoadMore={frontendLoadMoreHandler}
+            courses={frontendCourses}
+            className='our-courses__wrapper'
+          />
         )}
       </div>
 
       {/* Backend */}
-      <div className='our-courses container spacing-h-md'>
+      <div className='our-courses container spacing-h-sm'>
         <h2 className='our-courses__title'>Backend</h2>
-        {isFetching ? (
+        {isBackendFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={backendCourses} className='our-courses__wrapper' />
+          <CourseList
+            courseState='notOrdered'
+            isLoadMore={isBackendLoadMore}
+            onLoadMore={backendLoadMoreHandler}
+            courses={backendCourses}
+            className='our-courses__wrapper'
+          />
         )}
       </div>
 
       {/* Devops */}
 
-      <div className='our-courses container spacing-h-md'>
+      <div className='our-courses container spacing-h-sm'>
         <h2 className='our-courses__title'>Devops</h2>
-        {isFetching ? (
+        {isDevopsFetching ? (
           <Skeleton />
         ) : (
-          <CourseList courseState='notOrdered' courses={devopsCourses} className='our-courses__wrapper' />
+          <CourseList
+            courseState='notOrdered'
+            isLoadMore={isDevopsLoadMore}
+            onLoadMore={devopsLoadMoreHandler}
+            courses={devopsCourses}
+            className='our-courses__wrapper'
+          />
         )}
       </div>
     </div>

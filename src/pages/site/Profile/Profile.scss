@@ -22,6 +22,8 @@
                 border-radius: 50%;
             }
             &-icon {
+                display: flex;
+                justify-content: center;
                 font-size: 4rem;
                 margin-bottom: 1.5rem;
             }
@@ -85,4 +87,19 @@
             }
         }
     }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        &__header {
+            &-item{
+                margin-bottom: 2rem;
+                &-icon {
+                }
+            }
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        
+    }
+
 }

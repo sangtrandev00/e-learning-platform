@@ -1,7 +1,11 @@
+@import "../../../../assets/sass/base";
+
 .view-cart {
 
     &__list {
+        &-item {
 
+        }
 
         &-item-price {
             &-text {
@@ -13,4 +17,28 @@
             }
         }
     }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        &__list {
+
+            &-item {
+                border: 1px solid #ccc;
+                margin-top: 1rem;
+                padding: 1rem;
+
+                &-info {
+                    margin-top: 1rem;
+
+                    &-name {
+                    }
+                }
+
+            }
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        
+    }
+
 }

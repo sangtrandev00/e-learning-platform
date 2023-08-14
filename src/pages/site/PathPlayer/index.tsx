@@ -1,7 +1,7 @@
-import { ArrowLeftOutlined, DoubleLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Col, Progress, Row, Tabs, TabsProps } from 'antd';
+import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Col, Progress, Row, Skeleton, Tabs, TabsProps } from 'antd';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
 import {
@@ -9,6 +9,7 @@ import {
   useGetCertificateQuery,
   useGetCourseEnrolledByUserQuery
 } from '../client.service';
+import { startPlayingVideo } from '../client.slice';
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
@@ -21,8 +22,10 @@ import PlayerScreen from './components/PlayerScreen/PlayerScreen';
 const PathPlayer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const courseId = searchParams.get('courseId');
-  const userId = useSelector((state: RootState) => state.auth.userId);
+  const userId = useSelector<RootState, string>((state: RootState) => state.auth.userId);
   const { data, isFetching, refetch } = useGetCourseEnrolledByUserQuery(courseId as string);
+  const dispatch = useDispatch();
+  console.log('data course watching: ', data);
 
   const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
 
@@ -92,6 +95,23 @@ const PathPlayer = () => {
       });
   }, [isLessonDone, refetch]);
 
+  // First initital first lesson of course
+
+  useEffect(() => {
+    console.log('first initial lesson of course');
+
+    console.log('lesson id: ', data?.course.lessons[0]._id);
+    console.log('content: ', data?.course.lessons[0].content);
+
+    // dispatch(
+    dispatch(
+      startPlayingVideo({
+        lessonId: data?.course.lessons[0]._id as string,
+        content: data?.course.lessons[0].content as string
+      })
+    );
+  }, [data?.course.lessons, dispatch]);
+
   const tabItems: TabsProps['items'] = [
     {
       key: 'pathsections',
@@ -129,18 +149,18 @@ const PathPlayer = () => {
   return (
     <div className='path-player'>
       <div className='path-player__wrap'>
-        <Row>
-          <Col md={6}>
+        <Row className='path-player__row'>
+          <Col md={24} lg={6} xl={6}>
             <div className='path-player__menu'>
               {/* Menu Header  */}
               <div className='path-player__menu-header'>
                 <div className='path-player__menu-header-nav'>
-                  <Link className='path-player__menu-header-nav-back' to='/'>
+                  <Link className='path-player__menu-header-nav-back' to='/start'>
                     <ArrowLeftOutlined className='path-player__menu-header-nav-back-icon' /> Back to course page
                   </Link>
-                  <Button className='path-player__menu-header-nav-collapse'>
+                  {/* <Button className='path-player__menu-header-nav-collapse'>
                     <DoubleLeftOutlined className='path-player__menu-header-nav-collapse-btn' />
-                  </Button>
+                  </Button> */}
                 </div>
                 <h3 className='path-player__menu-header-title'>{data?.course.name}</h3>
                 <div className='path-player__menu-progress'>
@@ -153,7 +173,7 @@ const PathPlayer = () => {
               </div>
             </div>
           </Col>
-          <Col md={18}>
+          <Col md={24} lg={18} xl={18}>
             <div className='path-player__player'>
               <div className='path-player__player-nav'>
                 <div className='path-player__player-nav-item'>
@@ -164,7 +184,8 @@ const PathPlayer = () => {
                 </div>
               </div>
               <div className='path-player__player-screen'>
-                <PlayerScreen />
+                {isFetching && <Skeleton />}
+                {!isFetching && <PlayerScreen />}
               </div>
             </div>
           </Col>
