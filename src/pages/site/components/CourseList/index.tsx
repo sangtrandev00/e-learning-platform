@@ -18,6 +18,7 @@ type CourseListProps = {
   courseState: string;
   isLoadMore?: boolean;
   onPaginate?: (page: number) => void;
+  onLoadMore?: () => void;
 };
 // props: Props
 
@@ -47,10 +48,6 @@ const CourseList = (props: CourseListProps) => {
     } else {
       navigate(`/courses/${id}`);
     }
-  };
-
-  const loadMoreHandler = () => {
-    console.log('load more');
   };
 
   const [current, setCurrent] = useState(params._page || 1);
@@ -127,11 +124,13 @@ const CourseList = (props: CourseListProps) => {
         </div>
       )}
 
-      <div className='our-courses__btn-place'>
-        <Button onClick={loadMoreHandler} className='btn btn-secondary btn-sm'>
-          Load more
-        </Button>
-      </div>
+      {props.isLoadMore && (
+        <div className='our-courses__btn-place'>
+          <Button onClick={() => props.onLoadMore && props.onLoadMore()} className='btn btn-secondary btn-sm'>
+            Load more
+          </Button>
+        </div>
+      )}
     </Fragment>
   );
 };

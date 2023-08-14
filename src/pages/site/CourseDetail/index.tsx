@@ -246,7 +246,7 @@ const CourseDetail = () => {
                 </div>
                 <div className='course-detail__intro-updated-at'>Last updated {transformDate(updatedAt)}</div>
               </Col>
-              <Col md={8}>
+              <Col sm={16} md={8} lg={8}>
                 <div className='course-detail__overview'>
                   <div className='course-detail__thumbnail'>
                     <img
@@ -261,8 +261,15 @@ const CourseDetail = () => {
                       </div>
                     </div>
                   </div>
-                  <div className='course-detail__overview-content'>
-                    <div className='course-detail__overview-price'>{finalPrice === 0 ? 'FREE' : `$${finalPrice}`}</div>
+                  <div className='course-detail__overview-content '>
+                    <div className='course-detail__overview-price'>{finalPrice === 0 && 'FREE'}</div>
+                    {finalPrice !== 0 && (
+                      <div className='course-detail__overview-price'>
+                        <div>
+                          <s className='font-light mr-4'>${price}</s> ${finalPrice}
+                        </div>
+                      </div>
+                    )}
                     <div className='course-detail__overview-btns'>
                       <Space>
                         {finalPrice !== 0 && (
@@ -321,7 +328,7 @@ const CourseDetail = () => {
         {/* Include section */}
         <div className='course-detail__includes spacing-h-sm container'>
           <Row>
-            <Col md={16}>
+            <Col md={24} lg={16}>
               <div className='container course-detail__includes-wrap'>
                 <List
                   header={<div className='course-detail__includes-header'>What you'll learn</div>}
@@ -346,7 +353,7 @@ const CourseDetail = () => {
         {/* Content section */}
         <div className='course-detail__content container'>
           <Row>
-            <Col md={16}>
+            <Col md={24} lg={16}>
               <h3 className='course-detail__content-title'>Course content</h3>
               <div className='course-detail__content-wrap'>
                 <div className='course-detail__content-summary'>

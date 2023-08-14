@@ -129,9 +129,20 @@ const CourseItem = (props: CourseItemProps) => {
     backgroundImageUrl = encodeURI(`${BACKEND_URL}/${props.courseItem.thumbnail}`);
   }
 
+  let badgeCourse = 'new';
+
+  if (props.courseItem.finalPrice < props.courseItem.price) {
+    badgeCourse = 'Special Offer';
+  }
+
   return (
-    <Col md={currentPath === '/start' || currentPath === '/' ? 6 : 8}>
-      <Badge.Ribbon text='Special Offer'>
+    <Col
+      lg={currentPath === '/start' || currentPath === '/' ? 6 : 8}
+      md={currentPath === '/start' || currentPath === '/' ? 8 : 12}
+      sm={12}
+      xs={24}
+    >
+      <Badge.Ribbon text={badgeCourse}>
         <div className='course-item'>
           <div
             className='course-item__img'
@@ -161,7 +172,7 @@ const CourseItem = (props: CourseItemProps) => {
             <div className='course-item__enrolls'>
               <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
                 <Col md={12}>
-                  {!hasBought && (
+                  {!hasBought && props.courseState !== 'ordered' && (
                     <Button
                       onClick={btnClickHandler}
                       action={props.courseItem.finalPrice === 0 ? 'enroll' : 'buynow'}

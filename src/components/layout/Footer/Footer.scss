@@ -62,4 +62,25 @@
        color: $brand-secondary-color;
     }
 
+    @media (max-width: map-get($breakpoint, tablet)) {
+       
+    }
+
+    @media (max-width: map-get($breakpoint, mobile-sm)) {
+        &__text {
+            margin: 2rem 0rem;
+        }
+
+        &__col {
+            margin-bottom: 2rem;
+        }
+
+        .featured-list {
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        
+    }
+
 }

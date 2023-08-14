@@ -1,4 +1,5 @@
 @import "../../../assets/sass/base";
+@import "../../../assets/sass/responsive";
 @import "../../../assets/sass/mixins";
 
 .header {
@@ -45,7 +46,10 @@
         margin: 0rem 1.2rem;
         display: flex;
         align-items: center;
-
+        &--cart {
+            margin-right: 4rem;
+            margin-left: 0rem;
+        }
         &-user-icon {
 
         }
@@ -80,7 +84,81 @@
                 text-decoration: none;
                 text-transform: capitalize;
             }
+
+           
         }
     }
+
+    @media (max-width: map-get($breakpoint, tablet-lg)) {
+        &__nav {
+            &-list {
+                display: none;
+            }
+        }
+
+
+        &__wrapper{
+            width: 100%;
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        // Adjust styles for tablet
+
+        // width: 768px;
+
+        &__wrapper {
+            width: 100%;
+            padding: 0rem 2rem;
+        }
+
+        &__nav {
+            &-list {
+                display: none;
+            }
+
+            &-item {
+               &--cart {
+
+               }
+            }
+        }
+      }
+    
+    @media (max-width: map-get($breakpoint, mobile-sm)) {
+        // Adjust styles for mobile
+            width: 375px;
+            &__wrapper {
+                width: 375px;
+            }
+
+            &__search {
+                display: none;
+            }
+
+            &__logo {
+                margin-left: 2rem;
+            }
+
+            &__wrapper {
+                justify-content: unset;
+            }
+
+
+            &__nav {
+                &-item {
+
+                    &--user {
+                        margin-left: 3rem;
+                    }
+                }
+
+            }
+
+            &__auth {
+                display: none;
+            }
+      }
+
 }
 

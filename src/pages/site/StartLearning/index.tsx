@@ -32,7 +32,7 @@ const StartLearning = () => {
       <div className='start-learning__wrap'>
         <div className='start-learning__header spacing-h-md container'>
           <Row className='start-learning__header-row'>
-            <Col md={12}>
+            <Col md={12} xs={24}>
               <div className='start-learning__header-welcome'>
                 <div className='start-learning__header-welcome-icon'>
                   <img
@@ -52,10 +52,10 @@ const StartLearning = () => {
                 </div>
               </div>
             </Col>
-            <Col md={12}>
+            <Col md={12} sm={24}>
               <div className='start-learning__header-summary'>
                 <Row className='start-learning__header-summary-row'>
-                  <Col md={8}>
+                  <Col md={8} xs={24} sm={24}>
                     <div className='start-learning__header-summary-item start-learning__header-summary-item--courses'>
                       <div className='start-learning__header-summary-item-icon'>
                         <ReadOutlined />
@@ -64,7 +64,7 @@ const StartLearning = () => {
                       <div className='start-learning__header-summary-item-text'>Courses</div>
                     </div>
                   </Col>
-                  <Col md={8}>
+                  <Col md={8} xs={24} sm={24}>
                     <div className='start-learning__header-summary-item start-learning__header-summary-item--messages'>
                       <div className='start-learning__header-summary-item-icon'>
                         <ReadOutlined />
@@ -73,7 +73,7 @@ const StartLearning = () => {
                       <div className='start-learning__header-summary-item-text'>Messages</div>
                     </div>
                   </Col>
-                  <Col md={8}>
+                  <Col md={8} xs={24} sm={24}>
                     <div className='start-learning__header-summary-item start-learning__header-summary-item--hours'>
                       <div className='start-learning__header-summary-item-icon'>
                         <ReadOutlined />

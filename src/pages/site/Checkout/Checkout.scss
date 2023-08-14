@@ -160,4 +160,18 @@
         }
     }
     
+    @media (max-width: map-get($breakpoint, tablet)) {
+
+        padding: 0rem 2rem;
+
+    }
+
+    @media (max-width: map-get($breakpoint, mobile-sm)) {
+        padding: 0rem 1rem!important;
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        padding: 0rem 1rem!important;
+    }
+
 }

@@ -27,7 +27,7 @@
             &-name {
                 margin-left: 1rem;
             }
-
+           
          
         }
 
@@ -93,6 +93,11 @@
 
         &-name {
             margin-left: 1rem;
+        }
+
+        &-desc {
+            text-align: justify;
+            padding-right: 2rem;
         }
 
         &-img {
@@ -236,6 +241,8 @@
             }
         }
 
+
+
     }
 
     &__thumbnail {
@@ -268,5 +275,196 @@
         }
     }
 
+    // Tablet
+    @media (max-width: map-get($breakpoint, tablet)) {
+       
+       &__intro-wrap {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+       }
+
+       &__breadcrumb {
+        margin-top: 2rem;
+        ol {
+            justify-content: center;
+        }
+       }
+       
+       &__title {
+        text-align: center;
+       }
+
+       &__sub-title {
+        text-align: justify;
+       }
+
+        &__overview {
+            position: unset;
+            width: 52rem;
+            // margin-left: -14rem;
+            &-content {
+                margin-top: 2rem;
+                text-align: center;
+            }
+
+            &-includes {
+                display: none;
+            }
+
+            &-price {
+                margin-top: 26rem;
+            }
+
+            &-btns {
+                
+            }
+       }
+
+       &__thumbnail {
+        &-img {
+            width: 52rem;
+            height: 26rem;
+            object-fit: cover;
+        }
+
+        &-overlay {
+            width: 52rem;
+        }
+       }
+
+
+       &__includes {
+        padding: 0rem 4rem;
+        &-wrap {
+           
+        }
+       }
+
+       &__content {
+        padding: 0rem 4rem;
+       }
+
+       &__author {
+        padding: 0rem 4rem;
+
+        &-img {
+        }
+       }
+    }
+
+
+    // Mobile
+    @media (max-width: map-get($breakpoint, mobile)) {
+       &__overview {
+            width: 56rem;
+            margin-left: 0rem;
+
+            &-includes {
+            }
+       }
+
+       &__intro {
+        &-wrap {
+            padding: 0rem 1rem;
+        }
+       }
+
+
+       &__thumbnail {
+        &-img {
+            width: 56rem;
+        }
+
+        &-overlay {
+            width: 56rem;
+        }
+       }
+
+       &__includes {
+        padding: 0rem 1rem;
+
+        &-header {
+            text-align: center;
+        }
+       }
+
+       &__content {
+        padding: 0rem 1rem;
+
+        &-title {
+            text-align: center;
+        }
+
+        &-summary {
+            a {
+                display: inline-block;
+            }            
+        }
+       }
+
+       &__author {
+        &-img {
+            margin-top: 2rem;
+        }
+       }
+
+    }
+
+     // Mobile sm
+     @media (max-width: map-get($breakpoint, mobile-sm)) {
+        &__overview {
+             width: 36rem;
+ 
+             &-includes {
+             }
+        }
+ 
+        &__intro {
+         &-wrap {
+             padding: 0rem 1rem;
+         }
+        }
+ 
+ 
+        &__thumbnail {
+         &-img {
+             width: 36rem;
+         }
+ 
+         &-overlay {
+             width: 36rem;
+         }
+        }
+ 
+        &__includes {
+         padding: 0rem 1rem;
+ 
+         &-header {
+             text-align: center;
+         }
+        }
+ 
+        &__content {
+         padding: 0rem 1rem;
+ 
+         &-title {
+             text-align: center;
+         }
+ 
+         &-summary {
+             a {
+                 display: inline-block;
+             }            
+         }
+        }
+ 
+        &__author {
+         &-img {
+             margin-top: 2rem;
+         }
+        }
+ 
+     }
 
 }

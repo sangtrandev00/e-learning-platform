@@ -1,5 +1,6 @@
 @import "../../../assets/sass/base";
 
+
 .banner {
     position: relative;
     top: $header-height;
@@ -55,6 +56,50 @@
     &__cta-btns {
 
     }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        // Adjust styles for tablet
+        padding-top: 50%;
+        &__wrapper {
+            width: 768px;
+            padding: 0rem 2rem;
+        }
+
+        &__title {
+            @include h-style("h2");
+        }
+
+        &__content {
+            margin: 1rem 0rem;
+        }
+      }
+    
+    @media (max-width: map-get($breakpoint, mobile)) {
+        // Adjust styles for mobile
+
+
+        &__wrapper {
+            width: 375px;
+            padding: 0rem 2rem;
+            &-left {
+                width: 100%;
+            }
+        }
+
+        &__title {
+            font-size: 2.4rem;
+        }
+
+        &__content {
+            font-size: 1.2rem;
+        }
+
+        &__cta-section {
+
+        }
+
+      }
+
 }
 
 .our-benefits{
@@ -101,6 +146,26 @@
         font-weight: 400;
         
     }
+
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        &__list {
+            padding: 0rem 2rem;
+        }
+    }
+
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+
+        &__list {
+            flex-direction: column;
+
+        }
+
+        &__item {
+            margin-bottom: 2rem;
+        }
+    }
 }
 
 .statistics {
@@ -131,6 +196,14 @@
     &__item-content {
         font-size: 1.5rem;
     }
+
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        // Adjust styles for tablet
+
+       
+      }
+
 }
 
 .quotes {
@@ -163,7 +236,7 @@
         &-content {
             width: 50%;
             &-title {
-                @include h-style("h2")
+                @include h-style("h2");
             }
 
             &-text {
@@ -172,7 +245,53 @@
                 margin-top: 2rem;
             }
         }
+        
     }
+
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        // Adjust styles for tablet
+
+        &__author {
+            flex-direction: column;
+            &-img-cover {
+                width: 100%;
+            }
+
+            &-img {
+                width: 100%;
+                height: 26rem;
+                margin-left: 10rem;
+                margin-top: -1rem;
+            }
+
+            &-content {
+                width: 100%;
+                padding: 3.5rem 2.5rem;
+                &-title {
+                    @include h-style("h3");
+                    text-align: center;
+                }
+
+                &-text {
+                    text-align: justify;
+                }
+            }
+        }
+      }
+
+      @media (max-width: map-get($breakpoint, mobile-sm)) {
+        // Adjust styles for mobile
+
+
+        &__author {
+            &-img {
+                height: 24rem;
+                margin-left: 0rem;
+                margin-top: -1rem;
+            }
+        }
+      }
 
 
 }
@@ -185,10 +304,26 @@
 
     &__btn-place {
         text-align: center;
-        margin-top: 8rem;
+        margin-top: 4rem;
 
         button {
             font-weight: 400;
+        }
+    }
+
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        padding: 0rem 2rem;
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+
+        &__title {
+            text-align: center;
+        }
+
+        &__wraper {
+            padding: 0rem 2rem;
         }
     }
 

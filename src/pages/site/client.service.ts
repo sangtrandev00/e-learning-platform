@@ -47,8 +47,13 @@ export interface getCoursesResponse {
   };
 }
 
-export interface getPopluarCoursesResponse {
+export interface getPopularCoursesResponse {
   courses: ICourse[];
+  pagination: {
+    _limit: number;
+    _totalRows: number;
+    _page: number;
+  };
   message: string;
 }
 
@@ -90,6 +95,8 @@ export interface ICourseEnrolledByUser extends ICourse {
   progress: number;
   totalVideosLengthDone: number;
   isBought: boolean;
+  lessons: ILesson[];
+  sections: ISection[];
 }
 
 export interface getCourseEnrolledByUserResponse {
@@ -252,7 +259,7 @@ export const clientApi = createApi({
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
-    getPopularCourses: build.query<getPopluarCoursesResponse, IParams>({
+    getPopularCourses: build.query<getPopularCoursesResponse, IParams>({
       query: (params) => ({
         url: '/courses/popular',
         params: params

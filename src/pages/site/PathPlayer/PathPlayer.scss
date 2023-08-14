@@ -6,6 +6,10 @@
 
     }
 
+    &__row {
+       
+    }
+
     &__menu {
         color: $light-bg-color;
 
@@ -93,5 +97,42 @@
             // height: 1000px;
         }
     }
+
+    @media (max-width: map-get($breakpoint, desktop)) {
+        &__row {
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, tablet-lg)) {
+        &__row {
+            flex-direction: column-reverse;
+        }
+
+        &__menu-content {
+            padding: 2rem;
+            margin: 0;
+        }
+    }
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+            &__row {
+                flex-direction: column-reverse;
+            }
+
+            &__menu-content {
+                padding: 2rem;
+                margin: 0;
+            }
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        
+        &__menu-content {
+            padding: 2rem;
+            margin: 0;
+        }
+
+    }
+
     
 }

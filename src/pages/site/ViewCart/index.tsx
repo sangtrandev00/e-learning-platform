@@ -14,6 +14,8 @@ const ViewCart = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const courseIds = cart.items.map((item) => item.courseId);
 
+  console.log('course ids: ', courseIds);
+
   const { data: cartData, isFetching: isCartFetching } = useGetRetrieveCartQuery({ courseIds });
 
   const totalPrice = cartData?.cart.totalPrice || 0;
@@ -25,9 +27,20 @@ const ViewCart = () => {
   const removeCartHandler = (courseId: string) => {
     console.log('remove from cart: course id: ', courseId);
     dispatch(removeCart(courseId));
+
+    notification.success({
+      message: 'Course removed from cart'
+    });
   };
 
   const checkoutHandler = () => {
+    if (courseIds.length === 0) {
+      notification.error({
+        message: 'Please add courses to cart'
+      });
+      return;
+    }
+
     if (isAuth) {
       console.log('checkout handler');
       navigate('/checkout');
@@ -46,7 +59,7 @@ const ViewCart = () => {
         <h2 className='view-cart__title'>Shopping Cart</h2>
         <div className='view-cart__content '>
           <Row>
-            <Col md={18}>
+            <Col md={18} sm={24}>
               <div className='view-cart__list'>
                 <h4 className='view-cart__list-title'>{cart?.items?.length || 0} Courses in Cart</h4>
                 <div className='view-cart__list-wrap'>

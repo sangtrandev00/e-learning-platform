@@ -1,10 +1,25 @@
+import { Skeleton } from 'antd';
 import { Link } from 'react-router-dom';
-
+import { useGetCategoriesQuery } from '../../../../../pages/site/client.service';
+import './CategoriesNav.scss';
 const CategoriesNav = () => {
+  const { data, isFetching } = useGetCategoriesQuery();
+
   return (
     <div className='header__categories container'>
       <div className='header__categories-wrap'>
-        <div className='header__categories-item'>
+        {isFetching && <Skeleton.Input block={true} />}
+
+        {!isFetching &&
+          (data?.categories || []).map((category) => {
+            return (
+              <div className='header__categories-item'>
+                <Link to={`courses?_topic=${category._id}`}>{category.name}</Link>
+              </div>
+            );
+          })}
+
+        {/* <div className='header__categories-item'>
           <Link to=''>Frontend</Link>
         </div>
         <div className='header__categories-item'>
@@ -27,7 +42,7 @@ const CategoriesNav = () => {
         </div>
         <div className='header__categories-item'>
           <Link to=''>Data science</Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

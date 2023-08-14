@@ -133,6 +133,38 @@
         width: 75%;
         
     }
-    
 
+    @media (max-width: map-get($breakpoint, desktop)) {
+        padding: 0rem 2rem;
+    }
+
+    @media (max-width: map-get($breakpoint, tablet-lg)) {
+        padding: 0rem 2rem;
+    }
+
+    
+    @media (max-width: map-get($breakpoint, tablet)) {
+      
+        padding: 0rem 2rem;
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        &__filter-bar {
+            display: none;
+        }
+
+        &__list {
+            width: 100%;
+        }
+    }
+
+    // @media (max-width: map-get($breakpoint, mobile-sm)) {
+    //     &__filter-bar {
+    //         display: none;
+    //     }
+
+    //     &__list {
+    //         width: 100%;
+    //     }
+    // }
 }

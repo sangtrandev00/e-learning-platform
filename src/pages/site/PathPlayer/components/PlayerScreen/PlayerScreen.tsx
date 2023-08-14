@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { useUpdateLessonDoneByUserMutation } from '../../../client.service';
 import { setCurrentLessonDone } from '../../../client.slice';
-
+import './PlayerScreen.scss';
 // type Props = {};
 
 const PlayerScreen = () => {
@@ -45,6 +45,8 @@ const PlayerScreen = () => {
       }
     }
   };
+
+  console.log('Content playing video is: ', content);
 
   return (
     <ReactPlayer

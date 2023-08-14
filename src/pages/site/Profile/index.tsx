@@ -70,7 +70,7 @@ const Profile = () => {
         <div className='profile__header'>
           <div className='container profile__header-wrap'>
             <Row>
-              <Col md={4}>
+              <Col md={4} xs={24}>
                 <div className='profile__header-item'>
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
@@ -79,7 +79,7 @@ const Profile = () => {
                   <div className='profile__header-item-text'>Courses</div>
                 </div>
               </Col>
-              <Col md={4}>
+              <Col md={4} xs={24}>
                 <div className='profile__header-item'>
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
@@ -90,7 +90,7 @@ const Profile = () => {
                   <div className='profile__header-item-text'>Hours</div>
                 </div>
               </Col>
-              <Col md={8}>
+              <Col md={8} xs={24}>
                 <div className='profile__header-item'>
                   <div className='profile__header-item-icon'>
                     <img
@@ -108,7 +108,7 @@ const Profile = () => {
                   </div>
                 </div>
               </Col>
-              <Col md={4}>
+              <Col md={4} xs={24}>
                 <div className='profile__header-item'>
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />
@@ -117,7 +117,7 @@ const Profile = () => {
                   <div className='profile__header-item-text'>POSTS</div>
                 </div>
               </Col>
-              <Col md={4}>
+              <Col md={4} xs={24}>
                 <div className='profile__header-item'>
                   <div className='profile__header-item-icon'>
                     <ReadOutlined />

@@ -142,4 +142,27 @@
             }
         }
     }
+
+
+    @media (max-width: map-get($breakpoint, tablet)) {
+        padding: 0rem 2rem;
+
+        &__list-item-info {
+            padding: 0rem 1rem;
+        }
+
+
+        &__summary {
+            margin-top: 2rem;
+            &-title {
+            
+            }
+        }
+
+       
+    }
+
+    @media (max-width: map-get($breakpoint, mobile)) {
+        
+    }
 }
