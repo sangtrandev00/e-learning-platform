@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { AccessStatus, CourseLevel, ICourse } from '../../../../../types/course.type';
 import { useAddCourseMutation } from '../../course.service';
-import { openCreateCourse } from '../../course.slice';
+import { handleFormData, openCreateCourse } from '../../course.slice';
 import './CreateCourse.scss';
 import CreateLeftSide from './components/CreateLeftSide';
 import CreateRightSide from './components/CreateRightSide';
@@ -77,6 +77,7 @@ const CreateCourse = () => {
           message: 'Add Course',
           description: 'Add course successfully!'
         });
+        dispatch(handleFormData(initStateCourse));
       })
       .catch((error) => {
         console.log(error);
@@ -120,7 +121,7 @@ const CreateCourse = () => {
               <form action='' className='create-course__form'>
                 <div className='create-course__form-wrap'>
                   <CreateRightSide dataSlide={orderCreateForm[currentSlideIdx]} />
-                  <div className='carousel-navigator'>
+                  <div className='carousel-navigator ms-8'>
                     <Space>
                       <div className='carousel-navigator__prev'>
                         <Button onClick={handlePrevSlide}>Previous</Button>

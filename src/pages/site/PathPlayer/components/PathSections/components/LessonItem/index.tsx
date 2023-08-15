@@ -17,10 +17,13 @@ function LessonItem(props: LessonItemProps) {
 
   const isLessonDoneAtStore = useSelector((state: RootState) => state.client.isLessonDone);
   const currLessonId = useSelector((state: RootState) => state.client.lessonId);
-
+  const lessonIdsDone = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
   const [isVideoDone, setIsVideoDone] = useState(isDone);
 
+  const isCurrentLessonDone = lessonIdsDone.includes(_id);
+
   console.log('is lesson Done at store', isLessonDoneAtStore);
+  console.log('list of lessons done', lessonIdsDone);
 
   // if (isLessonDoneAtStore && _id === currLessonId) {
   //   setIsVideoDone(true);
@@ -65,7 +68,7 @@ function LessonItem(props: LessonItemProps) {
       </div>
       <div className='lesson-item__name'>{name}</div>
       <div className='lesson-item__is-finished'>
-        {isVideoDone && <CheckCircleFilled className='lesson-item__is-finished-icon' />}
+        {isCurrentLessonDone && <CheckCircleFilled className='lesson-item__is-finished-icon' />}
       </div>
       <ReactPlayer
         ref={playerRef}

@@ -1,9 +1,9 @@
-import React from 'react';
-import './CourseThumb.scss';
 import { Input } from 'antd';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleFormData } from '../../../../../course.slice';
 import { RootState } from '../../../../../../../../store/store';
+import { handleFormData } from '../../../../../course.slice';
+import './CourseThumb.scss';
 const CourseThumb = () => {
   const formData = useSelector((state: RootState) => state.course.formData);
   const dispatch = useDispatch();
@@ -13,10 +13,10 @@ const CourseThumb = () => {
 
   return (
     <div className='course-thumb'>
-      <div className='course-thumb__wrap'>
+      <div className='course-thumb__wrap px-8'>
         <h3 className='course-thumb__title'>Write a Thumb for your course</h3>
 
-        <p className='course-thumb__desc'>
+        <p className='course-thumb__desc font-normal'>
           Craft a catchy title and capture your students’ imagination. Make it short, precise, memorable and SEO
           friendly by including strong keywords in it.
         </p>
@@ -33,10 +33,10 @@ const CourseThumb = () => {
           />
         </div>
       </div>
-      <div className='course-desc__wrap'>
+      <div className='course-desc__wrap px-8 mt-8'>
         <h3 className='course-desc__title'>Write a description for your course</h3>
 
-        <p className='course-desc__desc'>
+        <p className='course-desc__desc font-normal'>
           Craft a catchy title and capture your students’ imagination. Make it short, precise, memorable and SEO
           friendly by including strong keywords in it.
         </p>

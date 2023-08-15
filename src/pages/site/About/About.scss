@@ -1,0 +1,44 @@
+@import "../../../assets/sass/base";
+
+
+.about {
+
+    margin-top: $header-height;
+    
+    &__title {
+        @include h-style("h2");
+    }
+
+    &__sub-title {
+        @include h-style("h3");
+    }
+    
+    &__intro {
+        font-size: 1.6rem;
+        font-weight: normal;
+        line-height: 1.4;
+    }
+
+    &__member{
+
+        &-item {
+            border: 1px solid #ccc;
+            padding-bottom: 2rem;
+        }
+
+        &-img {
+            height: 36rem;
+            object-fit: cover;
+        }
+
+        &-desc {
+            line-height: 1.4;
+            font-size: 1.4rem;
+        }
+    }
+
+
+    &__wrapper {
+        margin-top: 2rem;
+    }
+}

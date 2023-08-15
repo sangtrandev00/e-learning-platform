@@ -36,8 +36,10 @@ import {
   setAuthenticated,
   setUnauthenticated
 } from './pages/auth.slice';
+import About from './pages/site/About';
 import AuthorProfile from './pages/site/AuthorProfile';
 import Checkout from './pages/site/Checkout';
+import Contact from './pages/site/Contact';
 import CourseDetail from './pages/site/CourseDetail';
 import SiteCourses from './pages/site/Courses';
 import HomePage from './pages/site/Home';
@@ -160,11 +162,11 @@ function App() {
         },
         {
           path: 'contact',
-          element: <div>Contact Page</div>
+          element: <Contact />
         },
         {
           path: 'about-us',
-          element: <div>About Us Page</div>
+          element: <About />
         },
         {
           path: 'user',

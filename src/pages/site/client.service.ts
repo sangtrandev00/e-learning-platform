@@ -96,6 +96,7 @@ export interface ICourseEnrolledByUser extends ICourse {
   totalVideosLengthDone: number;
   isBought: boolean;
   lessons: ILesson[];
+  lessonsDone: string[];
   sections: ISection[];
 }
 
@@ -111,6 +112,7 @@ export interface ICourseDetail extends ICourse {
   totalVideosLength: number;
   avgRatingStars: number;
   students: number;
+  isBought: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -514,13 +516,13 @@ export const clientApi = createApi({
         } catch (error: any) {
           throw new CustomError((error as CustomError).message);
         }
-      },
+      }
       /**
        * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
        * match với nó sẽ bị gọi lại
        * Trong trường hợp này Orders sẽ chạy lại
        */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
+      // invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
     }),
     getCategory: build.query<ICategory, string>({
       query: (id) => ({
@@ -575,13 +577,17 @@ export const clientApi = createApi({
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
-    getCourseDetail: build.query<getCourseDetailResponse, string>({
-      query: (id) => ({
-        url: `courses/${id}/detail`
-        // headers: {
-        //   hello: 'Im Sang'
-        // }
-      })
+    getCourseDetail: build.query<getCourseDetailResponse, { courseId: string; userId: string }>({
+      query: (params) => {
+        console.log('params: ', params);
+
+        return {
+          url: `courses/${params.courseId}/detail?userId=${params.userId}`
+          // headers: {
+          //   hello: 'Im Sang'
+          // }
+        };
+      }
     }),
     getSectionsByCourseId: build.query<getSectionsResponse, string>({
       query: (courseId) => ({

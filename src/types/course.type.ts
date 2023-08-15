@@ -17,6 +17,8 @@ export enum CourseLevel {
 export interface ICourse {
   _id: string;
   name: string;
+  subTitle?: string;
+  views?: number;
   description: string;
   price: number;
   finalPrice: number;
@@ -33,6 +35,9 @@ export interface ICourse {
     name: string;
     avatar: string;
   }; // FK
+  requirements?: string[];
+  willLearns?: string[];
+  tags?: string[];
   createdAt?: string;
   updatedAt?: string;
 }

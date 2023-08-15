@@ -15,10 +15,17 @@ interface ClientState {
   totalCartPrice: number;
   searchQuery: string;
   params: IParams;
+  lessonIdsDoneByCourseId: string[];
+  currentProgress: number;
+  certificatePath: string;
   //   formData: IClient;
 }
 
-const localCart = JSON.parse(localStorage.getItem('cart') || JSON.stringify({ cart: [] })) as ICart;
+const storedCart = JSON.parse(localStorage.getItem('cart') || '{}') as ICart;
+
+const localCart = {
+  items: storedCart.items || []
+};
 
 const initialState: ClientState = {
   lessonId: '',
@@ -26,12 +33,13 @@ const initialState: ClientState = {
   isLessonDone: false,
   totalLectures: 0,
   totalVideosLength: 0,
-  cart: localCart || {
-    items: []
-  },
+  cart: localCart,
   totalCartPrice: 0,
   searchQuery: '',
-  params: {}
+  params: {},
+  lessonIdsDoneByCourseId: [],
+  currentProgress: 0,
+  certificatePath: ''
 };
 
 const clientSlice = createSlice({
@@ -40,11 +48,25 @@ const clientSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<string>) => {
       if (action.payload) {
+        console.log('state cart: ', state.cart);
+
+        // const cartItems = state.cart.items;
+
+        // if (cartItems) {
+        //   state.cart.items = [];
+        // }
+        // console.log('state cart items: ', state.cart.items);
         const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
 
         if (courseExistingIdx === -1) {
           state.cart.items.push({ courseId: action.payload });
-          localStorage.setItem('cart', JSON.stringify(state.cart));
+          // state.cart.items = [...state.cart.items, { courseId: action.payload }];
+
+          const cartForStorage = {
+            items: state.cart.items
+          };
+
+          localStorage.setItem('cart', JSON.stringify(cartForStorage));
           notification.success({
             message: 'Add to cart successfully!'
           });
@@ -81,6 +103,21 @@ const clientSlice = createSlice({
     },
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
+    },
+    initLessonsDoneOfCourse: (state, action: PayloadAction<string[]>) => {
+      state.lessonIdsDoneByCourseId = action.payload;
+    },
+    updateLessonDoneAtBrowser: (state, action: PayloadAction<string>) => {
+      const existingLessonId = state.lessonIdsDoneByCourseId.findIndex((lessonId) => lessonId === action.payload);
+      if (existingLessonId === -1) {
+        state.lessonIdsDoneByCourseId.push(action.payload);
+      }
+    },
+    initCurrentProgress: (state, action: PayloadAction<number>) => {
+      state.currentProgress = action.payload;
+    },
+    createCertificatePath: (state, action: PayloadAction<string>) => {
+      state.certificatePath = action.payload;
     }
     // handleFormData: (state, action: PayloadAction<IOrder>) => {
     //   state.formData = action.payload;
@@ -97,6 +134,10 @@ export const {
   calcTotalLectures,
   calcTotalVideosLength,
   setCurrentLessonDone,
-  setSearchQuery
+  setSearchQuery,
+  initLessonsDoneOfCourse,
+  updateLessonDoneAtBrowser,
+  initCurrentProgress,
+  createCertificatePath
 } = clientSlice.actions;
 export default clientReducer;

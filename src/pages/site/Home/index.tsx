@@ -7,7 +7,7 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import { Col, Row, Skeleton, Space } from 'antd';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
@@ -64,11 +64,23 @@ const HomePage = () => {
     userId: userId
   });
 
-  const { data: userCoursesData, isFetching } = useGetCoursesQuery(userCoursesParams);
-  const { data: frontendData, isFetching: isFrontendFetching } = useGetCoursesQuery(frontendParams);
-  const { data: backendData, isFetching: isBackendFetching } = useGetCoursesQuery(backendParams);
-  const { data: devopsData, isFetching: isDevopsFetching } = useGetCoursesQuery(devopsParams);
-  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(popularParams);
+  const { data: userCoursesData, isFetching, refetch: refetchUsersCourses } = useGetCoursesQuery(userCoursesParams);
+  const {
+    data: frontendData,
+    isFetching: isFrontendFetching,
+    refetch: refetchFrontend
+  } = useGetCoursesQuery(frontendParams);
+  const {
+    data: backendData,
+    isFetching: isBackendFetching,
+    refetch: refetchBackend
+  } = useGetCoursesQuery(backendParams);
+  const { data: devopsData, isFetching: isDevopsFetching, refetch: refetchDevops } = useGetCoursesQuery(devopsParams);
+  const {
+    data: popularCoursesData,
+    isFetching: isPoppularCoursesFetching,
+    refetch: refetchPopular
+  } = useGetPopularCoursesQuery(popularParams);
 
   const isPopularLoadMore =
     (popularCoursesData?.pagination._totalRows || 0) > (popularCoursesData?.courses.length || 0);
@@ -189,6 +201,30 @@ const HomePage = () => {
   //     window.removeEventListener('resize', updateScreenSize);
   //   };
   // }, [updateScreenSize]);
+
+  useEffect(() => {
+    if (isAuth) {
+      setUserCoursesParams({
+        ...userCoursesParams,
+        userId: userId
+      });
+
+      setFrontendParams({
+        ...frontendParams,
+        userId: userId
+      });
+
+      setBackendParams({
+        ...backendParams,
+        userId: userId
+      });
+
+      setDevopsParams({
+        ...devopsParams,
+        userId: userId
+      });
+    }
+  }, [isAuth]);
 
   return (
     <div>
@@ -336,7 +372,7 @@ const HomePage = () => {
 
       {isAuth && (
         <div className={`our-courses container spacing-h-sm`}>
-          <h2 className='our-courses__title mt-sm'>Our Courses</h2>
+          <h2 className='our-courses__title mt-md'>Our Courses</h2>
           {isFetching ? (
             <Skeleton />
           ) : (

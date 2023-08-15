@@ -1,3 +1,4 @@
+import { Skeleton } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store/store';
 import { useGetLessonsBySectionIdEnrolledCourseQuery } from '../../../../../client.service';
@@ -19,9 +20,11 @@ const PathPlayerLessonList = (props: LessonListProps) => {
 
   return (
     <div className='path-player__lesson-list'>
-      {lessonData?.lessons.map((lessonItem) => {
-        return <LessonItem key={lessonItem._id} lessonItem={lessonItem} />;
-      })}
+      {isLessonFetching && <Skeleton />}
+      {!isLessonFetching &&
+        lessonData?.lessons.map((lessonItem) => {
+          return <LessonItem key={lessonItem._id} lessonItem={lessonItem} />;
+        })}
 
       {/* <div className='lesson-item'>
         <div className='lesson-item__icon'></div>

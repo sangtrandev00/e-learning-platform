@@ -1,9 +1,10 @@
+import { notification } from 'antd';
 import { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { useUpdateLessonDoneByUserMutation } from '../../../client.service';
-import { setCurrentLessonDone } from '../../../client.slice';
+import { updateLessonDoneAtBrowser } from '../../../client.slice';
 import './PlayerScreen.scss';
 // type Props = {};
 
@@ -26,20 +27,29 @@ const PlayerScreen = () => {
       const percentHavePlayed = playerEl.current.getCurrentTime() / playerEl.current.getDuration();
       if (percentHavePlayed >= 0.95) {
         console.log('watched done the video');
-        setApiCalled(true);
+
+        // Update lesson done at current state
+        dispatch(updateLessonDoneAtBrowser(currLessonId));
+
+        // Update lesson Done at database
         updateLessonDone({
           userId: currUserId,
           lessonId: currLessonId
         })
           .then((result) => {
             console.log('update lesson done result: ', result);
-
+            notification.success({
+              message: 'You have finished this video'
+            });
             // Update at state and db here!!!
-            dispatch(setCurrentLessonDone());
+
+            // dispatch(setCurrentLessonDone());
           })
           .catch((error) => {
             console.log(error);
           });
+
+        setApiCalled(true);
       } else {
         console.log('have not watched done the video');
       }

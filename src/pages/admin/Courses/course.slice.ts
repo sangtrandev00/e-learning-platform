@@ -23,14 +23,18 @@ const initialState: CourseState = {
     thumbnail: '',
     courseSlug: '',
     categoryId: {
-      _id: '646781266859a50acfca8e93',
-      name: 'Web'
+      _id: '',
+      name: ''
     },
     userId: {
       _id: '6468a145401d3810494f4797',
       name: 'Nguyen Van A',
       avatar: ''
-    }
+    },
+    willLearns: [],
+    requirements: [],
+    tags: [],
+    subTitle: ''
   },
   sectionId: '',
   isOpenAddSectionModal: false
