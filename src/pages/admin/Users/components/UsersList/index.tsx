@@ -182,7 +182,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
             </a>
           </>
         ),
-        lastLogin: '19 Jul 2023 21:43:35',
+        lastLogin: user.lastLogin || '',
         createdAt: user.createdAt,
         courses: (
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>

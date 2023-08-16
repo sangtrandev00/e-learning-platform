@@ -19,6 +19,7 @@ export interface IUser {
   courses?: ICourse[];
   createdAt?: string;
   updatedAt?: string;
+  lastLogin?: string;
   tags?: string[];
   providerId?: string; // maybe improve later
   resetToken?: string;
