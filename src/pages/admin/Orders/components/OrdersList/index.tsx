@@ -102,8 +102,7 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
             </div>
           </a>
         ),
-        register: '19 Jul 2023 21:43:35',
-
+        register: order.createdAt || '',
         courses: (
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
             {(items || []).map((course) => (

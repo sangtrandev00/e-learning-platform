@@ -1,48 +1,119 @@
 # FRONTEND: E LEARNING PLATFORM
+<!-- [![YouTube Video](https://img.youtube.com/vi/gyMwXuJrbJQ/default.jpg)](https://www.youtube.com/watch?v=gyMwXuJrbJQ)
 
-## Description: 
-Develop a comprehensive e-learning platform that
-serves as a marketplace for selling online courses. Our platform
-offers a seamless experience for users to browse and purchase
-courses, study the course materials, and track their progress. The
-administrator has the ability to manage orders and analyze
-student performance
-### Site:
+[![YouTube Video](https://img.youtube.com/vi/VIDEO_ID/0.jpg){width=480px height=360px}](https://www.youtube.com/watch?v=VIDEO_ID) -->
+<img src="./src/assets/images/e-learning-website.png" alt="Screenshot" width="100%" >
 
-#### Authentication feature: 
-+ User can signup
-+ After signup, users are able to login (with username and password have created at website)
-+ Using JWT to login
-#### Before login:
-- Be able to see overview about website with slogan, banner, CTA, courses by categories at website
-- View detail for every course (At here user can see throughly about course with name, rating, last updated, thumbnail, course includes, will learns, and layout sections of the course with lessons, videos, minutes,... )
-- User can buy course (if paid) and enrolled course if (free). After enrolled will create an order at website and redirect to 1 subsribed page. After buying course go to checkout page with previous courses at cart and continute to checkout.
-- User can add to cart (the course). View Cart. And Checkout base on that cart
+<p style="text-align: center; font-style: italic">This video provides a summary of the project and its main features.</p>
+<!-- <iframe width="480" height="360" src="https://www.youtube.com/embed/gyMwXuJrbJQ" frameborder="0" allowfullscreen></iframe> -->
 
-#### After login:
-- Look at your learning courses
-- Start learning section tab (to start learning what courses you have ordered)
-- Start Watching (learning course) by click continue button. Redirect to player path to watch videos. 
-- At Player video, user can watch video, after watch 1 video over 95%, the lesson will done and add to database. At this page, user can track the progress and after complete 100% of course, user will be able to get certification of this course (PDF file)
-### Admin: 
 
-#### Before login
-[Author page before login](https://master--wetech-e-learning.netlify.app/author-login)
+## 1. Project Description Overview: 
++ Develop a comprehensive e-learning platform that
+serves as a marketplace for selling online courses.
++ Our platform
+offers a seamless experience for users to browse and purchase courses, study the course materials, and track their progress. 
++ The administrator has the ability to manage orders and analyze student performance
++ Take a look to visit the website: 
+https://master--wetech-e-learning.netlify.app/
+## 2. Main Module features
 
-#### After login
-[Author page link here after login](https://master--wetech-e-learning.netlify.app/author/dashboard)
-- View overall reports at the website (with total sales for 30 days, all users, all courses, all categories), view new singups, revenue, course sales for (7/30/60 days ago)
-- Manage categories, courses, users, orders
-- With categories can create, edit, delete
-- With courses can create a course, after create course can add sections and lessons for this course (in the video youtube format)
-- reports about courses sale (orders)
-- Other features intend to do (Like report center - track user progress, course insight, certifications, reviews of users)
+### 2.1 Authentication feature: 
++ Using JWT authenticate for both user and admin site
++ Users can signup - After signup, users are able to login (with username and password have created at website)
++ Users are able to login - after login state of website will change.
++ Admin login. After login with (User is authorized to view/manage models base on the current role (USER, TEACHER) )
++ Logout. Both user and admin are able to logout of website. When user or admin logout of website (the state of website will reset from the begining, and it will send a request to backend to excute logout and make JSON WEB TOKEN invalid)
+## 2.2 Main core features
+### 2.2.1 Before login
+#### **2.2.1.1. Client**
+- **Homepage**: 
+  -  Users are able to see overview about website with slogan, banner, benefits, statistic, CTA, courses by categories (Popular, Frontend, Backend, Devops Courses) at website
+    - At banner user can click to view courses, start now to open login modal
+    - When not logined, user when click to the button (Enroll/ Buy now) it will force user to login first then continue.
+    - Load more to views at each categories section.
+    - When click at title and thumbnail of course it will go to course detail
+- **Course Detail**:
+  - View detail for every course (At here user can see throughly about course with name, rating, last updated, thumbnail, course includes, will learns, and layout sections of the course with lessons, videos, minutes,... )
+  <!-- - User can buy course (if paid) and enrolled course if (free). After enrolled will create an order at website and redirect to 1 subsribed page. After buying course go to checkout page with previous courses at cart and continute to checkout. -->
+  - User can add to cart (the course). Got to View Cart
+- **Courses Page**:
+    - Users are able to views all the courses of website
+    - Users can search for courses. This feature, I applied fulltext search with nodejs and mongoodb. If course name or desc includes the word in "seach terms" it will be displayed.
+    - Users can filter buy author name, level, price, topic. (All this feature i used logic at backend using nodejs)
+    - Users can sort for buying newest courses.
+    - Paginate the courses. With 12 coures per each page.
+- **View Cart**: 
+  - User can add to cart without login at website. The Cart will store at localStorage, persite the state even if user close browser.
+  -  At cart page, user can remove cart, view briefly information of course, total price of cart, number of courses have added, continute to checkout (if logined).
+- **Other pages**: Contact, About page
+#### 2.2.1.2. Admin Pages:
+    **Only show admin login page when not logged in**
+### 2.2.2 After login:
+#### 2.2.2.1 Client (Add more features when logined)
+- **Header**: Show information of user (with avatar, username, email )
+- **Homepage**: 
+  - Change state of website. Show my courses (the courses have ordered of users)
+  - Users are ble to buy courses, enroll (if free) when logined.
+  - After enrolled to go subcribe course and create an order at database. 
+  - After click to buy now to go checkout page, and continute to check and create order.
+  - If that course's already bought buy user, the course item will show (Go to Course) Button. Let the user navigate to Study Watch Video Place.
+-  **Course Detail**: 
+   -  Users are able to buy now, enroll if free.
+   -  Go to course study place if already bought.
+- **My Learning Place**: (React Player)
+  - Users are able to view all of courses have ordered before
+  - See overview of number of courses, total hours of video have watch/done.
+  - Click to course item to go to course study place (watch video)
+- **View Profile of user**:
+  - View Profile of user with total course have ordered, total hours of videos have done, info name. 
+- **Course Study Place**: 
+    - Users are able to track current progress of user'course
+    - Watch video, complete video
+    - After complete 100% course's lessons, Users are able to get certificates of course (with PDF file have name, date finished, course name)
+#### 2.2.2.2 Admin
+
+- **Dashboard**: 
+  - View overall reports at the website (with total sales for 30 days, all users, all courses, all categories),
+  -  view new singups, revenue, course sales for (7/30/60 days ago)
+- **Categories**: 
+  - Manage categories with list categories by table format have pagination 
+  - Create/edit/delete category, 
+  - Search category by name, filter category by category name 
+- **Courses**:
+  - Manage courses with list courses by table format and grid format have pagination 
+  - Create/edit/delete course, 
+  - Search course by name (full-text search)
+  - Filter course by categories, author's name
+- **Users**:
+  - Manage users with list users by table format, have pagination 
+  - Create/edit/delete user, 
+  - Search user by name (full-text search)
+- **Orders**:
+  - Manage orders with list orders by table format, have pagination.
+  - View the overall of each orders includes total revenue of website, total number of sales, total amounts of each orders, numbers of courses, date ordered
+  - Search order by user's name
+  - Filter orders by course, buy previous date ordered (7 days, 30 days, yesterday, today).
+
+- **Reports Centers**:
+  - ** User Progress**:
+    - List users's insight with total study time of users for all courses, total courses have orered, in completed course  
+  - ** Course Insight**:  
+    - List course's insight with total of learners, average study times of students per all students of this course, total videos durations, and all lessons of the course.
+- **Authorization**:
+  - Website author with 2 main role (ADMIN - TEACHER)
+  - Admin with full control of permissions
+  - Teachers are able to view courses of themselves, create/edit/ delete courses of themselves, View categories, not able to edit or delete
 ## Technologies in use:
-HTML, CSS, SCSS, React Typescript, Redux, RTK Query, Ant Design
+HTML, CSS, SCSS, Responsive Web Design, React Typescript, Redux, RTK Query, Ant Design
 
-## Find more continue related to this repository:
-[backend repository link here](https://github.com/sangtrandev00/backend-course-prj)
+## Related Links:
++ Backend Repository Link: [backend repository link here](https://github.com/sangtrandev00/backend-course-prj)
++ Author's Person Website: https://trannhatsang.com
 
-## Author:
 
-https://trannhatsang.com
+## Project Status: (In Progress).
+I am currently working on this project, the project is going to be updated more and more with complicated modules such as community, track review after ordering the course, note, comment, realtime notifications,...
+
+## License
+Author: sangtrandev00

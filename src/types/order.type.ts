@@ -13,6 +13,8 @@ export interface IOrder {
   totalPrice: number;
   vatFee: number;
   note?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface ITransaction {
