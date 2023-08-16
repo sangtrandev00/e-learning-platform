@@ -23,7 +23,7 @@ const PathPlayerLessonList = (props: LessonListProps) => {
       {isLessonFetching && <Skeleton />}
       {!isLessonFetching &&
         lessonData?.lessons.map((lessonItem) => {
-          return <LessonItem key={lessonItem._id} lessonItem={lessonItem} />;
+          return <LessonItem key={lessonItem._id} lessonItem={lessonItem} isFetching={isLessonFetching} />;
         })}
 
       {/* <div className='lesson-item'>

@@ -1,5 +1,5 @@
 import { notification } from 'antd';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
@@ -56,7 +56,10 @@ const PlayerScreen = () => {
     }
   };
 
-  console.log('Content playing video is: ', content);
+  // Reset state when lesson id change
+  useEffect(() => {
+    setApiCalled(false);
+  }, [currLessonId]);
 
   return (
     <ReactPlayer

@@ -4,8 +4,17 @@
     display: flex;
     padding: 1rem;
     background-color: $light-bg-color;
-    border-left: 4px solid $brand-primary-color;
+    border-left: 4px solid transparent;
     cursor: pointer;
+
+    &:hover {
+        border-left: 4px solid $brand-primary-color;
+    }
+
+    &.playing {
+        border-left: 4px solid $brand-primary-color;
+    }
+
     &__icon {
 
         &-icon {

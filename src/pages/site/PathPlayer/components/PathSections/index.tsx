@@ -13,29 +13,13 @@ type Props = {
   courseId: string;
   progressPercent: string;
   certificate: ICertificate | undefined;
-  isCreateNewCertificate: boolean;
 };
 
 const PathSections = (props: Props) => {
   const { data: sectionData, isFetching } = useGetSectionsByCourseIdQuery(props.courseId);
   const certificatePath = useSelector((state: RootState) => state.client.certificatePath);
   const lessonIdsDoneByCourseId = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
-  // const [hasFinished, setHasFinished] = useState(false);
-  let certificateName = '';
-  if (props.certificate) {
-    certificateName = props.certificate.certificateName;
-  }
-
-  // console.log('is create certificate: ', props.isCreateNewCertificate);
-
-  // useEffect(() => {
-  //   const hasCertificated = (Number(props.progressPercent) === 100 && props.certificate) as boolean;
-  //   console.log('props.progressPercen ', props.progressPercent);
-  //   console.log('props.certificate ', props.certificate);
-  //   console.log('has hasCertificated ', hasCertificated);
-  //   console.log('lessonIdsDoneByCourseId ', hasCertificated);
-  //   setHasFinished(hasCertificated);
-  // }, [lessonIdsDoneByCourseId]);
+  const currentProgress = useSelector((state: RootState) => state.client.currentProgress);
 
   const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
     const { _id, name, description, access } = sectionItem;
@@ -58,13 +42,14 @@ const PathSections = (props: Props) => {
         <h3>Certification</h3>
       </div>
     ),
-    children: certificatePath ? (
-      <Link target='_blank' to={`${BACKEND_URL}/images/${certificateName}`}>
-        Got the certification here!!!
-      </Link>
-    ) : (
-      <div>Complete the videos first to get the certificate</div>
-    )
+    children:
+      certificatePath && currentProgress === 1 ? (
+        <Link target='_blank' to={`${BACKEND_URL}/images/${certificatePath}`}>
+          Got the certification here!!!
+        </Link>
+      ) : (
+        <div>Complete the videos first to get the certificate</div>
+      )
   };
 
   if (sectionItems) {

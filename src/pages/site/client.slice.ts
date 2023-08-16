@@ -18,6 +18,7 @@ interface ClientState {
   lessonIdsDoneByCourseId: string[];
   currentProgress: number;
   certificatePath: string;
+  isLessonChange: boolean;
   //   formData: IClient;
 }
 
@@ -39,7 +40,8 @@ const initialState: ClientState = {
   params: {},
   lessonIdsDoneByCourseId: [],
   currentProgress: 0,
-  certificatePath: ''
+  certificatePath: '',
+  isLessonChange: false
 };
 
 const clientSlice = createSlice({
@@ -117,7 +119,22 @@ const clientSlice = createSlice({
       state.currentProgress = action.payload;
     },
     createCertificatePath: (state, action: PayloadAction<string>) => {
-      state.certificatePath = action.payload;
+      if (action.payload) {
+        state.certificatePath = action.payload;
+      }
+    },
+    updateCurrentProgress: (state, action: PayloadAction<number>) => {
+      state.currentProgress += action.payload;
+    },
+    updateIsLessonChange: (state, action: PayloadAction<string>) => {
+      if (state.lessonId !== action.payload) {
+        state.isLessonChange = true;
+      } else {
+        state.isLessonChange = false;
+      }
+    },
+    resetLessonChange: (state) => {
+      state.isLessonChange = false;
     }
     // handleFormData: (state, action: PayloadAction<IOrder>) => {
     //   state.formData = action.payload;
@@ -138,6 +155,10 @@ export const {
   initLessonsDoneOfCourse,
   updateLessonDoneAtBrowser,
   initCurrentProgress,
-  createCertificatePath
+  updateCurrentProgress,
+  createCertificatePath,
+  updateIsLessonChange,
+  resetLessonChange
+  // refetchCourseEnrolledbyUser
 } = clientSlice.actions;
 export default clientReducer;
