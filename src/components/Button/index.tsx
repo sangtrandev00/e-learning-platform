@@ -5,11 +5,12 @@ type Props = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   action?: string;
+  disabled?: boolean;
 };
 
 const Button = (props: Props) => {
   return (
-    <button onClick={props.onClick} data-action={props.action} className={props.className}>
+    <button disabled={props.disabled} onClick={props.onClick} data-action={props.action} className={props.className}>
       {props.children}
     </button>
   );

@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
-import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
 import React, { useState } from 'react';
 import { ISection } from '../../../../../../../types/lesson.type';
 import { useAddSectionMutation } from '../../../../course.service';
@@ -116,7 +116,7 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
               </Row>
 
               <Row gutter={16}>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name='approver'
                     label='Approver'
@@ -127,8 +127,8 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                       <Option value='tom'>Tom Liu</Option>
                     </Select>
                   </Form.Item>
-                </Col>
-                <Col span={12}>
+                </Col> */}
+                {/* <Col span={12}>
                   <Form.Item
                     name='dateTime'
                     label='DateTime'
@@ -139,7 +139,7 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                       getPopupContainer={(trigger) => trigger.parentElement!}
                     />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
               <Row gutter={16}>
                 <Col span={24}>

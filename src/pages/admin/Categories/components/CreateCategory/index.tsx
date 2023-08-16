@@ -59,19 +59,34 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
 
     console.log('categoryId: ', categoryId);
 
-    if (categoryId) {
+    if (categoryId && data) {
       setFormData(initialCategory);
       form.setFieldsValue(initialCategory);
     } else {
-      form.resetFields();
+      console.log('Add state');
+      setFormData({
+        _id: '',
+        name: '',
+        cateImage: '',
+        cateSlug: '',
+        description: ''
+      });
+      form.setFieldsValue({
+        _id: '',
+        name: '',
+        cateImage: '',
+        cateSlug: '',
+        description: ''
+      });
+
+      // form.resetFields();
     }
 
     return () => {
-      form.resetFields();
-
-      console.log('Unmount data: ');
+      // form.resetFields();
+      // console.log('Unmount data: ');
     };
-  }, [categoryId, initialCategory, form]);
+  }, [categoryId, data, form]);
 
   const submitHandler = (formData: Omit<ICategory, '_id'>) => {
     console.log('submit', formData);
@@ -100,8 +115,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
           notification.error({
             message: 'Update Category failed',
             description: error.data.message
-          })
-
+          });
         });
     } else {
       addCategory(formData)
@@ -158,7 +172,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
               <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter category name' }]}>
                 <Input
                   name='name'
-                  // value={formData.name}
+                  value={formData.name}
                   placeholder='Please enter category name'
                   onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
                 />
@@ -175,7 +189,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
                   // addonBefore='http://'
                   // addonAfter='.com'
                   name='cateImage'
-                  // value={formData.cateImage}
+                  value={formData.cateImage}
                   onChange={(event) => setFormData((prev) => ({ ...prev, cateImage: event.target.value }))}
                   placeholder='Please enter cate image'
                 />
@@ -193,7 +207,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
                   name='cateSlug'
                   style={{ width: '100%' }}
                   placeholder='Please enter your cate slug'
-                  // value={formData.cateSlug}
+                  value={formData.cateSlug}
                   onChange={(event) => setFormData((prev) => ({ ...prev, cateSlug: event.target.value }))}
                 />
               </Form.Item>

@@ -1,16 +1,19 @@
-import { Button, Checkbox, Form, Input, notification } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Spin, notification } from 'antd';
 import jwtDecode from 'jwt-decode';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../../../../types/user.type';
 import { adminLoginError } from '../../../../utils/helpers';
 import { useAdminLoginMutation } from '../../../auth.service';
 import { setAdminAuthenticated } from '../../../auth.slice';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const AdminLogin: React.FC = () => {
   const [form] = Form.useForm();
   const [adminLogin, adminLoginResult] = useAdminLoginMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onFinish = (formValues: { email: string; password: string }) => {
@@ -20,6 +23,8 @@ const AdminLogin: React.FC = () => {
       email: formValues.email,
       password: formValues.password
     };
+
+    setIsSubmitting(true);
 
     adminLogin(adminCredentials)
       .then((result) => {
@@ -60,6 +65,10 @@ const AdminLogin: React.FC = () => {
               description: (result as adminLoginError).error.data.message
             });
           }
+        }
+
+        if (!adminLoginResult.isLoading) {
+          setIsSubmitting(false);
         }
         // if (result.error.status === 500) {
         //   console.log('show notification!');
@@ -104,8 +113,8 @@ const AdminLogin: React.FC = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type='primary' htmlType='submit'>
-          Submit
+        <Button type='primary' htmlType='submit' disabled={isSubmitting}>
+          {isSubmitting ? <Spin indicator={antIcon} /> : 'Login '}
         </Button>
       </Form.Item>
     </Form>

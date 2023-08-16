@@ -1,11 +1,11 @@
-import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled } from '@ant-design/icons';
+import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled, LoadingOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Input, Space, notification } from 'antd';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import ButtonCmp from '../../../../components/Button';
 import { IUser, UserRole } from '../../../../types/user.type';
 import { useSignupMutation } from '../../../auth.service';
 import '../Auth.scss';
-
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface SignupProps {
   onClick: (authState: string) => void;
 }
@@ -13,7 +13,7 @@ interface SignupProps {
 const Signup: React.FC<SignupProps> = (props) => {
   const [form] = Form.useForm();
   const [signup, signupResult] = useSignupMutation();
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onFinish = (formValues: Omit<IUser, '_id'>) => {
     console.log('Success:', formValues);
 
@@ -25,6 +25,8 @@ const Signup: React.FC<SignupProps> = (props) => {
       role: UserRole.USER
     };
 
+    setIsSubmitting(true);
+
     signup(newUser)
       .then((result) => {
         console.log(result);
@@ -35,6 +37,9 @@ const Signup: React.FC<SignupProps> = (props) => {
           const signupResponse: { message: string; userId: string } = result.data;
 
           notification.success({ type: 'success', message: signupResponse.message });
+        }
+        if (!signupResult.isLoading) {
+          setIsSubmitting(false);
         }
 
         props.onClick('login');

@@ -1,7 +1,7 @@
 import { Avatar, Button, Popover, Skeleton, Space, Table, Tag, Tooltip, notification } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import './UsersList.scss';
 // import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
@@ -118,14 +118,21 @@ const SettingContent = (props: { userId: string }) => {
 
 interface UserListProps {
   onEditUser: () => void;
+  searchValue: string;
 }
 
 const UsersList: React.FC<UserListProps> = (props) => {
   const [open, setOpen] = useState(false);
 
   const [usersParams, setUsersParams] = useState({
-    _q: ''
+    _q: props.searchValue
   });
+
+  useEffect(() => {
+    setUsersParams({
+      _q: props.searchValue
+    });
+  }, [props.searchValue]);
 
   // useEffect(() => {
   //   setUsersParams({

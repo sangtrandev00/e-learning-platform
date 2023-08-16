@@ -53,7 +53,7 @@ export const categoryApi = createApi({
   }),
   endpoints: (build) => ({
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getAllCategories: build.query<getCategoriesResponse, IParams>({
+    getAllCategories: build.query<getCategoriesResponse, void>({
       query: () => ({
         url: '/all-categories'
       }), // method không có argument
@@ -204,6 +204,7 @@ export const categoryApi = createApi({
 
 export const {
   useGetCategoriesQuery,
+  useGetAllCategoriesQuery,
   useAddCategoryMutation,
   useGetCategoryQuery,
   useUpdateCategoryMutation,

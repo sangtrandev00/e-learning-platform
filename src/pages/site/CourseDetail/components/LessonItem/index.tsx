@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
-import './LessonItem.scss';
-import { Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
+import { Collapse, Skeleton } from 'antd';
 import { ILesson } from '../../../../../types/lesson.type';
 import { formatTime } from '../../../../../utils/functions';
+import './LessonItem.scss';
 
 type CourseDetailLessonItemProps = {
   lessonItem: ILesson;
@@ -12,7 +11,7 @@ type CourseDetailLessonItemProps = {
 const CourseDetailLessonItem = (props: CourseDetailLessonItemProps) => {
   const { _id, name, description, access, content, videoLength } = props.lessonItem;
 
-  console.log('video Length: ');
+  // console.log('video Length: ');
 
   return (
     <div className='course-detail__lesson-item'>

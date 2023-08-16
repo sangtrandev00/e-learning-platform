@@ -1,20 +1,21 @@
-import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled } from '@ant-design/icons';
-import { Button, Divider, Form, Input, Space, notification } from 'antd';
+import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled, LoadingOutlined } from '@ant-design/icons';
+import { Button, Divider, Form, Input, Space, Spin, notification } from 'antd';
 import jwtDecode from 'jwt-decode';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ButtonCmp from '../../../../components/Button';
 import { useLoginMutation, useUpdateLastLoginMutation } from '../../../auth.service';
 import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
 import '../Auth.scss';
-
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface LoginProps {
   onClick: (authState: string) => void;
 }
 
 const Login: React.FC<LoginProps> = (props) => {
   const [form] = Form.useForm();
-  const [login] = useLoginMutation();
+  const [login, loginResult] = useLoginMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
   const [updateLastLogin, updateLastLoginResult] = useUpdateLastLoginMutation();
@@ -24,7 +25,9 @@ const Login: React.FC<LoginProps> = (props) => {
       email: formValues.email,
       password: formValues.password
     };
+    console.log('loginResult: ', loginResult);
 
+    setIsSubmitting(true);
     login(userCredentials)
       .then((result) => {
         console.log(result);
@@ -43,6 +46,8 @@ const Login: React.FC<LoginProps> = (props) => {
           const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(
             loginResponse.token
           );
+
+          console.log('loginResult: ', loginResult);
 
           // Update last login at database
           const currentDate = new Date();
@@ -74,6 +79,10 @@ const Login: React.FC<LoginProps> = (props) => {
             // Token has expired, handle accordingly (e.g., prompt user to log in again)
             console.log('Token has expired. Please log in again.');
           }
+        }
+
+        if (!loginResult.isLoading) {
+          setIsSubmitting(false);
         }
 
         // Handling error failed login here
@@ -150,7 +159,12 @@ const Login: React.FC<LoginProps> = (props) => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 24 }}>
-          <ButtonCmp className='btn btn-primary btn-sm w-full'>Login</ButtonCmp>
+          <ButtonCmp disabled={isSubmitting} className='btn btn-primary btn-sm w-full'>
+            {isSubmitting ? <Spin indicator={antIcon} /> : 'Login '}
+          </ButtonCmp>
+          {/* <Button loading={true}>
+            Submit Ant Design <Spin indicator={antIcon} />;
+          </Button> */}
         </Form.Item>
       </Form>
       <div className='auth__footer'>
