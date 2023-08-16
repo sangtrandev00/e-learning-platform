@@ -1,0 +1,10 @@
+@import "../../../assets/sass/base";
+
+
+.contact {
+    margin-top: $header-height;
+    
+    &__title {
+        @include h-style("h2");
+    }
+}

@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps } from 'antd';
+import { Collapse, CollapseProps, Skeleton } from 'antd';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { BACKEND_URL } from '../../../../../constant/backend-domain';
@@ -17,11 +17,9 @@ type Props = {
 
 const PathSections = (props: Props) => {
   const { data: sectionData, isFetching } = useGetSectionsByCourseIdQuery(props.courseId);
-  const userId = useSelector((state: RootState) => state.auth.userId);
-  let certificateName = '';
-  if (props.certificate) {
-    certificateName = props.certificate.certificateName;
-  }
+  const certificatePath = useSelector((state: RootState) => state.client.certificatePath);
+  const lessonIdsDoneByCourseId = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
+  const currentProgress = useSelector((state: RootState) => state.client.currentProgress);
 
   const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
     const { _id, name, description, access } = sectionItem;
@@ -45,8 +43,8 @@ const PathSections = (props: Props) => {
       </div>
     ),
     children:
-      Number(props.progressPercent) === 100 && props.certificate ? (
-        <Link target='_blank' to={`${BACKEND_URL}/images/${certificateName}`}>
+      certificatePath && currentProgress === 1 ? (
+        <Link target='_blank' to={`${BACKEND_URL}/images/${certificatePath}`}>
           Got the certification here!!!
         </Link>
       ) : (
@@ -69,14 +67,17 @@ const PathSections = (props: Props) => {
           <div className='section'>
             {/* <h3 className='section__title'>1. Section 01 - How to deal with SEO page</h3> */}
             <div className='section__content'>
-              <div className='section__content-item'>
-                <Collapse
-                  style={{ borderRadius: '0px' }}
-                  items={sectionItems}
-                  defaultActiveKey={['1']}
-                  onChange={onChange}
-                />
-              </div>
+              {isFetching && <Skeleton />}
+              {!isFetching && (
+                <div className='section__content-item'>
+                  <Collapse
+                    style={{ borderRadius: '0px' }}
+                    items={sectionItems}
+                    defaultActiveKey={['1']}
+                    onChange={onChange}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

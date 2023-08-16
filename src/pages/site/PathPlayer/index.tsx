@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Col, Progress, Row, Skeleton, Tabs, TabsProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { Col, Progress, Row, Skeleton, Tabs, TabsProps, notification } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
@@ -9,7 +9,12 @@ import {
   useGetCertificateQuery,
   useGetCourseEnrolledByUserQuery
 } from '../client.service';
-import { startPlayingVideo } from '../client.slice';
+import {
+  createCertificatePath,
+  initCurrentProgress,
+  initLessonsDoneOfCourse,
+  startPlayingVideo
+} from '../client.slice';
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
@@ -23,10 +28,9 @@ const PathPlayer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const courseId = searchParams.get('courseId');
   const userId = useSelector<RootState, string>((state: RootState) => state.auth.userId);
+
   const { data, isFetching, refetch } = useGetCourseEnrolledByUserQuery(courseId as string);
   const dispatch = useDispatch();
-  console.log('data course watching: ', data);
-
   const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
 
   const cerficiateParams = {
@@ -37,80 +41,122 @@ const PathPlayer = () => {
   const { data: certificateData, isFetching: isFetchingCertificate } = useGetCertificateQuery(cerficiateParams);
 
   const progressPercent = ((data?.course.progress || 0) * 100).toFixed(2);
-  const [currProgress, setCurrProgress] = useState(progressPercent);
-  const [isCreated, setIsCreated] = useState(false);
-  const lessonId = useSelector((state: RootState) => state.client.lessonId);
-  const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
+  const [currProgress, setCurrProgress] = useState(Number(progressPercent));
+
+  const lessonIdsDone = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
+
+  // const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
 
   console.log('certificate data: ', certificateData);
 
-  const isCreateNewCertificate =
-    Number(progressPercent) === 100 && !certificateData?.certificate && isFetchingCertificate === false;
+  const isCreateNewCertificate = useMemo(() => {
+    return currProgress === 100 && !certificateData?.certificate && isFetchingCertificate === false;
+  }, [currProgress, certificateData?.certificate, isFetchingCertificate]);
 
-  console.log('is create new certificate: ', isCreateNewCertificate);
+  // Test demo create certificate:
 
   useEffect(() => {
-    if (isCreateNewCertificate && !isCreated) {
+    console.log('enough to create : ', isCreateNewCertificate);
+
+    if (isCreateNewCertificate) {
       const newCertificate = {
         userId,
         courseId: courseId || '',
         completionDate: new Date().toISOString()
       };
 
-      console.log('create new: ', newCertificate);
-      console.log('result: ', createCertificateResult);
       createCertificate(newCertificate)
         .unwrap()
         .then((result) => {
           console.log('create certificate successfully!', result);
+          notification.success({
+            message:
+              'Congratulation! You have completed the course. Let check the certificate section to get your achievement!'
+          });
 
-          setIsCreated(true);
+          const { certificate } = result;
 
-          refetch()
-            .then((result) => {
-              console.log('result: ', result);
-            })
-            .catch((error) => {
-              console.log('eror: ', error);
-            });
+          dispatch(createCertificatePath(certificate.certificateName));
         })
         .catch((error) => {
           console.log('error: ', error);
         });
     }
-  }, [isCreateNewCertificate, isCreated]);
+  }, [isCreateNewCertificate]);
 
   // Handle change progress when player finish the current lesson (watching!)
-  useEffect(() => {
-    console.log('update lesson here at local state, at path player set progress ', isLessonDone);
+  // useEffect(() => {
+  //   console.log('update lesson here at local state, at path player set progress ', isLessonDone);
 
-    // Refetch data here
-    refetch()
-      .then((result) => {
-        console.log('refetch successfully!', result);
-        console.log('done: ', isLessonDone);
-      })
-      .catch((error) => {
-        console.log('error: ', error);
-      });
-  }, [isLessonDone, refetch]);
+  //   // Refetch data here
+  //   refetch()
+  //     .then((result) => {
+  //       console.log('refetch successfully!', result);
+  //       console.log('done: ', isLessonDone);
+  //     })
+  //     .catch((error) => {
+  //       console.log('error: ', error);
+  //     });
+  // }, [isLessonDone, refetch]);
 
   // First initital first lesson of course
 
   useEffect(() => {
     console.log('first initial lesson of course');
 
-    console.log('lesson id: ', data?.course.lessons[0]._id);
-    console.log('content: ', data?.course.lessons[0].content);
+    // console.log('lesson id: ', data?.course.lessons[0]._id || '');
+    // console.log('content: ', data?.course.lessons[0].content || '');
+    let currentPlayingVideo = {
+      lessonId: '',
+      content: ''
+    };
+
+    // notification.success({
+    //   message: 'isFetching ' + isFetching.toString()
+    // });
+
+    if (data?.course && data?.course.lessons.length > 0 && !isFetching) {
+      currentPlayingVideo = {
+        lessonId: data?.course.lessons[0]._id,
+        content: data?.course.lessons[0].content
+      };
+    }
+
+    let certificateName = '';
+
+    if (certificateData?.certificate) {
+      certificateName = certificateData?.certificate.certificateName;
+    }
 
     // dispatch(
-    dispatch(
-      startPlayingVideo({
-        lessonId: data?.course.lessons[0]._id as string,
-        content: data?.course.lessons[0].content as string
-      })
-    );
-  }, [data?.course.lessons, dispatch]);
+    dispatch(startPlayingVideo(currentPlayingVideo));
+
+    dispatch(initLessonsDoneOfCourse(data?.course.lessonsDone || []));
+
+    dispatch(initCurrentProgress(data?.course.progress || 0));
+
+    dispatch(createCertificatePath(certificateName));
+  }, [
+    data?.course,
+    data?.course.lessons,
+    data?.course.lessonsDone,
+    data?.course.progress,
+    dispatch,
+    certificateData?.certificate,
+    isFetching
+  ]);
+
+  // See effect change of progress
+  useEffect(() => {
+    const totalLessonsDone = lessonIdsDone.length;
+    const lessonsOfCourse = data?.course.lessons.length;
+    let progress = 0;
+    if (lessonsOfCourse) {
+      progress = (totalLessonsDone / lessonsOfCourse) * 100;
+    }
+    console.log('current progress change ', progress);
+    setCurrProgress(progress);
+  }, [data?.course.lessons.length, lessonIdsDone.length]);
 
   const tabItems: TabsProps['items'] = [
     {
@@ -119,7 +165,7 @@ const PathPlayer = () => {
       children: (
         <PathSections
           courseId={courseId as string}
-          progressPercent={progressPercent}
+          progressPercent={currProgress.toString()}
           certificate={certificateData?.certificate}
           className='path-player__menu-content'
         />
@@ -164,7 +210,7 @@ const PathPlayer = () => {
                 </div>
                 <h3 className='path-player__menu-header-title'>{data?.course.name}</h3>
                 <div className='path-player__menu-progress'>
-                  <Progress percent={progressPercent as unknown as number} status='active' />
+                  <Progress percent={currProgress as unknown as number} status='active' />
                 </div>
               </div>
               {/* Menu Content  */}

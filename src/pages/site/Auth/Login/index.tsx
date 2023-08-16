@@ -28,6 +28,14 @@ const Login: React.FC<LoginProps> = (props) => {
     login(userCredentials)
       .then((result) => {
         console.log(result);
+
+        // if(result.error) {
+        //   notification.error({ type: 'error', message: result.error.data.message, duration: 2 });
+        // }
+        if ('error' in result) {
+          notification.error({ type: 'error', message: 'login failed', description: 'Email or password incorrect' });
+        }
+
         if ('data' in result) {
           console.log(result.data);
 

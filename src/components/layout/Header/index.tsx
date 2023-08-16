@@ -1,9 +1,10 @@
 import { BellOutlined, HeartOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Avatar, Badge, Drawer, Dropdown, Input, Modal, Space } from 'antd';
+import { Avatar, Badge, Drawer, Dropdown, Input, Modal, Space, notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLogoutMutation } from '../../../pages/auth.service';
 import { closeAuthModal, openAuthModal, setUnauthenticated } from '../../../pages/auth.slice';
 import Login from '../../../pages/site/Auth/Login';
 import Signup from '../../../pages/site/Auth/Signup';
@@ -31,6 +32,8 @@ const Header = () => {
   const { data, isFetching } = useGetUserQuery(userId, {
     skip: !userId
   });
+  const [logout, logoutResult] = useLogoutMutation();
+
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -202,6 +205,17 @@ const Header = () => {
     console.log('click', e);
 
     if (e.key === 'logout') {
+      logout()
+        .unwrap()
+        .then((result) => {
+          console.log('result: ', result);
+          notification.success({
+            message: result.message
+          });
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
       dispatch(setUnauthenticated());
     }
   };

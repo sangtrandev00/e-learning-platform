@@ -42,7 +42,16 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/auth`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
+      const adminToken = localStorage.getItem('adminToken');
+      const token = localStorage.getItem('token');
+      if (adminToken) {
+        headers.set('authorization', `Bearer ${adminToken}`);
+        headers.set('adminRole', 'admin');
+      }
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+        headers.set('userRole', 'user');
+      }
       // Set some headers here !
       return headers;
     }
@@ -75,6 +84,51 @@ export const authApi = createApi({
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
     }),
+    logout: build.mutation<loginResponse, void>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: 'logout',
+            method: 'POST',
+            body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Authentication sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
+    }),
+    adminLogout: build.mutation<loginResponse, void>({
+      query(body) {
+        try {
+          // throw Error('hehehehe')
+          // let a: any = null
+          // a.b = 1
+          return {
+            url: 'admin/logout',
+            method: 'POST',
+            body
+          };
+        } catch (error: any) {
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Authentication sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Authentication', id: 'LIST' }])
+    }),
+
     updateLastLogin: build.mutation<loginResponse, { userId: string; lastLogin: Date }>({
       query(body) {
         try {
@@ -152,5 +206,7 @@ export const {
   useAdminLoginMutation,
   useSignupMutation,
   useResetPasswordMutation,
-  useUpdateLastLoginMutation
+  useUpdateLastLoginMutation,
+  useLogoutMutation,
+  useAdminLogoutMutation
 } = authApi;

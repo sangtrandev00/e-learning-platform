@@ -52,6 +52,7 @@ const initCourseDetail = {
   lessons: 0,
   students: 0,
   avgRatingStars: 0,
+  isBought: false,
   createdAt: '',
   updatedAt: ''
 };
@@ -68,7 +69,9 @@ const CourseDetail = () => {
 
   const { courseId } = params;
 
-  const { data, isFetching } = useGetCourseDetailQuery(courseId || '');
+  console.log('course id: ', courseId);
+
+  const { data, isFetching } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
   const [createOrder, createOrderResult] = useCreateOrderMutation();
   const navigate = useNavigate();
 
@@ -98,6 +101,7 @@ const CourseDetail = () => {
     lessons,
     avgRatingStars,
     students,
+    isBought,
     createdAt,
     updatedAt
   } = courseDetail;
@@ -180,6 +184,9 @@ const CourseDetail = () => {
   const buyNowHandler = () => {
     if (isAuth) {
       console.log('buy now handler');
+
+      dispatch(addToCart(courseId as string));
+      navigate(`/checkout`);
     } else {
       notification.error({
         message: 'Please login to buy this course'
@@ -187,6 +194,10 @@ const CourseDetail = () => {
 
       dispatch(openAuthModal());
     }
+  };
+
+  const gotoCourseHandler = () => {
+    navigate(`/path-player?courseId=${courseId as string}`);
   };
 
   return (
@@ -263,7 +274,7 @@ const CourseDetail = () => {
                   </div>
                   <div className='course-detail__overview-content '>
                     <div className='course-detail__overview-price'>{finalPrice === 0 && 'FREE'}</div>
-                    {finalPrice !== 0 && (
+                    {finalPrice !== 0 && !isBought && (
                       <div className='course-detail__overview-price'>
                         <div>
                           <s className='font-light mr-4'>${price}</s> ${finalPrice}
@@ -271,39 +282,52 @@ const CourseDetail = () => {
                       </div>
                     )}
                     <div className='course-detail__overview-btns'>
-                      <Space>
-                        {finalPrice !== 0 && (
-                          <ButtonCmp
-                            onClick={addCartHandler}
-                            className='course-detail__overview-add-to-cart btn btn-md btn-secondary'
-                          >
-                            Add to Cart
-                          </ButtonCmp>
-                        )}
-                        <Button className='course-detail__overview-wishlist-btn'>
-                          <HeartOutlined />
-                        </Button>
-                      </Space>
-                      <div>
+                      {!isBought && (
+                        <>
+                          <Space>
+                            {finalPrice !== 0 && (
+                              <ButtonCmp
+                                onClick={addCartHandler}
+                                className='course-detail__overview-add-to-cart btn btn-md btn-secondary'
+                              >
+                                Add to Cart
+                              </ButtonCmp>
+                            )}
+                            <Button className='course-detail__overview-wishlist-btn'>
+                              <HeartOutlined />
+                            </Button>
+                          </Space>
+                          <div>
+                            <Space>
+                              {finalPrice === 0 && (
+                                <ButtonCmp
+                                  onClick={subscribeCourseHandler}
+                                  className='course-detail__overview-enroll-btn btn btn-md btn-primary'
+                                >
+                                  Enroll now
+                                </ButtonCmp>
+                              )}
+                              {finalPrice !== 0 && (
+                                <ButtonCmp
+                                  onClick={buyNowHandler}
+                                  className='course-detail__overview-enroll-btn btn btn-md btn-primary'
+                                >
+                                  Buy now
+                                </ButtonCmp>
+                              )}
+                            </Space>
+                          </div>
+                        </>
+                      )}
+
+                      {isBought && (
                         <Space>
-                          {finalPrice === 0 && (
-                            <ButtonCmp
-                              onClick={subscribeCourseHandler}
-                              className='course-detail__overview-enroll-btn btn btn-md btn-primary'
-                            >
-                              Enroll now
-                            </ButtonCmp>
-                          )}
-                          {finalPrice !== 0 && (
-                            <ButtonCmp
-                              onClick={buyNowHandler}
-                              className='course-detail__overview-enroll-btn btn btn-md btn-primary'
-                            >
-                              Buy now
-                            </ButtonCmp>
-                          )}
+                          <ButtonCmp onClick={gotoCourseHandler} className='btn btn-primary btn-md btn-tertiary'>
+                            Go to course
+                          </ButtonCmp>
                         </Space>
-                      </div>
+                      )}
+
                       <div className='course-detail__overview-guarantee'>30-Day Money-Back Guarantee</div>
                     </div>
                     <div className='course-detail__overview-includes'>

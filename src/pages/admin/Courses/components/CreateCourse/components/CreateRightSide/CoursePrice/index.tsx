@@ -12,17 +12,37 @@ const CoursePrice = () => {
     }
   };
 
+  const handlePriceChange = (value: number | null) => {
+    if (value) {
+      dispatch(handleFormData({ ...formData, price: value }));
+    }
+  };
+
   return (
     <div className='course-price'>
-      <div className='course-price__wrap'>
+      <div className='course-price__wrap px-8'>
         <h3 className='course-price__title'>Write a number for your price</h3>
 
-        <p className='course-price__desc'>
+        <p className='course-price__desc font-normal'>
           Craft a catchy title and capture your students’ imagination. Make it short, precise, memorable and SEO
           friendly by including strong keywords in it.
         </p>
-        <div className='course-price__input-group'>
-          <label htmlFor='' className='course-price__input-label'>
+        <div className='course-price__input-group mt-4'>
+          <label htmlFor='' className='course-price__input-label me-4'>
+            Your First Price
+          </label>
+          <InputNumber
+            min={1}
+            max={200}
+            value={formData.price}
+            onChange={handlePriceChange}
+            className='course-price__input-input'
+            placeholder='Price'
+          />
+        </div>
+        {/* Your final price */}
+        <div className='course-price__input-group mt-4'>
+          <label htmlFor='' className='course-price__input-label me-4'>
             Your final Price
           </label>
           <InputNumber

@@ -108,7 +108,7 @@
     text-align: center;
     
     &__title{
-        @include heading-style;
+        @include h-style('h2');
         margin-bottom: 2.5rem;        
     }
 
@@ -297,6 +297,8 @@
 }
 
 .our-courses {
+    
+
     &__title {
         @include h-style("h2");
         margin-bottom: 4rem;

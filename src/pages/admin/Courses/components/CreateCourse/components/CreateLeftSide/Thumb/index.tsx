@@ -1,7 +1,6 @@
-import React from 'react';
 
 const ThumbPreview = () => {
-  return <div>ThumbPreview</div>;
+  return <div>ThumbPreview and Description Preview</div>;
 };
 
 export default ThumbPreview;
