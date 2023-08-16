@@ -143,7 +143,7 @@ export const userApi = createApi({
         };
       },
       // Trong trường hợp này thì Users sẽ chạy lại
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: data._id }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
     }),
     deleteUser: build.mutation<Record<string, never>, string>({
       query(id) {
@@ -153,7 +153,7 @@ export const userApi = createApi({
         };
       },
       // Trong trường hợp này thì Users sẽ chạy lại
-      invalidatesTags: (result, error, id) => [{ type: 'Users', id: id }]
+      invalidatesTags: (result, error, id) => [{ type: 'Users', id: 'LIST' }]
     })
   })
 });

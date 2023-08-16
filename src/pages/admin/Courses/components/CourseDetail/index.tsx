@@ -1,12 +1,12 @@
-import React from 'react';
-import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import CourseDetailLayout from '../Layout';
-import CourseContents from '../Contents';
-import Pricing from '../Pricing';
-import Access from '../Access';
-import Settings from '../../../Settings';
+import { Tabs } from 'antd';
+import React from 'react';
 import Dashboard from '../../../Dashboard';
+import Settings from '../../../Settings';
+import Access from '../Access';
+import CourseContents from '../Contents';
+import CourseDetailLayout from '../Layout';
+import Pricing from '../Pricing';
 import './CourseDetail.scss';
 const onChange = (key: string) => {
   console.log(key);
@@ -47,7 +47,13 @@ const items: TabsProps['items'] = [
 
 const CourseDetail: React.FC = () => (
   <div className='admin-course-detail'>
-    <Tabs className='admin-course-detail__tabs' centered defaultActiveKey='layout' items={items} onChange={onChange} />
+    <Tabs
+      defaultActiveKey='contents'
+      className='admin-course-detail__tabs'
+      centered
+      items={items}
+      onChange={onChange}
+    />
   </div>
 );
 

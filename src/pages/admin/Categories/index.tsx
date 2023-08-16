@@ -2,7 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Skeleton, Space } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useGetCategoriesQuery } from './category.service';
+import { useGetAllCategoriesQuery, useGetCategoriesQuery } from './category.service';
 import { startEditCategory } from './category.slice';
 import CategoriesList from './components/CategoriesList';
 import CreateCategory from './components/CreateCategory';
@@ -18,13 +18,20 @@ const Categories = () => {
   });
 
   const { data, isFetching } = useGetCategoriesQuery(params);
+  const { data: allCateData, isFetching: isAllCateFetching } = useGetAllCategoriesQuery();
   const [open, setOpen] = useState(false);
 
-  const cateFilterList = data?.categories.map((cate) => {
-    return {
-      value: cate.name,
-      label: cate.name
-    };
+  const cateFilterList =
+    allCateData?.categories.map((cate) => {
+      return {
+        value: cate.name,
+        label: cate.name
+      };
+    }) || [];
+
+  cateFilterList.unshift({
+    value: 'all',
+    label: 'All Categories'
   });
 
   const dispatch = useDispatch();

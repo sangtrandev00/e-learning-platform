@@ -122,15 +122,23 @@ const Courses = () => {
     };
   });
 
-  const cateFilterList = categoriesData?.categories.map((cate) => {
-    return {
-      text: cate.name,
-      value: cate.name,
-      _id: cate._id
-    };
+  authorFilterList?.unshift({
+    text: 'all',
+    value: 'all',
+    _id: 'all',
+    name: 'all'
   });
 
-  cateFilterList?.unshift({
+  const cateFilterList =
+    categoriesData?.categories.map((cate) => {
+      return {
+        text: cate.name,
+        value: cate.name,
+        _id: cate._id
+      };
+    }) || [];
+
+  cateFilterList.unshift({
     text: 'all',
     value: 'all',
     _id: 'all'

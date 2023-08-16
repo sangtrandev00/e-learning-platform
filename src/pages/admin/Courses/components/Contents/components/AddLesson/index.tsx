@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
-import { Button, Col, DatePicker, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
 import React, { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useSelector } from 'react-redux';
@@ -142,7 +142,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
                       placeholder='Please enter link youtube'
                     />
                   </Form.Item>
-                  <span>Video length: 30 minutes</span>
+                  {/* <span>Video length: 30 minutes</span> */}
                   <ReactPlayer
                     ref={playerRef}
                     url={contentLink}
@@ -180,7 +180,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
               </Row>
 
               <Row gutter={16}>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name='approver'
                     label='Approver'
@@ -203,7 +203,7 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
                       getPopupContainer={(trigger) => trigger.parentElement!}
                     />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
               <Row gutter={16}>
                 <Col span={24}>

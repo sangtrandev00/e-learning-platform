@@ -99,9 +99,18 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       setFormData(data.user);
       form.setFieldsValue(data.user);
     } else {
-      setFormData(initialState);
+      // setFormData(initialState);
+      form.setFieldsValue({
+        _id: '',
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        avatar: '',
+        role: UserRole.USER
+      });
     }
-  }, [data, userId]);
+  }, [data, form, userId]);
 
   return (
     <>
