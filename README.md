@@ -20,29 +20,66 @@ https://master--wetech-e-learning.netlify.app/
 
 ### 2.1 Authentication feature: 
 + Using JWT authenticate for both user and admin site
-+ Users can signup - After signup, users are able to login (with username and password have created at website)
-+ Users are able to login - after login state of website will change.
++ Users can signup 
+   - After signup, users are able to login (with username and password have created at website)
+   - Password using bcrypt algorithm
+   - Info to signup: Name, Email, Password, Phone
++ Users are able to login 
+  - After login state of website will change.
 + Admin login. After login with (User is authorized to view/manage models base on the current role (USER, TEACHER) )
 + Logout. Both user and admin are able to logout of website. When user or admin logout of website (the state of website will reset from the begining, and it will send a request to backend to excute logout and make JSON WEB TOKEN invalid)
 ## 2.2 Main core features
 ### 2.2.1 Before login
 #### **2.2.1.1. Client**
+- **Header**: With Navigation, help users can navigate over website
+- **Footer**: With related links such as about, contact, page introduction and other connection like socials.
+- **Menu**: With full categories of website.
 - **Homepage**: 
-  -  Users are able to see overview about website with slogan, banner, benefits, statistic, CTA, courses by categories (Popular, Frontend, Backend, Devops Courses) at website
+  -  Users are able to see overview about website with slogan, banner, benefits, statistic, courses by categories (Popular, Frontend, Backend, Devops Courses) at website
+  -  Each Section show 4 course items, and view more button, which make section load x2 number of items.
     - At banner user can click to view courses, start now to open login modal
     - When not logined, user when click to the button (Enroll/ Buy now) it will force user to login first then continue.
     - Load more to views at each categories section.
     - When click at title and thumbnail of course it will go to course detail
 - **Course Detail**:
-  - View detail for every course (At here user can see throughly about course with name, rating, last updated, thumbnail, course includes, will learns, and layout sections of the course with lessons, videos, minutes,... )
-  <!-- - User can buy course (if paid) and enrolled course if (free). After enrolled will create an order at website and redirect to 1 subsribed page. After buying course go to checkout page with previous courses at cart and continute to checkout. -->
-  - User can add to cart (the course). Got to View Cart
+  - View detail for every course with
+  - Infomation of course detail:
+    -  Course name
+    -  Numbers of Ratings
+    - Average stars
+    -  Last updated
+    -  Thumbnail
+    -  Number of students
+    -  Course Price / Free
+    -  Buttons: Enroll now/Add to cart/ Buy now.
+    -  Course includes (total videos length, number of sections, lessons)
+    -  Contents will learn
+    -  And layout sections of the course with numbers lessons, videos, minutes,...
+    -  Each section of course content have:
+       - Section name
+       - Number of lesson
+       - Total hours of that section  
+       - lessons follow by section.
+    - Each lesson have info:
+      - Lesson name
+      - total video lengths of that lesson 
+    - Course's author information: with name and avatar.
+  - User can add to cart (the course). Go to View Cart
 - **Courses Page**:
     - Users are able to views all the courses of website
     - Users can search for courses. This feature, I applied fulltext search with nodejs and mongoodb. If course name or desc includes the word in "seach terms" it will be displayed.
     - Users can filter buy author name, level, price, topic. (All this feature i used logic at backend using nodejs)
     - Users can sort for buying newest courses.
     - Paginate the courses. With 12 coures per each page.
+    - >Note: The Information of Course component, which shows at Homepage and Courses page is:
+      + The thumbnail
+      + Course name
+      + Course Description
+      + Buttons: Enroll/Buynow
+      + Price of course/ Free
+      + Author avatar and author's name
+      + Badge
+
 - **View Cart**: 
   - User can add to cart without login at website. The Cart will store at localStorage, persite the state even if user close browser.
   -  At cart page, user can remove cart, view briefly information of course, total price of cart, number of courses have added, continute to checkout (if logined).
@@ -72,6 +109,8 @@ https://master--wetech-e-learning.netlify.app/
     - Watch video, complete video
     - After complete 100% course's lessons, Users are able to get certificates of course (with PDF file have name, date finished, course name)
 #### 2.2.2.2 Admin
+<img src="./src/assets/images/e-learing-dashboard.png" alt="e-learing-admin-dashboard">
+<p style="text-align:center; font-style: italic">E learning dashboard overview</p>
 
 - **Dashboard**: 
   - View overall reports at the website (with total sales for 30 days, all users, all courses, all categories),
@@ -104,16 +143,19 @@ https://master--wetech-e-learning.netlify.app/
   - Website author with 2 main role (ADMIN - TEACHER)
   - Admin with full control of permissions
   - Teachers are able to view courses of themselves, create/edit/ delete courses of themselves, View categories, not able to edit or delete
-## Technologies in use:
-HTML, CSS, SCSS, Responsive Web Design, React Typescript, Redux, RTK Query, Ant Design
+## 3. Technologies in use:
++ Languages: HTML, CSS, SCSS
++ Responsive Web Design 
++  Framework/libraries: React Typescript, Redux, RTK Query, Ant Design
++  Build tool: Vitejs
 
-## Related Links:
+## 4. Related Links:
 + Backend Repository Link: [backend repository link here](https://github.com/sangtrandev00/backend-course-prj)
 + Author's Person Website: https://trannhatsang.com
 
 
-## Project Status: (In Progress).
+## 5. Project Status: (In Progress).
 I am currently working on this project, the project is going to be updated more and more with complicated modules such as community, track review after ordering the course, note, comment, realtime notifications,...
 
-## License
+## 6. License
 Author: sangtrandev00
