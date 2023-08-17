@@ -62,12 +62,12 @@ https://master--wetech-e-learning.netlify.app/
        - lessons follow by section.
     - Each lesson have info:
       - Lesson name
-      - total video lengths of that lesson 
+      - Total video lengths of that lesson 
     - Course's author information: with name and avatar.
   - User can add to cart (the course). Go to View Cart
 - **Courses Page**:
     - Users are able to views all the courses of website
-    - Users can search for courses. This feature, I applied fulltext search with nodejs and mongoodb. If course name or desc includes the word in "seach terms" it will be displayed.
+    - Users can search for courses. This feature, I applied full-text search with nodejs and mongoodb. If course's name or description includes the word in "search terms" it will be displayed.
     - Users can filter buy author name, level, price, topic. (All this feature i used logic at backend using nodejs)
     - Users can sort for buying newest courses.
     - Paginate the courses. With 12 coures per each page.
@@ -81,7 +81,7 @@ https://master--wetech-e-learning.netlify.app/
       + Badge
 
 - **View Cart**: 
-  - User can add to cart without login at website. The Cart will store at localStorage, persite the state even if user close browser.
+  - User can add to cart without login at website. The Cart will store at localStorage, persist the state even if user close browser.
   -  At cart page, user can remove cart, view briefly information of course, total price of cart, number of courses have added, continute to checkout (if logined).
 - **Other pages**: Contact, About page
 #### 2.2.1.2. Admin Pages:
@@ -91,8 +91,8 @@ https://master--wetech-e-learning.netlify.app/
 - **Header**: Show information of user (with avatar, username, email )
 - **Homepage**: 
   - Change state of website. Show my courses (the courses have ordered of users)
-  - Users are ble to buy courses, enroll (if free) when logined.
-  - After enrolled to go subcribe course and create an order at database. 
+  - Users are able to buy courses, enroll (if free) when logined.
+  - After enrolled to go to subcribe course and create an order at database. 
   - After click to buy now to go checkout page, and continute to check and create order.
   - If that course's already bought buy user, the course item will show (Go to Course) Button. Let the user navigate to Study Watch Video Place.
 -  **Course Detail**: 
@@ -117,11 +117,13 @@ https://master--wetech-e-learning.netlify.app/
   -  view new singups, revenue, course sales for (7/30/60 days ago)
 - **Categories**: 
   - Manage categories with list categories by table format have pagination 
-  - Create/edit/delete category, 
+  - Create/edit/delete category
   - Search category by name, filter category by category name 
 - **Courses**:
   - Manage courses with list courses by table format and grid format have pagination 
-  - Create/edit/delete course, 
+  - Create/delete course 
+  - After creating a course, admin is able to add section and lessons for course
+  - Lesson type is youtube video format.
   - Search course by name (full-text search)
   - Filter course by categories, author's name
 - **Users**:
@@ -136,7 +138,7 @@ https://master--wetech-e-learning.netlify.app/
 
 - **Reports Centers**:
   - ** User Progress**:
-    - List users's insight with total study time of users for all courses, total courses have orered, in completed course  
+    - List users's insight with total study time of users for all courses, total courses have ordered, in completed course  
   - ** Course Insight**:  
     - List course's insight with total of learners, average study times of students per all students of this course, total videos durations, and all lessons of the course.
 - **Authorization**:
@@ -146,8 +148,8 @@ https://master--wetech-e-learning.netlify.app/
 ## 3. Technologies in use:
 + Languages: HTML, CSS, SCSS
 + Responsive Web Design 
-+  Framework/libraries: React Typescript, Redux, RTK Query, Ant Design
-+  Build tool: Vitejs
++ Framework/libraries: React Typescript, Redux, RTK Query, Ant Design
++ Build tool: Vitejs
 
 ## 4. Related Links:
 + Backend Repository Link: [backend repository link here](https://github.com/sangtrandev00/backend-course-prj)
