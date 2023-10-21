@@ -29,7 +29,7 @@ const Header = () => {
   const cart = useSelector((state: RootState) => state.client.cart);
   const userId = useSelector((state: RootState) => state.auth.userId);
   const [userData, setUserData] = useState<IUser>();
-  const { data, isFetching } = useGetUserQuery(userId, {
+  const { data } = useGetUserQuery(userId, {
     skip: !userId
   });
   const [logout, logoutResult] = useLogoutMutation();
@@ -190,25 +190,14 @@ const Header = () => {
   };
 
   const changeAuthState = (authState: string) => {
-    console.log(authState);
-
     setAuthState(authState);
   };
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // message.info('Click on left button.');
-    console.log('click left button', e);
-  };
-
   const handleMenuClick: MenuProps['onClick'] = (e) => {
-    // message.info('Click on menu item.');
-    console.log('click', e);
-
     if (e.key === 'logout') {
       logout()
         .unwrap()
         .then((result) => {
-          console.log('result: ', result);
           notification.success({
             message: result.message
           });
@@ -234,7 +223,6 @@ const Header = () => {
   };
 
   const onSearch = (value: string) => {
-    console.log(value);
     dispatch(setSearchQuery(value));
     setSearchParams({ _q: value });
     navigate(`courses?_q=${value}`);
@@ -253,8 +241,6 @@ const Header = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-
-      console.log('hide unmount');
     };
   }, []);
 

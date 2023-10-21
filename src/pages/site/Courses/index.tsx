@@ -14,7 +14,6 @@ import './Courses.scss';
 import { SearchParamsStateType, useSearchParamsState } from 'react-use-search-params-state';
 
 const { Search } = Input;
-const onSearch = (value: string) => console.log(value);
 const Courses = () => {
   const filtersDefaults: SearchParamsStateType = {
     minPrice: { type: 'number', default: null },
@@ -39,10 +38,6 @@ const Courses = () => {
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  console.log(searchParams);
-
-  console.log('filterParams: ', filterParams);
-
   const searchValue = searchParams.get('_q') || '';
   const sortValue = searchParams.get('_sort') || 'relavant';
   const authorValue = searchParams.getAll('_author') || '';
@@ -64,16 +59,16 @@ const Courses = () => {
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-  const { data, isFetching, refetch } = useGetCoursesQuery(params);
+  const { data, isFetching } = useGetCoursesQuery(params);
 
   const isFiltered = authorValue || levelValue || priceValue;
 
   const numberOfResult = data?.pagination._totalRows || 0;
   // Get all categories at db
-  const { data: categoriesData, isFetching: isCategoriesFetching } = useGetCategoriesQuery();
+  const { data: categoriesData } = useGetCategoriesQuery();
 
   // Get all authors at db
-  const { data: authorsData, isFetching: isAuthorFetching } = useGetAuthorsQuery();
+  const { data: authorsData } = useGetAuthorsQuery();
 
   const categoriesList = categoriesData?.categories || [];
 
@@ -81,26 +76,7 @@ const Courses = () => {
 
   const levelList = ['All Level', 'Beginner', 'Intermediate', 'Advanced'];
 
-  const searchQuery = useSelector((state: RootState) => state.client.searchQuery);
-
-  // useEffect(() => {
-  //   // console.log('searchQuery: ', searchQuery);
-  //   refetch()
-  //     .then((result) => {
-  //       console.log(result);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [isAuth]);
-
   const navigate = useNavigate();
-
-  const moveToDetail = (id: string) => {
-    console.log('moveToDetail', id);
-
-    navigate(`/courses/${id}`);
-  };
 
   const sortChangeHandler = (value: string) => {
     console.log('value: ', value);
@@ -152,7 +128,6 @@ const Courses = () => {
   };
 
   const paginateHandler = (page: number) => {
-    console.log('paginate handler');
     setFilterParams({ _p: page });
   };
 

@@ -19,17 +19,11 @@ type CourseItemProps = {
   onEnroll?: (courseItem: IOrderItem) => void;
 };
 
-// Generate style of course-item__img
-
 const CourseItem = (props: CourseItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const currentPath = location.pathname;
-
-  console.log('current params: ', currentPath);
-
-  console.log('course item: ', props.courseItem);
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const userId = useSelector((state: RootState) => state.auth.userId);
@@ -46,19 +40,6 @@ const CourseItem = (props: CourseItemProps) => {
   if ((props.courseItem as ICourseEnrolledByUser).isBought) {
     hasBought = true;
   }
-
-  // if (isAuth) {
-  //   console.log('authenticated');
-
-  //   console.log('How to check course already bought buy this user!');
-
-  //   console.log(data?.user.courses.map((course) => course._id));
-
-  //   const courseIdsByUser = data?.user.courses.map((course) => course._id);
-  //   if (courseIdsByUser?.includes(props.courseItem._id)) {
-  //     hasBought = true;
-  //   }
-  // }
 
   const btnClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const btnEl = e.target as HTMLButtonElement;
@@ -107,18 +88,13 @@ const CourseItem = (props: CourseItemProps) => {
     progressPercent = 0;
   }
 
-  const gotoCourseHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('go to course handler', e.target);
-
+  // Go to course handler
+  const gotoCourseHandler = () => {
     navigate(`/path-player?courseId=${props.courseItem._id}`);
   };
 
   const viewCourseDetail = () => {
-    console.log('click course item!!!');
-
-    // if (!isAuth) {
     props?.onClick(props.courseItem._id);
-    // }
   };
 
   let backgroundImageUrl = '';
@@ -194,19 +170,6 @@ const CourseItem = (props: CourseItemProps) => {
                       Goto Course
                     </Button>
                   )}
-
-                  {/* {props.courseState === 'ordered' && (
-                    <Button
-                      onClick={clickHandler}
-                      className={`course-item__enrolls-btn btn btn-secondary btn-sm ${
-                        props.courseItem.finalPrice === 0 && props.courseState !== 'ordered'
-                          ? 'course-item__enrolls-btn--free'
-                          : ''
-                      }`}
-                    >
-                      Continue
-                    </Button>
-                  )} */}
                 </Col>
                 <Col md={12}>
                   {props.courseState !== 'ordered' && (

@@ -4,7 +4,7 @@
 [![YouTube Video](https://img.youtube.com/vi/VIDEO_ID/0.jpg){width=480px height=360px}](https://www.youtube.com/watch?v=VIDEO_ID) -->
 <img src="./src/assets/images/e-learning-website.png" alt="Screenshot" width="100%" >
 
-<p style="text-align: center; font-style: italic">This video provides a summary of the project and its main features.</p>
+<p style="text-align: center; font-style: italic">This Image of Homepage of E Learnning Platform</p>
 <!-- <iframe width="480" height="360" src="https://www.youtube.com/embed/gyMwXuJrbJQ" frameborder="0" allowfullscreen></iframe> -->
 
 
@@ -87,6 +87,18 @@ https://master--wetech-e-learning.netlify.app/
 #### 2.2.1.2. Admin Pages:
     **Only show admin login page when not logged in**
 ### 2.2.2 After login:
+
+#### How to login at Client ?
+#### Step 1: Click Sign in Button
+
+
+#### Step 2: Enter email and password:
++ Email: test_page@gmail.com
++ Password: 123456
+
+![Test Page](./src/assets/images/e-learning-website-client-login.png "Test Page")
+
+
 #### 2.2.2.1 Client (Add more features when logined)
 - **Header**: Show information of user (with avatar, username, email )
 - **Homepage**: 
@@ -109,6 +121,14 @@ https://master--wetech-e-learning.netlify.app/
     - Watch video, complete video
     - After complete 100% course's lessons, Users are able to get certificates of course (with PDF file have name, date finished, course name)
 #### 2.2.2.2 Admin
+
+#### How to login ?
+#### Step 1: Go to Website
+https://wetech-e-learning.netlify.app/author-login
+#### Step 2: Login with Admin author (contact me to get the account)
+![Author Login](./src/assets/images/e-learning-website-admin-login.png "Author Login")
+#### Step 3: Enjoy with admin dashboard and other features.
+
 <img src="./src/assets/images/e-learing-dashboard.png" alt="e-learing-admin-dashboard">
 <p style="text-align:center; font-style: italic">E learning dashboard overview</p>
 
@@ -156,8 +176,8 @@ https://master--wetech-e-learning.netlify.app/
 + Author's Person Website: https://trannhatsang.com
 
 
-## 5. Project Status: (In Progress).
-I am currently working on this project, the project is going to be updated more and more with complicated modules such as community, track review after ordering the course, note, comment, realtime notifications,...
-
-## 6. License
-Author: sangtrandev00
+## 5. License
++ Author: Tran Nhat Sang
++ Website: https://trannhatsang.com
++ Email: nhatsang0101@gmail.com
++ Contact me everytime!

@@ -52,12 +52,6 @@ import ViewCart from './pages/site/ViewCart';
 import { RootState } from './store/store';
 import { UserRole } from './types/user.type';
 
-// function ProtectedRoute({ path, element }) {
-//   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-
-//   return <Route path={path} element={isAuth ? element : <Navigate to="/author-login" />} />;
-// }
-
 function App() {
   if (!localStorage.getItem('cart')) {
     localStorage.setItem('cart', JSON.stringify({ items: [] }));
@@ -68,7 +62,6 @@ function App() {
   useEffect(() => {
     // Check if the token is stored in local storage
     const token = localStorage.getItem('token');
-    console.log('App render effect check auth');
     if (token) {
       // Decode the token to check for expiration and other details (optional)
       const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(token);
@@ -90,7 +83,6 @@ function App() {
   useEffect(() => {
     // Check if the adminToken is stored in local storage
     const adminToken = localStorage.getItem('adminToken');
-    console.log('App render effect check auth admin');
     if (adminToken) {
       // Decode the token to check for expiration and other details (optional)
       const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(adminToken);
@@ -112,11 +104,6 @@ function App() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const isAdminAuth = useSelector((state: RootState) => state.auth.isAdminAuth);
   const adminRole = useSelector((state: RootState) => state.auth.adminRole);
-
-  useEffect(() => {
-    console.log('change ', isAdminAuth);
-    console.log('role ', adminRole);
-  }, [isAdminAuth, adminRole]);
 
   const router = createBrowserRouter([
     {

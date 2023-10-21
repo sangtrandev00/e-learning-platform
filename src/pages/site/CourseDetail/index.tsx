@@ -65,13 +65,11 @@ const CourseDetail = () => {
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(userId);
+  const { data: userData } = useGetUserQuery(userId);
 
   const { courseId } = params;
 
-  console.log('course id: ', courseId);
-
-  const { data, isFetching } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
+  const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
   const [createOrder, createOrderResult] = useCreateOrderMutation();
   const navigate = useNavigate();
 
@@ -85,15 +83,11 @@ const CourseDetail = () => {
   }
 
   const {
-    _id,
     name,
     description,
     price,
     finalPrice,
     thumbnail,
-    level,
-    courseSlug,
-    categoryId,
     userId: author,
     numOfReviews,
     totalVideosLength,
@@ -102,7 +96,6 @@ const CourseDetail = () => {
     avgRatingStars,
     students,
     isBought,
-    createdAt,
     updatedAt
   } = courseDetail;
 
@@ -113,7 +106,7 @@ const CourseDetail = () => {
     thumbnailUrl = `${BACKEND_URL}/${thumbnail}`;
   }
 
-  const { data: sectionData, isFetching: isSectionFetching } = useGetSectionsByCourseIdQuery(courseId || '');
+  const { data: sectionData } = useGetSectionsByCourseIdQuery(courseId || '');
 
   const numOfSections = sectionData?.sections.length || 0;
 
@@ -127,13 +120,10 @@ const CourseDetail = () => {
   ];
 
   const addCartHandler = () => {
-    console.log('add to cart: course id: ', courseId);
     dispatch(addToCart(courseId as string));
   };
 
   const subscribeCourseHandler = () => {
-    console.log('subscribe course: course id: ', courseId);
-
     if (isAuth) {
       const orderItem = {
         courseId: courseId as string,
@@ -183,8 +173,6 @@ const CourseDetail = () => {
 
   const buyNowHandler = () => {
     if (isAuth) {
-      console.log('buy now handler');
-
       dispatch(addToCart(courseId as string));
       navigate(`/checkout`);
     } else {

@@ -32,7 +32,7 @@ const CourseList = (props: CourseListProps) => {
 
   // const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(userId);
+  const { data: userData } = useGetUserQuery(userId);
 
   const params = {
     _limit: searchParams.get('_limit') ? Number(searchParams.get('_limit')) : 12,
@@ -41,8 +41,6 @@ const CourseList = (props: CourseListProps) => {
   };
 
   const moveToDetail = (id: string) => {
-    console.log('moveToDetail', id);
-
     if (props.courseState === 'ordered') {
       navigate(`/path-player?courseId=${id}`);
     } else {
@@ -52,10 +50,8 @@ const CourseList = (props: CourseListProps) => {
 
   const [current, setCurrent] = useState(params._page || 1);
 
+  // Change page with pagination
   const paginationChangeHandler: PaginationProps['onChange'] = (page) => {
-    console.log(page);
-    // setSearchParams({ _p: `${page}` });
-
     if (props.onPaginate) {
       props.onPaginate(page);
     }
@@ -109,9 +105,6 @@ const CourseList = (props: CourseListProps) => {
             onEnroll={subscribeCourseHandler}
           />
         ))}
-        {/* <CourseItem onClick={moveToDetail} />
-        <CourseItem onClick={moveToDetail} />
-        <CourseItem onClick={moveToDetail} /> */}
       </Row>
       {props.pagination && (
         <div className='our-courses__pagination'>

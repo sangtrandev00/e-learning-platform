@@ -63,14 +63,12 @@ const Checkout = () => {
     }
   );
 
-  console.log('cartData: ', cartData);
-
   const cartItems = cartData?.cart.items || [];
   const totalPrice = cartData?.cart.totalPrice || 0;
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  const { data: userData, isFetching } = useGetUserQuery(userId, {
+  const { data: userData } = useGetUserQuery(userId, {
     skip: !userId
   });
 
@@ -78,8 +76,6 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    console.log('checkout handler');
-
     const newOrder = {
       items: cart?.items || [],
       user: {
@@ -99,7 +95,6 @@ const Checkout = () => {
     createOrder(newOrder as Omit<IOrder, '_id'>)
       .unwrap()
       .then((result) => {
-        console.log('result', result);
         if (result.order._id) {
           dispatch(clearCart());
           navigate(`/order-completed?orderId=${result.order._id}`);
@@ -159,12 +154,11 @@ const Checkout = () => {
               </div>
               <div className='checkout__orders-detail'>
                 <h3 className='checkout__orders-detail-title'>Order details</h3>
-               {isCartFetching && <Skeleton />}
-                {!isCartFetching && (
-                   cartItems.map((cartItem: { _id: string; name: string; thumbnail: string; finalPrice: number }) => {
+                {isCartFetching && <Skeleton />}
+                {!isCartFetching &&
+                  cartItems.map((cartItem: { _id: string; name: string; thumbnail: string; finalPrice: number }) => {
                     return <DetailItem key={cartItem._id} courseItem={cartItem} />;
-                  })
-                )}
+                  })}
               </div>
             </div>
           </Col>

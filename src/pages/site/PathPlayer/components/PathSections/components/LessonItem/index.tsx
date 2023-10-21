@@ -15,8 +15,7 @@ interface LessonItemProps {
 }
 
 function LessonItem(props: LessonItemProps) {
-  const { _id, name, sectionId, content, access, description, type, isDone } = props.lessonItem;
-  // const [data, isFetching, refetch] = useGetCourseEnrolledByUserQuery()
+  const { _id, name, content, access, isDone } = props.lessonItem;
   const isLessonDoneAtStore = useSelector((state: RootState) => state.client.isLessonDone);
   const currLessonId = useSelector((state: RootState) => state.client.lessonId);
   const lessonIdsDone = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
@@ -24,17 +23,7 @@ function LessonItem(props: LessonItemProps) {
 
   const isCurrentLessonDone = lessonIdsDone.includes(_id);
 
-  console.log('is lesson Done at store', isLessonDoneAtStore);
-  console.log('list of lessons done', lessonIdsDone);
-
-  // if (isLessonDoneAtStore && _id === currLessonId) {
-  //   setIsVideoDone(true);
-  // }
-
   useEffect(() => {
-    console.log('is lesson done at store: ', isLessonDoneAtStore);
-    console.log('What lesson Done at store: ', currLessonId);
-
     if (isLessonDoneAtStore && _id === currLessonId) {
       setIsVideoDone(true);
     }
@@ -55,8 +44,6 @@ function LessonItem(props: LessonItemProps) {
         content
       })
     );
-
-    // dispatch(refetchCourseEnrolledbyUser());
   };
 
   const handleDuration = (duration: number) => {
@@ -101,12 +88,6 @@ function LessonItem(props: LessonItemProps) {
     </Fragment>
   );
 }
-
-// function formatTime(seconds: number) {
-//   const date = new Date(0);
-//   date.setSeconds(seconds);
-//   return date.toISOString().substr(14, 5);
-// }
 
 LessonItem.defaultProps = {
   lessonItem: {
