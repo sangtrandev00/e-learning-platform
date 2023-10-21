@@ -21,14 +21,11 @@ import './Home.scss';
 const HomePage = () => {
   const [courseLimit, setCourseLimit] = useState(4);
 
-  console.log('course limit: ', courseLimit);
-  console.log('window scrreen', window.innerWidth);
   // Update screenSize when the window is resized
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentPath = location.pathname;
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const userId = useSelector((state: RootState) => state.auth.userId);
 
@@ -64,23 +61,11 @@ const HomePage = () => {
     userId: userId
   });
 
-  const { data: userCoursesData, isFetching, refetch: refetchUsersCourses } = useGetCoursesQuery(userCoursesParams);
-  const {
-    data: frontendData,
-    isFetching: isFrontendFetching,
-    refetch: refetchFrontend
-  } = useGetCoursesQuery(frontendParams);
-  const {
-    data: backendData,
-    isFetching: isBackendFetching,
-    refetch: refetchBackend
-  } = useGetCoursesQuery(backendParams);
-  const { data: devopsData, isFetching: isDevopsFetching, refetch: refetchDevops } = useGetCoursesQuery(devopsParams);
-  const {
-    data: popularCoursesData,
-    isFetching: isPoppularCoursesFetching,
-    refetch: refetchPopular
-  } = useGetPopularCoursesQuery(popularParams);
+  const { data: userCoursesData, isFetching } = useGetCoursesQuery(userCoursesParams);
+  const { data: frontendData, isFetching: isFrontendFetching } = useGetCoursesQuery(frontendParams);
+  const { data: backendData, isFetching: isBackendFetching } = useGetCoursesQuery(backendParams);
+  const { data: devopsData, isFetching: isDevopsFetching } = useGetCoursesQuery(devopsParams);
+  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(popularParams);
 
   const isPopularLoadMore =
     (popularCoursesData?.pagination._totalRows || 0) > (popularCoursesData?.courses.length || 0);
@@ -90,7 +75,6 @@ const HomePage = () => {
   const isBackendLoadMore = (backendData?.pagination._totalRows || 0) > (backendData?.courses.length || 0);
   const isDevopsLoadMore = (devopsData?.pagination._totalRows || 0) > (devopsData?.courses.length || 0);
 
-  console.log(userCoursesData);
   // users courses
   const usersCourses = userCoursesData?.courses;
 
@@ -110,8 +94,6 @@ const HomePage = () => {
   const devopsCourses = devopsData?.courses;
 
   const startNowHandler = () => {
-    console.log('start now');
-
     if (isAuth) {
       navigate('/start');
     } else {
@@ -120,8 +102,6 @@ const HomePage = () => {
   };
 
   const popularLoadMoreHandler = () => {
-    console.log('load more popular');
-
     setPopularParams({
       ...popularParams,
       _limit: (popularParams._limit || 0) + 4
@@ -129,8 +109,6 @@ const HomePage = () => {
   };
 
   const usersCoursesLoadMoreHandler = () => {
-    console.log('load more');
-
     setUserCoursesParams({
       ...userCoursesParams,
       _limit: (userCoursesParams._limit || 0) + 4
@@ -138,8 +116,6 @@ const HomePage = () => {
   };
 
   const frontendLoadMoreHandler = () => {
-    console.log('load more frontend');
-
     setFrontendParams({
       ...frontendParams,
       _limit: (frontendParams._limit || 0) + 4
@@ -147,8 +123,6 @@ const HomePage = () => {
   };
 
   const backendLoadMoreHandler = () => {
-    console.log('load more backend');
-
     setBackendParams({
       ...backendParams,
       _limit: (backendParams._limit || 0) + 4
@@ -156,51 +130,11 @@ const HomePage = () => {
   };
 
   const devopsLoadMoreHandler = () => {
-    console.log('load more devops');
-
     setDevopsParams({
       ...devopsParams,
       _limit: (devopsParams._limit || 0) + 4
     });
   };
-
-  // const updateScreenSize = useCallback(() => {
-  //   if (window.innerWidth >= 992) {
-  //     // setScreenSize('desktop');
-  //     setCourseLimit(4);
-  //   } else if (window.innerWidth >= 768) {
-  //     // setScreenSize('tablet');
-  //     setUserCoursesParams({
-  //       ...userCoursesParams,
-  //       _limit: 3
-  //     });
-
-  //     setPopularParams({
-  //       ...popularParams,
-  //       _limit: 3
-  //     });
-
-  //     setFrontendParams({
-  //       ...frontendParams,
-  //       _limit: 3
-  //     });
-  //     setCourseLimit(3);
-  //   } else if (window.innerWidth >= 375) {
-  //     // setScreenSize('mobile');
-  //     setCourseLimit(2);
-  //     // setScreenSize('mobile');
-  //     setCourseLimit(2);
-  //   }
-  // }, [frontendParams, popularParams, userCoursesParams]);
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', updateScreenSize);
-  //   updateScreenSize(); // Initial screen size detection
-
-  //   return () => {
-  //     window.removeEventListener('resize', updateScreenSize);
-  //   };
-  // }, [updateScreenSize]);
 
   useEffect(() => {
     if (isAuth) {

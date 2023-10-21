@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useGetLessonsBySectionIdQuery } from '../../../client.service';
-import CourseDetailLessonItem from '../LessonItem';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { calcTotalLectures } from '../../../client.slice';
 import { RootState } from '../../../../../store/store';
+import { useGetLessonsBySectionIdQuery } from '../../../client.service';
+import { calcTotalLectures } from '../../../client.slice';
+import CourseDetailLessonItem from '../LessonItem';
 
 interface LessonListProps {
   sectionId: string;
@@ -12,15 +12,10 @@ interface LessonListProps {
 const CourseDetailLessonList = (props: LessonListProps) => {
   const userId = useSelector((state: RootState) => state.auth.userId);
 
-  console.log('props: ', props.sectionId);
-  console.log('props: ', userId);
-
-  const { data: lessonData, isFetching: isLessonFetching } = useGetLessonsBySectionIdQuery({
+  const { data: lessonData } = useGetLessonsBySectionIdQuery({
     sectionId: props.sectionId,
     userId
   });
-
-  console.log(lessonData);
 
   const dispatch = useDispatch();
 

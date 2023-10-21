@@ -18,20 +18,17 @@ const Login: React.FC<LoginProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
-  const [updateLastLogin, updateLastLoginResult] = useUpdateLastLoginMutation();
+  const [updateLastLogin] = useUpdateLastLoginMutation();
 
   const onFinish = (formValues: { email: string; password: string }) => {
     const userCredentials: { email: string; password: string } = {
       email: formValues.email,
       password: formValues.password
     };
-    console.log('loginResult: ', loginResult);
 
     setIsSubmitting(true);
     login(userCredentials)
       .then((result) => {
-        console.log(result);
-
         // if(result.error) {
         //   notification.error({ type: 'error', message: result.error.data.message, duration: 2 });
         // }
@@ -40,14 +37,10 @@ const Login: React.FC<LoginProps> = (props) => {
         }
 
         if ('data' in result) {
-          console.log(result.data);
-
           const loginResponse: { token: string; message: string; userId: string } = result.data;
           const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(
             loginResponse.token
           );
-
-          console.log('loginResult: ', loginResult);
 
           // Update last login at database
           const currentDate = new Date();
@@ -56,8 +49,7 @@ const Login: React.FC<LoginProps> = (props) => {
             lastLogin: currentDate
           })
             .unwrap()
-            .then((result) => {
-              console.log('result: ', result);
+            .then(() => {
               notification.success({ type: 'success', message: 'update last login successully!', duration: 2 });
             })
             .catch((error) => {
@@ -66,7 +58,6 @@ const Login: React.FC<LoginProps> = (props) => {
 
           localStorage.setItem('token', loginResponse.token);
           const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds
-          console.log(decodedToken);
 
           // Check if the token has not expired
           if (Date.now() < expirationTime) {

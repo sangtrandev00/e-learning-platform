@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
-import { Button, Col, Drawer, Form, Input, Radio, Row, Select, Space, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Radio, Row, Space, notification } from 'antd';
 import React, { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useSelector } from 'react-redux';
@@ -8,7 +8,6 @@ import { RootState } from '../../../../../../../store/store';
 import { ILesson } from '../../../../../../../types/lesson.type';
 import { formatTime } from '../../../../../../../utils/functions';
 import { useAddLessonMutation } from '../../../../course.service';
-const { Option } = Select;
 
 type AddLessonProps = {
   // onSubmit: (formData: Omit<ILesson, '_id'>) => void;
@@ -16,13 +15,7 @@ type AddLessonProps = {
   // onCloseActivies: () => void;
 };
 
-// const initialSection: Omit<ISection, '_id'> = {
-//   name: '',
-//   courseId: '',
-//   description: ''
-// };
-
-const AddLesson: React.FC<AddLessonProps> = (props) => {
+const AddLesson: React.FC<AddLessonProps> = () => {
   const [open, setOpen] = useState(false);
   const playerRef = useRef<ReactPlayer | null>(null);
   const [contentLink, setContentLink] = useState('');
@@ -46,24 +39,16 @@ const AddLesson: React.FC<AddLessonProps> = (props) => {
   const [value, setValue] = useState('FREE');
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
     setValue((e.target as HTMLInputElement).value);
   };
 
   const onChangeVideoLink = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('calc video length', e.target.value);
     setContentLink(e.target.value);
-    // console.log('video length: ', playerRef.current.getDuration());
-
-    // props.videoLength = ;
   };
 
   const onPasteVideoLink = (e: React.ClipboardEvent<HTMLInputElement>) => {
     console.log(e.clipboardData.getData('text'));
     setContentLink(e.clipboardData.getData('text'));
-
-    // console.log('video length: ', playerRef.current?.getDuration());
-    // console.log('video length: ', formatTime(playerRef.current?.getDuration() || 0));
   };
 
   const onFinish = (formData: Omit<ILesson, '_id'>) => {

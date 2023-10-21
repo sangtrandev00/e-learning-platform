@@ -18,11 +18,10 @@ type Props = {
 const PathSections = (props: Props) => {
   const { data: sectionData, isFetching } = useGetSectionsByCourseIdQuery(props.courseId);
   const certificatePath = useSelector((state: RootState) => state.client.certificatePath);
-  const lessonIdsDoneByCourseId = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
   const currentProgress = useSelector((state: RootState) => state.client.currentProgress);
 
   const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
-    const { _id, name, description, access } = sectionItem;
+    const { _id, name } = sectionItem;
     const sectionTemplateItem = {
       key: _id,
       label: (
@@ -56,10 +55,6 @@ const PathSections = (props: Props) => {
     sectionItems.push(finalSectionItem);
   }
 
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
-
   return (
     <div className={props.className + ' path-sections'}>
       <div className='path-sections__wrap'>
@@ -70,12 +65,7 @@ const PathSections = (props: Props) => {
               {isFetching && <Skeleton />}
               {!isFetching && (
                 <div className='section__content-item'>
-                  <Collapse
-                    style={{ borderRadius: '0px' }}
-                    items={sectionItems}
-                    defaultActiveKey={['1']}
-                    onChange={onChange}
-                  />
+                  <Collapse style={{ borderRadius: '0px' }} items={sectionItems} defaultActiveKey={['1']} />
                 </div>
               )}
             </div>

@@ -13,7 +13,7 @@ const CategoriesNav = () => {
         {!isFetching &&
           (data?.categories || []).map((category) => {
             return (
-              <div className='header__categories-item'>
+              <div key={category._id} className='header__categories-item'>
                 <Link to={`courses?_topic=${category._id}`}>{category.name}</Link>
               </div>
             );

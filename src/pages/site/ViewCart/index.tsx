@@ -14,8 +14,6 @@ const ViewCart = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const courseIds = cart.items.map((item) => item.courseId);
 
-  console.log('course ids: ', courseIds);
-
   const { data: cartData, isFetching: isCartFetching } = useGetRetrieveCartQuery({ courseIds });
 
   const totalPrice = cartData?.cart.totalPrice || 0;
@@ -25,7 +23,6 @@ const ViewCart = () => {
   const navigate = useNavigate();
 
   const removeCartHandler = (courseId: string) => {
-    console.log('remove from cart: course id: ', courseId);
     dispatch(removeCart(courseId));
 
     notification.success({

@@ -29,7 +29,7 @@ const PathPlayer = () => {
   const courseId = searchParams.get('courseId');
   const userId = useSelector<RootState, string>((state: RootState) => state.auth.userId);
 
-  const { data, isFetching, refetch } = useGetCourseEnrolledByUserQuery(courseId as string);
+  const { data, isFetching } = useGetCourseEnrolledByUserQuery(courseId as string);
   const dispatch = useDispatch();
   const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
 
@@ -47,8 +47,6 @@ const PathPlayer = () => {
 
   // const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
 
-  console.log('certificate data: ', certificateData);
-
   const isCreateNewCertificate = useMemo(() => {
     return currProgress === 100 && !certificateData?.certificate && isFetchingCertificate === false;
   }, [currProgress, certificateData?.certificate, isFetchingCertificate]);
@@ -56,8 +54,6 @@ const PathPlayer = () => {
   // Test demo create certificate:
 
   useEffect(() => {
-    console.log('enough to create : ', isCreateNewCertificate);
-
     if (isCreateNewCertificate) {
       const newCertificate = {
         userId,
@@ -84,36 +80,15 @@ const PathPlayer = () => {
     }
   }, [isCreateNewCertificate]);
 
-  // Handle change progress when player finish the current lesson (watching!)
-  // useEffect(() => {
-  //   console.log('update lesson here at local state, at path player set progress ', isLessonDone);
-
-  //   // Refetch data here
-  //   refetch()
-  //     .then((result) => {
-  //       console.log('refetch successfully!', result);
-  //       console.log('done: ', isLessonDone);
-  //     })
-  //     .catch((error) => {
-  //       console.log('error: ', error);
-  //     });
-  // }, [isLessonDone, refetch]);
-
   // First initital first lesson of course
 
   useEffect(() => {
-    console.log('first initial lesson of course');
-
     // console.log('lesson id: ', data?.course.lessons[0]._id || '');
     // console.log('content: ', data?.course.lessons[0].content || '');
     let currentPlayingVideo = {
       lessonId: '',
       content: ''
     };
-
-    // notification.success({
-    //   message: 'isFetching ' + isFetching.toString()
-    // });
 
     if (data?.course && data?.course.lessons.length > 0 && !isFetching) {
       currentPlayingVideo = {
@@ -128,7 +103,6 @@ const PathPlayer = () => {
       certificateName = certificateData?.certificate.certificateName;
     }
 
-    // dispatch(
     dispatch(startPlayingVideo(currentPlayingVideo));
 
     dispatch(initLessonsDoneOfCourse(data?.course.lessonsDone || []));
@@ -154,7 +128,6 @@ const PathPlayer = () => {
     if (lessonsOfCourse) {
       progress = (totalLessonsDone / lessonsOfCourse) * 100;
     }
-    console.log('current progress change ', progress);
     setCurrProgress(progress);
   }, [data?.course.lessons.length, lessonIdsDone.length]);
 

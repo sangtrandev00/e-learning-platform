@@ -535,9 +535,6 @@ export const clientApi = createApi({
     getCourse: build.query<getCourseResponse, string>({
       query: (id) => ({
         url: `courses/${id}`
-        // headers: {
-        //   hello: 'Im Sang'
-        // }
       })
     }),
     getCourseEnrolledByUser: build.query<getCourseEnrolledByUserResponse, string>({
@@ -579,13 +576,8 @@ export const clientApi = createApi({
     }),
     getCourseDetail: build.query<getCourseDetailResponse, { courseId: string; userId: string }>({
       query: (params) => {
-        console.log('params: ', params);
-
         return {
           url: `courses/${params.courseId}/detail?userId=${params.userId}`
-          // headers: {
-          //   hello: 'Im Sang'
-          // }
         };
       }
     }),
