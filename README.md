@@ -15,7 +15,8 @@ serves as a marketplace for selling online courses.
 offers a seamless experience for users to browse and purchase courses, study the course materials, and track their progress. 
 + The administrator has the ability to manage orders and analyze student performance
 + Take a look to visit the website: 
-https://master--wetech-e-learning.netlify.app/
+https://e-learning-platform.pro
+
 ## 2. Main Module features
 
 ### 2.1 Authentication feature: 
@@ -124,7 +125,7 @@ https://master--wetech-e-learning.netlify.app/
 
 #### How to login ?
 #### Step 1: Go to Website
-https://wetech-e-learning.netlify.app/author-login
+https://e-learning-platform.pro/author-login
 #### Step 2: Login with Admin author (contact me to get the account)
 ![Author Login](./src/assets/images/e-learning-website-admin-login.png "Author Login")
 #### Step 3: Enjoy with admin dashboard and other features.
