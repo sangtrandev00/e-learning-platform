@@ -246,8 +246,8 @@ const Courses = () => {
               <span className='table__col-name-text'>{name}</span>
             </div>
           ),
-          author: userId.name,
-          categories: categoryId.name,
+          author: userId?.name,
+          categories: categoryId?.name,
           access: Access.FREE,
           // Gio Tinh. -> Course detail
           finalPrice: finalPrice,

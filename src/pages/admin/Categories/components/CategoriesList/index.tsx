@@ -11,6 +11,7 @@ import { ICategory } from '../../../../../types/category.type';
 import { CategoryError } from '../../../../../utils/helpers';
 import { useDeleteCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
+
 interface DataCategoryType {
   key: React.Key;
   name: any;
